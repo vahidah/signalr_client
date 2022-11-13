@@ -4,8 +4,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/io_client.dart';
 import 'package:signalr_core/signalr_core.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -36,6 +43,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _controllerMessage = TextEditingController();
 
   List<Map<String, dynamic>> messageList = List.generate(0, (index) => {"hi": "hi"}, growable: true);
+  String? firebaseToken;
+
+  bool tokenSend = false;
 
   final connection = HubConnectionBuilder()
       .withUrl(
@@ -52,6 +62,19 @@ class _MyHomePageState extends State<MyHomePage> {
     await connection.start();
   }
 
+  final FirebaseMessaging _firebasemessaging = FirebaseMessaging.instance;
+
+  _getToken() {
+    print('here1');
+    _firebasemessaging.getToken().then((deviceToken) {
+      print("Device Token: $deviceToken");
+      firebaseToken = deviceToken;
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
   @override
   initState() {
     // TODO: implement initState
@@ -59,18 +82,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
     _initializeSignalRConnection();
 
+    _getToken();
+
     connection.on('ReceiveNewMessage', (message) {
       messageList.add({"SenderId": message![0], "MessageText": message[1]});
       setState(() {});
       debugPrint("new message received");
       debugPrint(message[1]);
     });
+    
 
     connection.on('ReceiveId', (message) {
       myId = message![0];
       debugPrint("client id is $myId");
       setState(() {});
     });
+
+
 
   }
 
@@ -121,8 +149,14 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          debugPrint(_controllerMessage.text);
-          await connection.invoke('sendMessage', args: [int.parse(_controllerId.text), _controllerMessage.text]);
+          if(tokenSend){
+            debugPrint(_controllerMessage.text);
+            await connection.invoke('sendMessage', args: [int.parse(_controllerId.text), _controllerMessage.text]);
+          }else{
+            connection.invoke('ReceiveFireBaseToken', args: [firebaseToken]);
+            tokenSend = true;
+          }
+
         },
         child: const Icon(Icons.send),
       ),
