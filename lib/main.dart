@@ -90,16 +90,15 @@ class _MyHomePageState extends State<MyHomePage> {
       debugPrint("new message received");
       debugPrint(message[1]);
     });
-    
 
     connection.on('ReceiveId', (message) {
       myId = message![0];
       debugPrint("client id is $myId");
+      connection.invoke('ReceiveFireBaseToken', args: [firebaseToken]);
+      debugPrint("connection status:  ${connection.state}");
+      debugPrint("sending token");
       setState(() {});
     });
-
-
-
   }
 
   @override
@@ -114,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Container(
               color: Colors.blue,
               child: Center(
-                child: Text("My id is: ${myId?? -1}"),
+                child: Text("My id is: ${myId ?? -1}"),
               ),
             ),
             Form(
@@ -149,14 +148,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          if(tokenSend){
-            debugPrint(_controllerMessage.text);
-            await connection.invoke('sendMessage', args: [int.parse(_controllerId.text), _controllerMessage.text]);
-          }else{
-            connection.invoke('ReceiveFireBaseToken', args: [firebaseToken]);
-            tokenSend = true;
-          }
-
+          debugPrint(_controllerMessage.text);
+          debugPrint("sending message");
+          await connection.invoke('sendMessage', args: [int.parse(_controllerId.text), _controllerMessage.text]);
         },
         child: const Icon(Icons.send),
       ),
