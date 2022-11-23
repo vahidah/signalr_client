@@ -57,8 +57,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   final TextEditingController _controllerId = TextEditingController();
   final TextEditingController _controllerMessage = TextEditingController();
+  final TextEditingController _controllerJoinGroup = TextEditingController();
+  final TextEditingController _controllerGroupSendMessage = TextEditingController();
+  final TextEditingController _controllerGroupNameSendMessage = TextEditingController();
 
-  List<Map<String, dynamic>> messageList = List.generate(0, (index) => {"hi": "hi"}, growable: true);
+
   String? firebaseToken;
 
   bool tokenSend = false;
@@ -105,8 +108,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late TabController tabController;
 
   Map<int, List<String>> contacts = <int, List<String>>{};
+  Map<String, List<Map<int, String>>> groups = <String, List<Map<int, String>>>{};
+
 
   int selectedChat = -1;
+  String selectedGroup = "noone";
 
   @override
   initState() {
@@ -118,8 +124,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     _getToken();
 
     connection.on('ReceiveNewMessage', (message) {
-      messageList.add({"SenderId": message![0], "MessageText": message[1]});
-      if (contacts.containsKey(message[0])) {
+      if (contacts.containsKey(message![0])) {
         // it cant be null we check it above
         contacts[message[0]]?.add(message[1]);
       } else {
@@ -128,6 +133,23 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       setState(() {});
       debugPrint("new message received");
       debugPrint(message[1]);
+    });
+
+    connection.on('GroupMessage', (message) {
+
+      debugPrint("new message for group ${message![0]} form user ${message[1]} received, message is ${message[2]}");
+      debugPrint(message[1].toString());
+
+
+      if(groups.containsKey(message[0])){
+
+        groups[message[0]]!.add({message[1]:message[2]});
+      }else{
+        groups[message[0]] = [];
+        groups[message[0]]!.add( {message[1]:message[2]}) ;
+      }
+
+      setState(() {});
     });
 
     connection.on('ReceiveId', (message) {
@@ -173,7 +195,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 Expanded(
                     child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.black54,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30.0),
                       topRight: Radius.circular(30.0),
@@ -186,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                           child: TextButton(
                             onPressed: () {
                               selectedChat = e.key;
-                              //setState(() {});
+                              setState(() {});
                             },
                             child: Text("contact id is ${e.key}"),
                           ),
@@ -199,14 +220,22 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     child: ListView(
                   children: [
                     ...?contacts[selectedChat]?.map((e) {
-                      return Container(
-                        height: 100,
-                        child: Center(
-                          child: Text(
-                            e,
-                            style: const TextStyle(fontSize: 20),
+                      return Column(
+                        children: [
+                          Align(
+                            child: SizedBox(
+                              height: 40,
+                              child: Center(
+                                child: Text(
+                                  e,
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                              ),
+                            ),
+
                           ),
-                        ),
+
+                        ],
                       );
                     }).toList()
                   ],
@@ -215,31 +244,127 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             ),
           ),
           Center(
-            child: Text("defalut"),
+            child: Row(
+              children: [
+                Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                      ),
+                      child: ListView(
+                        children: [
+                          ...groups.entries.map((e) {
+                            return Container(
+                              child: TextButton(
+                                onPressed: () {
+                                  selectedGroup= e.key;
+                                  setState(() {});
+                                },
+                                child: Text("Group name is ${e.key}"),
+                              ),
+                            );
+                          }).toList()
+                        ],
+                      ),
+                    )),
+                Expanded(
+                    child: ListView(
+                      children: [
+                        ...?groups[selectedGroup]?.map((e) {
+                          return Column(
+                            children: [
+                              Align(
+                                alignment: e.keys.first == myId ? Alignment.centerLeft : Alignment.centerRight,
+                                child: SizedBox(
+                                  height: 40,
+                                  child: Text(
+                                    e.keys.first.toString(),
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: e.keys.first == myId ? Alignment.centerLeft : Alignment.centerRight,
+                                child: SizedBox(
+                                  height: 40,
+                                  child: Text(
+                                    e.values.first,
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList()
+                      ],
+                    ))
+              ],
+            ),
           ),
-          Column(
-            children: [
-              Form(
-                child: TextFormField(
-                  controller: _controllerId,
-                  decoration: const InputDecoration(labelText: "target client"),
+          ListView(
+            children: [ Column(
+              children: [
+                //
+                Form(
+                  child: TextFormField(
+                    controller: _controllerId,
+                    decoration: const InputDecoration(labelText: "group name"),
+                  ),
                 ),
-              ),
-              Form(
-                child: TextFormField(
-                  controller: _controllerMessage,
-                  decoration: const InputDecoration(labelText: "Message"),
+                Form(
+                  child: TextFormField(
+                    controller: _controllerMessage,
+                    decoration: const InputDecoration(labelText: "Message"),
+                  ),
                 ),
-              ),
-              TextButton(
-                  onPressed: () async {
-                    debugPrint(_controllerMessage.text);
-                    debugPrint("sending message");
-                    await connection
-                        .invoke('sendMessage', args: [int.parse(_controllerId.text), _controllerMessage.text]);
-                  },
-                  child: const Text("Send Message"))
-            ],
+                TextButton(
+                    onPressed: () async {
+                      debugPrint(_controllerMessage.text);
+                      debugPrint("sending message");
+                      await connection
+                          .invoke('sendMessage', args: [int.parse(_controllerId.text), _controllerMessage.text]);
+                    },
+                    child: const Text("Send Message")),
+                //create group
+                Form(
+                  child: TextFormField(
+                    controller: _controllerJoinGroup,
+                    decoration: const InputDecoration(labelText: "Group Name"),
+                  ),
+                ),
+                TextButton(
+                    onPressed: () async {
+                      debugPrint(_controllerMessage.text);
+                      debugPrint("AddToGroup");
+                      await connection
+                          .invoke('AddToGroup', args: [_controllerJoinGroup.text]);
+                    },
+                    child: const Text("Join or create group")),
+                Form(
+                  child: TextFormField(
+                    controller: _controllerGroupNameSendMessage,
+                    decoration: const InputDecoration(labelText: "target client"),
+                  ),
+                ),
+                Form(
+                  child: TextFormField(
+                    controller: _controllerGroupSendMessage,
+                    decoration: const InputDecoration(labelText: "Message"),
+                  ),
+                ),
+                TextButton(
+                    onPressed: () async {
+                      debugPrint(_controllerMessage.text);
+                      debugPrint("sending message to group");
+                      await connection
+                          .invoke('SendMessageToGroup', args: [_controllerGroupNameSendMessage.text, myId,  _controllerGroupSendMessage.text]);
+                    },
+                    child: const Text("Send Message to group")),
+              ],
+            )],
           )
         ],
       ),
