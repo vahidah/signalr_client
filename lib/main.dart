@@ -61,7 +61,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   final TextEditingController _controllerGroupSendMessage = TextEditingController();
   final TextEditingController _controllerGroupNameSendMessage = TextEditingController();
 
-
   String? firebaseToken;
 
   bool tokenSend = false;
@@ -107,12 +106,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   ];
   late TabController tabController;
 
-  Map<int, List<String>> contacts = <int, List<String>>{};
+  Map<int, List<Map<int, String>>> contacts = <int, List<Map<int, String>>>{};
   Map<String, List<Map<int, String>>> groups = <String, List<Map<int, String>>>{};
 
-
   int selectedChat = -1;
-  String selectedGroup = "noone";
+  String selectedGroup = "none";
 
   @override
   initState() {
@@ -126,27 +124,26 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     connection.on('ReceiveNewMessage', (message) {
       if (contacts.containsKey(message![0])) {
         // it cant be null we check it above
-        contacts[message[0]]?.add(message[1]);
+        contacts[message[0]]?.add({message[0]: message[1]});
       } else {
-        contacts[message[0]] = [message[1]];
+        contacts[message[0]] = [
+          {message[0]: message[1]}
+        ];
       }
       setState(() {});
-      debugPrint("new message received");
+      debugPrint("new message received from ${message[0]}");
       debugPrint(message[1]);
     });
 
     connection.on('GroupMessage', (message) {
-
       debugPrint("new message for group ${message![0]} form user ${message[1]} received, message is ${message[2]}");
       debugPrint(message[1].toString());
 
-
-      if(groups.containsKey(message[0])){
-
-        groups[message[0]]!.add({message[1]:message[2]});
-      }else{
+      if (groups.containsKey(message[0])) {
+        groups[message[0]]!.add({message[1]: message[2]});
+      } else {
         groups[message[0]] = [];
-        groups[message[0]]!.add( {message[1]:message[2]}) ;
+        groups[message[0]]!.add({message[1]: message[2]});
       }
 
       setState(() {});
@@ -220,21 +217,49 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     child: ListView(
                   children: [
                     ...?contacts[selectedChat]?.map((e) {
+                      debugPrint("the key is ${e.keys}");
                       return Column(
                         children: [
-                          Align(
-                            child: SizedBox(
-                              height: 40,
-                              child: Center(
-                                child: Text(
-                                  e,
-                                  style: const TextStyle(fontSize: 20),
+                          Column(
+                            children: [
+                              Align(
+                                alignment: e.keys.first == -1 ? Alignment.centerLeft : Alignment.centerRight,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: e.keys.first == -1 ? Colors.green : Colors.blue,
+                                  ),
+                                  margin: const EdgeInsets.only(top: 5.0, bottom: 5.0, right: 5.0),
+                                  height: 40,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 7),
+                                    child: Text(
+                                      e.keys.first.toString(),
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-
+                              Align(
+                                alignment: e.keys.first == -1 ? Alignment.centerLeft : Alignment.centerRight,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: e.keys.first == -1 ? Colors.green : Colors.blue,
+                                  ),
+                                  margin: const EdgeInsets.only(top: 5.0, bottom: 5.0, right: 5.0),
+                                  height: 40,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 7),
+                                    child: Text(
+                                      e.values.first,
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-
                         ],
                       );
                     }).toList()
@@ -248,183 +273,177 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               children: [
                 Expanded(
                     child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30.0),
-                          topRight: Radius.circular(30.0),
-                        ),
-                      ),
-                      child: ListView(
-                        children: [
-                          ...groups.entries.map((e) {
-                            return Container(
-                              child: TextButton(
-                                onPressed: () {
-                                  selectedGroup= e.key;
-                                  setState(() {});
-                                },
-                                child: Text("Group name is ${e.key}"),
-                              ),
-                            );
-                          }).toList()
-                        ],
-                      ),
-                    )),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30.0),
+                      topRight: Radius.circular(30.0),
+                    ),
+                  ),
+                  child: ListView(
+                    children: [
+                      ...groups.entries.map((e) {
+                        return Container(
+                          child: TextButton(
+                            onPressed: () {
+                              selectedGroup = e.key;
+                              setState(() {});
+                            },
+                            child: Text("Group name is ${e.key}"),
+                          ),
+                        );
+                      }).toList()
+                    ],
+                  ),
+                )),
                 Expanded(
                     child: ListView(
-                      children: [
-                        ...?groups[selectedGroup]?.map((e) {
-                          return Column(
+                  children: [
+                    ...?groups[selectedGroup]?.map((e) {
+                      // return Column(
+                      //   children: [
+                      //     Align(
+                      //       alignment: e.keys.first == myId ? Alignment.centerLeft : Alignment.centerRight,
+                      //       child: SizedBox(
+                      //         height: 40,
+                      //         child: Text(
+                      //           e.keys.first.toString(),
+                      //           style: const TextStyle(fontSize: 20),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     Align(
+                      //       alignment: e.keys.first == myId ? Alignment.centerLeft : Alignment.centerRight,
+                      //       child: SizedBox(
+                      //         height: 40,
+                      //         child: Text(
+                      //           e.values.first,
+                      //           style: const TextStyle(fontSize: 20),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // );
+                      return Align(
+                        alignment: e.keys.first == myId ? Alignment.centerLeft : Alignment.centerRight,
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 5.0, bottom: 5.0, right: 5.0),
+                          height: 40,
+                          child: Row(
                             children: [
-                              Align(
-                                alignment: e.keys.first == myId ? Alignment.centerLeft : Alignment.centerRight,
-                                child: SizedBox(
-                                  height: 40,
+                              Container(
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  color: e.keys.first == myId ? Colors.green : Colors.blue,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 7, bottom: 7),
                                   child: Text(
                                     e.keys.first.toString(),
                                     style: const TextStyle(fontSize: 20),
                                   ),
                                 ),
                               ),
-                              Align(
-                                alignment: e.keys.first == myId ? Alignment.centerLeft : Alignment.centerRight,
-                                child: SizedBox(
-                                  height: 40,
-                                  child: Text(
-                                    e.values.first,
-                                    style: const TextStyle(fontSize: 20),
+                              Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: e.keys.first == myId ? Colors.green : Colors.blue,
                                   ),
-                                ),
-                              ),
+                                  margin: const EdgeInsets.only(left: 5.0, right: 5.0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 15.0, left: 15.0, top: 7),
+                                    child: SizedBox(
+                                      height: 40,
+                                      child: Text(
+                                        e.values.first,
+                                        style: const TextStyle(fontSize: 20),
+                                      ),
+                                    ),
+                                  ))
                             ],
-                          );
-                        }).toList()
-                      ],
-                    ))
+                          ),
+                        ),
+                      );
+                    }).toList()
+                  ],
+                ))
               ],
             ),
           ),
           ListView(
-            children: [ Column(
-              children: [
-                //
-                Form(
-                  child: TextFormField(
-                    controller: _controllerId,
-                    decoration: const InputDecoration(labelText: "group name"),
+            children: [
+              Column(
+                children: [
+                  //
+                  Form(
+                    child: TextFormField(
+                      controller: _controllerId,
+                      decoration: const InputDecoration(labelText: "target client"),
+                    ),
                   ),
-                ),
-                Form(
-                  child: TextFormField(
-                    controller: _controllerMessage,
-                    decoration: const InputDecoration(labelText: "Message"),
+                  Form(
+                    child: TextFormField(
+                      controller: _controllerMessage,
+                      decoration: const InputDecoration(labelText: "Message"),
+                    ),
                   ),
-                ),
-                TextButton(
-                    onPressed: () async {
-                      debugPrint(_controllerMessage.text);
-                      debugPrint("sending message");
-                      await connection
-                          .invoke('sendMessage', args: [int.parse(_controllerId.text), _controllerMessage.text]);
-                    },
-                    child: const Text("Send Message")),
-                //create group
-                Form(
-                  child: TextFormField(
-                    controller: _controllerJoinGroup,
-                    decoration: const InputDecoration(labelText: "Group Name"),
+                  TextButton(
+                      onPressed: () async {
+                        int targetId = int.parse(_controllerId.text);
+                        if (contacts.containsKey(targetId)) {
+                          // it cant be null we check it above
+                          contacts[targetId]?.add({-1: _controllerMessage.text});
+                        } else {
+                          contacts[targetId] = [
+                            {-1: _controllerMessage.text}
+                          ];
+                        }
+                        debugPrint(_controllerMessage.text);
+                        debugPrint("sending message");
+                        await connection.invoke('sendMessage', args: [targetId, _controllerMessage.text]);
+                        setState(() {});
+                      },
+                      child: const Text("Send Message")),
+                  //create group
+                  Form(
+                    child: TextFormField(
+                      controller: _controllerJoinGroup,
+                      decoration: const InputDecoration(labelText: "Group Name"),
+                    ),
                   ),
-                ),
-                TextButton(
-                    onPressed: () async {
-                      debugPrint(_controllerMessage.text);
-                      debugPrint("AddToGroup");
-                      await connection
-                          .invoke('AddToGroup', args: [_controllerJoinGroup.text]);
-                    },
-                    child: const Text("Join or create group")),
-                Form(
-                  child: TextFormField(
-                    controller: _controllerGroupNameSendMessage,
-                    decoration: const InputDecoration(labelText: "target client"),
+                  TextButton(
+                      onPressed: () async {
+                        debugPrint(_controllerMessage.text);
+                        debugPrint("AddToGroup");
+                        await connection.invoke('AddToGroup', args: [_controllerJoinGroup.text]);
+                      },
+                      child: const Text("Join or create group")),
+                  Form(
+                    child: TextFormField(
+                      controller: _controllerGroupNameSendMessage,
+                      decoration: const InputDecoration(labelText: "Group Name"),
+                    ),
                   ),
-                ),
-                Form(
-                  child: TextFormField(
-                    controller: _controllerGroupSendMessage,
-                    decoration: const InputDecoration(labelText: "Message"),
+                  Form(
+                    child: TextFormField(
+                      controller: _controllerGroupSendMessage,
+                      decoration: const InputDecoration(labelText: "Message"),
+                    ),
                   ),
-                ),
-                TextButton(
-                    onPressed: () async {
-                      debugPrint(_controllerMessage.text);
-                      debugPrint("sending message to group");
-                      await connection
-                          .invoke('SendMessageToGroup', args: [_controllerGroupNameSendMessage.text, myId,  _controllerGroupSendMessage.text]);
-                    },
-                    child: const Text("Send Message to group")),
-              ],
-            )],
+                  TextButton(
+                      onPressed: () async {
+                        debugPrint(_controllerMessage.text);
+                        debugPrint("sending message to group");
+                        await connection.invoke('SendMessageToGroup',
+                            args: [_controllerGroupNameSendMessage.text, myId, _controllerGroupSendMessage.text]);
+                        setState(() {});
+                      },
+                      child: const Text("Send Message to group")),
+                ],
+              )
+            ],
           )
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () async {
-      //     debugPrint(_controllerMessage.text);
-      //     debugPrint("sending message");
-      //     await connection.invoke('sendMessage', args: [int.parse(_controllerId.text), _controllerMessage.text]);
-      //   },
-      //   child: const Icon(Icons.send),
-      // ),
     );
   }
 }
-
-// Center(
-// child: Column(
-// children: [
-// Container(
-// color: Colors.blue,
-// child: Center(
-// child: Text("My id is: ${myId ?? -1}"),
-// ),
-// ),
-// Form(
-// child: TextFormField(
-// controller: _controllerId,
-// decoration: const InputDecoration(labelText: "target client"),
-// ),
-// ),
-// Form(
-// child: TextFormField(
-// controller: _controllerMessage,
-// decoration: const InputDecoration(labelText: "Message"),
-// ),
-// ),
-// ListView(
-// shrinkWrap: true,
-// children: messageList
-//     .map((e) => Column(
-// children: [
-// Container(
-// child: Text("Sender Id is  ${e["SenderId"]}"),
-// ),
-// Container(
-// child: Text("Message: ${e["MessageText"]}"),
-// )
-// ],
-// ))
-// .toList(),
-// )
-// ],
-// ),
-// ),
-// floatingActionButton: FloatingActionButton(
-// onPressed: () async {
-// debugPrint(_controllerMessage.text);
-// debugPrint("sending message");
-// await connection.invoke('sendMessage', args: [int.parse(_controllerId.text), _controllerMessage.text]);
-// },
-// child: const Icon(Icons.send),
-// ),
-// );
