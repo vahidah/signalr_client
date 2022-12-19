@@ -11,18 +11,13 @@ import 'package:get/get.dart';
 // import '/core/util/moon_icons.dart';
 // import '/core/util/utils.dart';
 
-class ChatState with ChangeNotifier {
+class SignUpState with ChangeNotifier {
   setState() => notifyListeners();
 
 
-  int myId = -1;
-  String? firebaseToken;
 
 
-  // Map<String, List<Map<int, String>>> chats = <String, List<Map<int, String>>>{};
 
-  List<MapEntry<String, List<Map<int, String>>>> chats = [];
-  RxBool rebuildChatList = false.obs;
-  RxBool idReceived = false.obs;
-  RxBool showSendMessageIcon = false.obs;
+// Map<String, List<Map<int, String>>> chats = <String, List<Map<int, String>>>{};
+
 }
