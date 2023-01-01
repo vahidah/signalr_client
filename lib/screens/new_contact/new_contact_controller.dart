@@ -2,9 +2,13 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:core';
 import 'dart:io';
+import 'package:dio/dio.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:typed_data';
 // import 'package:intl/intl.dart';
 
 // import '/core/classes/flight_element_class.dart';
@@ -59,12 +63,32 @@ class NewContactController extends MainController {
     myNavigator.goToName(RouteNames.newChat);
   }
 
-  void sendFirstMessage(){
+  void sendFirstMessage() async{
       debugPrint("here send first message");
+      String base64Image;
+
       debugPrint("contact id is : ${int.parse(contactId.text)}");
+      Dio dio = Dio(  );
+
+      // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
+      //   client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      //   return client;
+      // };
+      Map<String, String> requestHeaders = {
+        "Connection": "keep-alive",
+      };
+      http.Response response = await http.post(
+          Uri.parse("http://10.0.2.2:9000/api/Image/${int.parse(contactId.text)}",),
+        headers: requestHeaders
+
+      );
+     // final response = await dio.post("http://10.0.2.2:9000/api/Image/${int.parse(contactId.text)}");
+     // response.data.
+      base64Image = base64.encode(response.bodyBytes);
+      debugPrint("status code is ${response.statusCode}");
       homeState.userNameReceived.toggle();
       debugPrint("value is: ${homeState.userNameReceived.toggle()}");
-      homeState.chats.insert(0, Chat(type: ChatType.contact, chatName: contactId.text,
+      homeState.chats.insert(0, Chat(type: ChatType.contact, chatName: contactId.text, image: base64Image,
           messages: [Message(sender: homeState.myId, text: firstMessage.text, senderUserName: homeState.userName!)]));
       connection.invoke('sendMessage', args: [int.parse(contactId.text), firstMessage.text, true]);
       // firstMessage.clear();

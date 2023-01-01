@@ -223,6 +223,9 @@ class MyRouter {
   static List<MyRoute> get routes => _routes;
 
   static BuildContext get context => _router.navigator!.context;
+  //_router.routerDelegate.navigatorKey.currentContext;
+
+
 }
 
 class MyRoute extends GoRoute {

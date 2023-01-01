@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:core';
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ import 'screens/sign_up/sign_up_state.dart';
 import 'core/navigation/router.dart';
 import 'core/dependency_injection.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 import 'core/classes/chat.dart';
 import 'core/classes/message.dart';
@@ -117,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
     _getToken();
 
-    connection.on('ReceiveNewMessage', (message) {
+    connection.on('ReceiveNewMessage', (message) async{
       debugPrint("new message received");
       int targetIndex = widget.myHomeState.chats.indexWhere((e) => e.chatName == message![0].toString());
       if(targetIndex != -1){
@@ -127,8 +129,20 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         widget.myChatState.rebuildChatList.toggle();
         widget.myHomeState.rebuildChatList.toggle();
       }else{
-        widget.myHomeState.chats.insert(0, Chat(type: ChatType.contact, chatName: message![0].toString(), messages:
-          [Message(sender: message[0], text: message[1], senderUserName: message[2],)],userName: message[2]));
+        debugPrint("send request to get image");
+        Map<String, String> requestHeaders = {
+          "Connection": "keep-alive",
+        };
+        http.Response response = await http.post(
+            Uri.parse("http://10.0.2.2:9000/api/Image/${message![0]}",),
+            headers: requestHeaders
+
+        );
+        debugPrint("image received");
+        final base64Image = base64.encode(response.bodyBytes);
+        widget.myHomeState.chats.insert(0, Chat(type: ChatType.contact, chatName: message[0].toString(), messages:
+          [Message(sender: message[0], text: message[1], senderUserName: message[2],)],userName: message[2],
+        image:  base64Image),);
         widget.myHomeState.rebuildChatList.toggle();
       }
 
@@ -165,7 +179,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
     connection.on('ReceiveId', (message) {
       widget.myHomeState.myId = message![0];
-      debugPrint("client id is $widget.myHomeState.myId");
+      debugPrint("client id is ${widget.myHomeState.myId}");
       connection.invoke('ReceiveFireBaseToken', args: [widget.myHomeState.firebaseToken]);
       debugPrint("connection status:  ${connection.state}");
       debugPrint("sending token");

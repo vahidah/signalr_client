@@ -71,9 +71,8 @@ class HomeController extends MainController {
   }
 
   void goToChatScreen(String chatKey){
-    debugPrint("before navigate");
+    
     myNavigator.goToName(RouteNames.chat, extra: chatKey);
-    debugPrint("after navigate");
   }
   void goToNewChatScreen(){
     myNavigator.goToName(RouteNames.newChat);

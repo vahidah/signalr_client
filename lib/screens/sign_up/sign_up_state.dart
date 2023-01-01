@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 class SignUpState with ChangeNotifier {
   setState() => notifyListeners();
 
-
+  RxBool rebuild = true.obs;
 
 
 

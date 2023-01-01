@@ -26,6 +26,8 @@ import '/core/util/failure_handler.dart';
 // import '../usecases/flight_list_usecase.dart';
 // import '../usecases/flight_status_list_usecase.dart';
 import 'sign_up_state.dart';
+import 'sign_up_repository.dart';
+import 'usecases/image_usecase.dart';
 import '../home/home_state.dart';
 import 'package:signalr_core/signalr_core.dart';
 import 'package:http/io_client.dart';
@@ -39,12 +41,16 @@ import '../../core/classes/message.dart';
 
 
 class SignUpController extends MainController {
-  final SignUpState chatState = getIt<SignUpState>();
+  final SignUpState signUpState = getIt<SignUpState>();
   final HomeState homeState = getIt<HomeState>();
+  final SignupRepository signupRepository = getIt<SignupRepository>();
+
+  late ImageUseCase imageUseCaseUse = ImageUseCase(repository: signupRepository);
 
 
   TextEditingController nameController = TextEditingController();
 
+  File? image;
 
   @override
   void onInit({dynamic args}) {
@@ -58,7 +64,10 @@ class SignUpController extends MainController {
     myNavigator.goToName(RouteNames.newChat);
   }
 
-  void sendContactName(){
+  void sendContactName() async{
+    ImageRequest imageRequest = ImageRequest(id: homeState.myId, image: image!);
+    final result = await imageUseCaseUse(request: imageRequest);
+    debugPrint("result of uploading image is: ${result}");
     homeState.userName = nameController.text;
     connection.invoke('ReceiveUserName', args: [nameController.text, homeState.myId]);
     myNavigator.goToName(RouteNames.home);
