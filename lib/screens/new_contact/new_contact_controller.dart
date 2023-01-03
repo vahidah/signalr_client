@@ -68,27 +68,27 @@ class NewContactController extends MainController {
       String base64Image;
 
       debugPrint("contact id is : ${int.parse(contactId.text)}");
-      Dio dio = Dio(  );
+      // Dio dio = Dio(  );
 
       // (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
       //   client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
       //   return client;
       // };
-      Map<String, String> requestHeaders = {
-        "Connection": "keep-alive",
-      };
-      http.Response response = await http.post(
-          Uri.parse("http://10.0.2.2:9000/api/Image/${int.parse(contactId.text)}",),
-        headers: requestHeaders
-
-      );
+      // Map<String, String> requestHeaders = {
+      //   "Connection": "keep-alive",
+      // };
+      // http.Response response = await http.post(
+      //     Uri.parse("http://10.0.2.2:9000/api/Image/${int.parse(contactId.text)}",),
+      //   headers: requestHeaders
+      //
+      // );
      // final response = await dio.post("http://10.0.2.2:9000/api/Image/${int.parse(contactId.text)}");
      // response.data.
-      base64Image = base64.encode(response.bodyBytes);
-      debugPrint("status code is ${response.statusCode}");
-      homeState.userNameReceived.toggle();
+     //  base64Image = base64.encode(response.bodyBytes);
+     //  debugPrint("status code is ${response.statusCode}");
+     // homeState.userNameReceived.toggle();
       debugPrint("value is: ${homeState.userNameReceived.toggle()}");
-      homeState.chats.insert(0, Chat(type: ChatType.contact, chatName: contactId.text, image: base64Image,
+      homeState.chats.insert(0, Chat(type: ChatType.contact, chatName: contactId.text,
           messages: [Message(sender: homeState.myId, text: firstMessage.text, senderUserName: homeState.userName!)]));
       connection.invoke('sendMessage', args: [int.parse(contactId.text), firstMessage.text, true]);
       // firstMessage.clear();

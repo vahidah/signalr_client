@@ -129,20 +129,20 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         widget.myChatState.rebuildChatList.toggle();
         widget.myHomeState.rebuildChatList.toggle();
       }else{
-        debugPrint("send request to get image");
-        Map<String, String> requestHeaders = {
-          "Connection": "keep-alive",
-        };
-        http.Response response = await http.post(
-            Uri.parse("http://10.0.2.2:9000/api/Image/${message![0]}",),
-            headers: requestHeaders
-
-        );
-        debugPrint("image received");
-        final base64Image = base64.encode(response.bodyBytes);
-        widget.myHomeState.chats.insert(0, Chat(type: ChatType.contact, chatName: message[0].toString(), messages:
+        // debugPrint("send request to get image");
+        // Map<String, String> requestHeaders = {
+        //   "Connection": "keep-alive",
+        // };
+        // http.Response response = await http.post(
+        //     Uri.parse("http://10.0.2.2:9000/api/Image/${message![0]}",),
+        //     headers: requestHeaders
+        //
+        // );
+        // debugPrint("image received");
+        // final base64Image = base64.encode(response.bodyBytes);
+        widget.myHomeState.chats.insert(0, Chat(type: ChatType.contact, chatName: message![0].toString(), messages:
           [Message(sender: message[0], text: message[1], senderUserName: message[2],)],userName: message[2],
-        image:  base64Image),);
+       ),);
         widget.myHomeState.rebuildChatList.toggle();
       }
 
@@ -150,11 +150,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       debugPrint(message[1]);
     });
     connection.on('receiveUserName', (message){
+      debugPrint("user name is : ${message![1]}");
       int targetChat = widget.myHomeState.chats.indexWhere((element) => element.chatName == message![0].toString());
       widget.myHomeState.chats[targetChat].userName = message![1];
       debugPrint("receive user name");
       widget.myHomeState.userNameReceived.toggle();
-      debugPrint("value is: ${widget.myHomeState.userNameReceived.toggle()}");
       widget.myHomeState.rebuildChatList.toggle();
     });
 

@@ -65,10 +65,11 @@ class SignUpController extends MainController {
   }
 
   void sendContactName() async{
-    ImageRequest imageRequest = ImageRequest(id: homeState.myId, image: image!);
-    final result = await imageUseCaseUse(request: imageRequest);
-    debugPrint("result of uploading image is: ${result}");
+    // ImageRequest imageRequest = ImageRequest(id: homeState.myId, image: image!);
+    // final result = await imageUseCaseUse(request: imageRequest);
+    // debugPrint("result of uploading image is: ${result}");
     homeState.userName = nameController.text;
+    debugPrint("sending user name ${nameController.text}");
     connection.invoke('ReceiveUserName', args: [nameController.text, homeState.myId]);
     myNavigator.goToName(RouteNames.home);
   }

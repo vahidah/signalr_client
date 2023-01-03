@@ -23,7 +23,7 @@ class HomeView extends StatelessWidget {
     int imageIndex = -1;
     return SafeArea(
         child: Scaffold(
-      backgroundColor: Colors.transparent,
+
       appBar: AppBar(
         // bottom: TabBar(
         //   tabs: tabs,
@@ -55,34 +55,72 @@ class HomeView extends StatelessWidget {
         ],
       ),
       body:
-          // myController.homeState.rebuildChatList.value;
 
           Obx(() {
         debugPrint("rebuild this chat");
-        imageIndex = -1;
+        imageIndex = 0;
         myController.homeState.rebuildChatList.value;
         return ListView(
           shrinkWrap: true,
           children: [
             ...myController.homeState.chats.map((e) {
+              debugPrint("user name is : ${e.userName}");
               imageIndex++;
-              return Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: AssetImage("assets/images/$imageIndex.jpg"),
-                    radius: 25,
+              return TextButton(
+                onPressed: () => myController.goToChatScreen(e.chatName),
+                child: Container(
+                  height: 60,
+                  decoration: BoxDecoration(
+                    border: Border(bottom: BorderSide(
+                      width: 1.0,
+                      color: Colors.black54,
+                      style: BorderStyle.solid
+                    ))
                   ),
-                  Column(
+                  child: Row(
+
                     children: [
-                      Text(e.userName!),
-                      Text(e.messages != [] ? "${e.messages[0].senderUserName}:${e.messages[0].text}" : ""),
-                      const Text(
-                        "19:54",
-                        style: TextStyle(color: Colors.grey),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: CircleAvatar(
+                          backgroundImage: AssetImage("assets/images/$imageIndex.jpg"),
+                          radius: 25,
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Text(e.userName?? e.chatName, style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold, color: Colors.black),),
+                            ),
+                            Text(e.messages.isNotEmpty ? "${e.messages[0].senderUserName} : ${e.messages[0].text}" : "",
+                              style: TextStyle(color: Colors.black54,),
+                            ),
+
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: const Text(
+                                "19:54",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          ],
+                        ),
                       )
                     ],
-                  )
-                ],
+                  ),
+                ),
               );
             }).toList()
           ],
@@ -92,6 +130,9 @@ class HomeView extends StatelessWidget {
         onPressed: () => myController.goToNewChatScreen(),
         child: const Icon(Icons.chat),
       ),
-    ));
+
+    ),
+
+    );
   }
 }
