@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'core/constants/apis.dart';
 import 'main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/io_client.dart';
@@ -23,7 +24,6 @@ import 'core/navigation/router.dart';
 import 'core/dependency_injection.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-
 import 'core/classes/chat.dart';
 import 'core/classes/message.dart';
 
@@ -49,7 +49,7 @@ void define_signalr_functions(){
         "Connection": "keep-alive",
       };
       http.Response response = await http.post(
-          Uri.parse("http://10.0.2.2:9000/api/Image/${message![0]}",),
+          Uri.parse("${Apis.getImage}/${message![0]}",),
           headers: requestHeaders
 
       );

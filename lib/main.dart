@@ -9,9 +9,12 @@ import 'package:http/io_client.dart';
 import 'package:provider/provider.dart';
 import 'package:signalr_core/signalr_core.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'core/dependency_injection.dart';
+import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'core/dependency_injection.dart';
 import 'screens/home/home_state.dart';
 import 'screens/chat/chat_state.dart';
 import 'screens/create_group/create_group_state.dart';
@@ -21,9 +24,6 @@ import 'screens/sign_up/sign_up_state.dart';
 import 'core/navigation/router.dart';
 import 'signalr_fucntions.dart';
 import 'core/dependency_injection.dart';
-import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-
 import 'core/classes/chat.dart';
 import 'core/classes/message.dart';
 
@@ -32,7 +32,7 @@ final connection = HubConnectionBuilder()
     'http://10.0.2.2:5000/Myhub',
     HttpConnectionOptions(
       client: IOClient(HttpClient()..badCertificateCallback = (x, y, z) => true),
-      logging: (level, message) => print(message),
+      logging: (level, message) => debugPrint(message),
     ))
     .build();
 
