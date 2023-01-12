@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 // import 'package:intl/intl.dart';
 
 // import '/core/classes/flight_element_class.dart';
@@ -50,11 +51,17 @@ class SignUpController extends MainController {
 
   TextEditingController nameController = TextEditingController();
 
-  File? image;
+  @override
+  void onCreate() {
+    // TODO: implement onCreate
+    super.onCreate();
+  }
 
   @override
   void onInit({dynamic args}) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
 
+      });
   }
   //
   // void sendMessageToContact(){
@@ -65,13 +72,22 @@ class SignUpController extends MainController {
   }
 
   void sendContactName() async{
-    // ImageRequest imageRequest = ImageRequest(id: homeState.myId, image: image!);
-    // final result = await imageUseCaseUse(request: imageRequest);
-    // debugPrint("result of uploading image is: ${result}");
+    ImageRequest imageRequest = ImageRequest(id: homeState.myId, image: signUpState.image!);
+    final result = await imageUseCaseUse(request: imageRequest);
+    // result.fold((l) => null, (r) => null);
+    debugPrint("result of uploading image is: ${result}");
     homeState.userName = nameController.text;
     debugPrint("sending user name ${nameController.text}");
     connection.invoke('ReceiveUserName', args: [nameController.text, homeState.myId]);
     myNavigator.goToName(RouteNames.home);
+  }
+
+  Future pickImage(ImageSource source)async{
+    final image = await ImagePicker().pickImage(source: source);
+
+    if(image != null){
+      signUpState.setImage = File(image.path);
+    }
   }
 
 

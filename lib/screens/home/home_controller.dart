@@ -48,22 +48,11 @@ class HomeController extends MainController {
 
   int imageId = 0;
 
-  bool justOne = true;
-
 
   @override
   void onInit({dynamic args}) {
-    //todo remove lines below
-    if(justOne) {
-      // justOne = false;
-      // homeState.chats.add(Chat(chatName: "New Group", type: ChatType.group, messages: []));
-      // homeState.chats[0].messages.add(Message(sender: 4, text: "hi", senderUserName: "unknown"));
-      //todo there is no need remove them
 
 
-      // homeState.rebuildChatList.toggle();
-      debugPrint("controller onInit");
-    }
   }
 
   void sendMessageToContact(){

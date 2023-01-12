@@ -69,6 +69,7 @@ class MyRouter {
         builder: (BuildContext context, GoRouterState state) => NewContactView(),
       ),
       MyRoute(
+        showInMainRoute: false,
         name: RouteNames.signUp,
         path: '/signUp',
         title: 'signUp',

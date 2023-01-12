@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:signalr_client/core/classes/chat.dart';
 import 'package:signalr_client/screens/chat/widgets/message.dart';
+import 'dart:convert';
 
 // import '/core/constants/constants.dart';
 import '/core/dependency_injection.dart';
@@ -20,7 +24,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int imageIndex = -1;
+    //todo add context.watch
     return SafeArea(
         child: Scaffold(
 
@@ -38,6 +42,7 @@ class HomeView extends StatelessWidget {
         title: Text(
           "My Id is ${myController.homeState.myId}",
           style: const TextStyle(fontSize: 20, color: Colors.white),
+          //todo move color to ui constants
         ),
         actions: [
           IconButton(
@@ -58,14 +63,14 @@ class HomeView extends StatelessWidget {
 
           Obx(() {
         debugPrint("rebuild this chat");
-        imageIndex = 0;
+        myController.homeState.imageIndex = 0;
         myController.homeState.rebuildChatList.value;
         return ListView(
           shrinkWrap: true,
           children: [
             ...myController.homeState.chats.map((e) {
               debugPrint("user name is : ${e.userName}");
-              imageIndex++;
+              myController.homeState.imageIndex++;
               return TextButton(
                 onPressed: () => myController.goToChatScreen(e.chatName),
                 child: Container(
@@ -83,7 +88,7 @@ class HomeView extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: CircleAvatar(
-                          backgroundImage: AssetImage("assets/images/$imageIndex.jpg"),
+                          backgroundImage: MemoryImage(base64.decode(e.image!)),
                           radius: 25,
                         ),
                       ),

@@ -21,10 +21,12 @@ class HomeState with ChangeNotifier {
   String? firebaseToken;
   String? userName;
   RxBool userNameReceived = true.obs;
-
+  int imageIndex = -1;
 
 
   List<Chat> chats = [];
+  //todo add getter and setter
+
 
 
   RxBool rebuildChatList = false.obs;

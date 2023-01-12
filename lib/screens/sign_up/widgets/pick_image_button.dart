@@ -4,19 +4,24 @@
 
 import 'package:flutter/material.dart';
 
-Widget pickImageButton({
-  required IconData icon,
-  required String title,
-  required VoidCallback onclick,
-  required double width
-}){
+class PickImageButton extends StatelessWidget {
 
+  final IconData icon;
+  final String title;
+  final VoidCallback onclick;
+  final double width;
 
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 10),
-    child: Container(
+  const PickImageButton({Key? key,required this.icon,
+    required this.title,
+    required this.onclick,
+    required this.width}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
       width: width,
-      padding: EdgeInsets.only(left: 10),
+      margin:const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(left: 10),
       height: 45,
       child: ElevatedButton(
         onPressed: onclick,
@@ -24,12 +29,12 @@ Widget pickImageButton({
         child: Row(
           children: [
             Icon(icon),
-            SizedBox(width: 10,),
+            const SizedBox(width: 10,),
             Text(title, style: TextStyle(fontWeight: FontWeight.bold),)
           ],
         ),
       ),
-    ),
-  );
-
+    );
+  }
 }
+

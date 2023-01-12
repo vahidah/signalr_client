@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,10 +15,15 @@ import 'package:get/get.dart';
 class SignUpState with ChangeNotifier {
   setState() => notifyListeners();
 
-  RxBool rebuild = true.obs;
+  File? image;
+
+  void set setImage(File image) {
+
+    this.image = image;
+    notifyListeners();
+  }
 
 
 
-// Map<String, List<Map<int, String>>> chats = <String, List<Map<int, String>>>{};
 
 }

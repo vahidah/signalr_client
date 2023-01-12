@@ -8,7 +8,7 @@ import '/core/interfaces/request.dart';
 import '/core/interfaces/usecase.dart';
 import '../sign_up_repository.dart';
 
-class ImageUseCase extends UseCase<void, ImageRequest> {
+class ImageUseCase extends UseCase<int, ImageRequest> {
   final SignupRepository repository;
 
   ImageUseCase({required this.repository});
@@ -27,7 +27,7 @@ class ImageRequest /*extends Request*/ {
   final int id;
   final File image;
 
-  @override
+
   Future<FormData> formData() async {
     
     // var map = FormData.fromMap({

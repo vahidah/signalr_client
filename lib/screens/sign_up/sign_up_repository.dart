@@ -20,10 +20,10 @@ class SignupRepository implements SignupRepositoryInterface {
     if (await networkInfo.isConnected) {
       try {
         int response = await signupRemoteDataSource.image(imageRequest: imgRequest);
-        return Right(1);
+        return Right(response);
       } on AppException catch (e) {
         return Left(ServerFailure.fromAppException(e));
-      }
+      }//todo handle all exceptions
     } else {
       // todo Handle Offline Mode
       return const Right(0);

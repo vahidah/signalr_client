@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 class SignUpRemoteDataSource implements SignUpDataSourceInterface {
   // final LoginLocalDataSource localDataSource;
   // LoginRemoteDataSource(this.localDataSource);
+  //todo complete local data source
 
 
   @override
@@ -25,7 +26,8 @@ class SignUpRemoteDataSource implements SignUpDataSourceInterface {
     //   return client;
     // };
     var data = await imageRequest.formData();
-    final response = await dio.post(Apis.baseUrl, data: data);
+    final response = await dio.post(Apis.getImage, data: data);
+    //todo put request in try catch
 
     debugPrint("status code is ${response.statusCode}");
     debugPrint("");
