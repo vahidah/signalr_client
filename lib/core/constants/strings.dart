@@ -2,8 +2,8 @@
 
 
 
-class Strings{
-  Strings._();
+class ConstStrings{
+  ConstStrings._();
 
   static late String fireBaseToken;
 }

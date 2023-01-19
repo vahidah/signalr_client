@@ -8,52 +8,26 @@ import '/core/interfaces/request.dart';
 import '/core/interfaces/usecase.dart';
 import '../sign_up_repository.dart';
 
-class ImageUseCase extends UseCase<int, ImageRequest> {
+class ImageUseCase extends UseCase<void, ImageRequest> {
   final SignupRepository repository;
 
   ImageUseCase({required this.repository});
 
   @override
-  Future<Either<Failure, int>> call({required ImageRequest request}) => repository.image(request);
+  Future<Either<Failure, void>> call({required ImageRequest request}) => repository.image(request);
+  //todo try void and no params
 }
 
-
-class ImageRequest /*extends Request*/ {
-
-
-
+class ImageRequest {
   ImageRequest({required this.id, required this.image});
 
   final int id;
   final File image;
 
-
   Future<FormData> formData() async {
-    
-    // var map = FormData.fromMap({
-    //   "image" : image,
-    //   "id" : id
-    //
-    // });
-    FormData map = FormData.fromMap({
-      "file":
-      await MultipartFile.fromFile(image.path, filename:image.path.split('/').last),
-      "id": id
-    });
-
-    
-
+    FormData map = FormData.fromMap(
+        {"file": await MultipartFile.fromFile(image.path, filename: image.path.split('/').last), "id": id});
 
     return map;
   }
-
-  // @override
-  // Map<String, dynamic> toJson() {
-  //   // TODO: implement toJson
-  //   throw UnimplementedError();
-  // }
-
-
-
-
 }

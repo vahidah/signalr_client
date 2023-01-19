@@ -18,7 +18,6 @@ class HomeState with ChangeNotifier {
 
 
   int myId = -1;
-  String? firebaseToken;
   String? userName;
   RxBool userNameReceived = true.obs;
   int imageIndex = -1;

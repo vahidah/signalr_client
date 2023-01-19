@@ -50,3 +50,9 @@ class ValidationException extends AppException {
   ValidationException({required String message, required StackTrace trace})
       : super(code: -300, message: message, trace: trace);
 }
+
+class ConnectionException extends AppException {
+  ConnectionException({required String message, required StackTrace trace})
+      : super(code: -300, message: message, trace: trace);
+}
+

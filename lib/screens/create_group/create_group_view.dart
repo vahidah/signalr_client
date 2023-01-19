@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:signalr_client/screens/chat/widgets/message.dart';
 
-// import '/core/constants/constants.dart';
+import '/core/constants/ui.dart';
 import '/core/dependency_injection.dart';
 // import '/widgets/LoadingWidget.dart';
 // import '/widgets/my_app_bar.dart';
@@ -42,18 +42,18 @@ class CreateGroupView extends StatelessWidget {
                     onPressed: () {
                       myController.backToHomeScreen();
                     },
-                    icon: Icon(Icons.arrow_back, color: Colors.white),
+                    icon: Icon(Icons.arrow_back, color: ProjectColors.fontWhite),
                   ),
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "New group",
-                        style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 20, color: ProjectColors.fontWhite, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         "Add subject",
-                        style: const TextStyle(fontSize: 12, color: Colors.white),
+                        style: const TextStyle(fontSize: 12, color: ProjectColors.fontWhite),
                       ),
                     ],
                   )),
@@ -70,19 +70,19 @@ class CreateGroupView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0, top: 10, bottom: 10),
                         child: Stack(
-                          children: [
-                            Align(
+                          children: const [
+                           Align(
+                              alignment: Alignment.center,
                               child: CircleAvatar(
                                 backgroundColor: Colors.grey,
                                 radius: 50,
-                                child: Icon(Icons.camera_alt, color: Colors.white70,),
+                                child: Icon(Icons.camera_alt, color: ProjectColors.fontWhite,),
                               ),
-                              alignment: Alignment.center,
                             ),
                             Align(
                               alignment: Alignment.bottomRight,
                               child: CircleAvatar(
-                                backgroundColor: Colors.blue,
+                                backgroundColor: ProjectColors.backGround,
                                 radius: 12,
                                   child: Icon(Icons.add),
                               ),
@@ -106,7 +106,7 @@ class CreateGroupView extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
-                      child: Align(alignment: Alignment.centerLeft,child: Icon(Icons.add_reaction, color:Colors.black45)),
+                      child: Align(alignment: Alignment.centerLeft,child: Icon(Icons.add_reaction, color:ProjectColors.iconBlackColor)),
                     )
                   ],
                 ),

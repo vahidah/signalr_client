@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'package:get_it/get_it.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:signalr_core/signalr_core.dart';
+import 'package:http/io_client.dart';
 
 
 import '../screens/home/home_state.dart';
@@ -22,6 +25,8 @@ import 'navigation/router.dart';
 import '../core/navigation/navigation_service.dart';
 import 'constants/route_names.dart';
 import '../../core/platform/network_info.dart';
+import 'package:signalr_client/screens/new_contact/data_sources/new_contact_remote_ds.dart';
+import 'package:signalr_client/screens/new_contact/new_contact_repositroy.dart';
 
 
 
@@ -29,6 +34,16 @@ final getIt = GetIt.instance;
 
 
 Future<void> init() async{
+
+  final connection = HubConnectionBuilder()
+      .withUrl(
+      'http://10.0.2.2:5000/Myhub',
+      HttpConnectionOptions(
+        client: IOClient(HttpClient()..badCertificateCallback = (x, y, z) => true),
+        logging: (level, message) => debugPrint(message),
+      ))
+      .build();
+
 
 
   NavigationService navigationService = NavigationService();
@@ -77,10 +92,20 @@ Future<void> init() async{
   getIt.registerLazySingleton(() => newChatPageController );
   navigationService.registerController(RouteNames.newChat, newChatPageController);
 
-  // new Chat ------------------------------------------------------------------------------------------------------------------
+  // new contact ------------------------------------------------------------------------------------------------------------------
   NewContactState newContactState = NewContactState();
   getIt.registerLazySingleton(() => newContactState);
 
+  // Data Sources
+  NewContactRemoteDataSource newContactRemoteDataSource = NewContactRemoteDataSource();
+
+  // Repository
+  NewContactRepository newContactRepository = NewContactRepository(
+    newContactRemoteDataSource,
+  );
+  getIt.registerLazySingleton(() => newContactRepository);
+
+  //controller
 
   NewContactController newContactPageController = NewContactController();
   getIt.registerLazySingleton(() =>newContactPageController);
@@ -112,3 +137,4 @@ Future<void> init() async{
   MyRouter.initialize();
 
 }
+

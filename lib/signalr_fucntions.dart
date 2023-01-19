@@ -2,28 +2,17 @@ import 'dart:async';
 import 'dart:core';
 import 'dart:io';
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
-import 'core/constants/apis.dart';
-import 'main.dart';
-import 'package:flutter/material.dart';
-import 'package:http/io_client.dart';
-import 'package:provider/provider.dart';
-import 'package:signalr_core/signalr_core.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'core/dependency_injection.dart';
-import 'firebase_options.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'screens/home/home_state.dart';
-import 'screens/chat/chat_state.dart';
-import 'screens/create_group/create_group_state.dart';
-import 'screens/new_chat/new_chat_state.dart';
-import 'screens/new_contact/new_contact_state.dart';
-import 'screens/sign_up/sign_up_state.dart';
-import 'core/navigation/router.dart';
-import 'core/dependency_injection.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:signalr_core/signalr_core.dart';
+
+
+import 'package:signalr_client/core/constants/strings.dart';
+import 'core/constants/apis.dart';
+import 'core/dependency_injection.dart';
+import 'screens/home/home_state.dart';
+import 'screens/chat/chat_state.dart';
 import 'core/classes/chat.dart';
 import 'core/classes/message.dart';
 
@@ -33,6 +22,8 @@ void define_signalr_functions(){
 
   final myHomeState = getIt<HomeState>();
   final myChatState = getIt<ChatState>();
+
+  final connection = getIt<HubConnection>();
 
   connection.on('ReceiveNewMessage', (message) async{
     debugPrint("new message received");
@@ -95,7 +86,7 @@ void define_signalr_functions(){
   connection.on('ReceiveId', (message) {
     myHomeState.myId = message![0];
     debugPrint("client id is ${myHomeState.myId}");
-    connection.invoke('ReceiveFireBaseToken', args: [myHomeState.firebaseToken]);
+    connection.invoke('ReceiveFireBaseToken', args: [ConstStrings.fireBaseToken]);
     debugPrint("connection status:  ${connection.state}");
     debugPrint("sending token");
     myHomeState.idReceived.toggle();

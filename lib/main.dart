@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'my_app.dart';
 import 'core/dependency_injection.dart';
 import 'screens/home/home_state.dart';
 import 'screens/chat/chat_state.dart';
@@ -27,14 +28,7 @@ import 'core/dependency_injection.dart';
 import 'core/classes/chat.dart';
 import 'core/classes/message.dart';
 
-final connection = HubConnectionBuilder()
-    .withUrl(
-    'http://10.0.2.2:5000/Myhub',
-    HttpConnectionOptions(
-      client: IOClient(HttpClient()..badCertificateCallback = (x, y, z) => true),
-      logging: (level, message) => debugPrint(message),
-    ))
-    .build();
+
 
 
 Future<void> main() async {
@@ -59,84 +53,4 @@ Future<void> main() async {
           ), (error, stack) {
     debugPrint("we have error");
   });
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "simple chat app",
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
-
-  final myHomeState = getIt<HomeState>();
-  final myChatState = getIt<ChatState>();
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-
-
-
-  bool tokenSend = false;
-
-
-
-
-  void _initializeSignalRConnection() async {
-    await connection.start();
-  }
-
-  final FirebaseMessaging _firebasemessaging = FirebaseMessaging.instance;
-  //todo move it to controller
-
-  _getToken() {
-    print('here1');
-    _firebasemessaging.getToken().then((deviceToken) {
-      print("Device Token: $deviceToken");
-      widget.myHomeState.firebaseToken = deviceToken;
-    });
-  }
-
-
-
-  @override
-  initState() {
-    // TODO: implement initState
-    super.initState();
-
-    _initializeSignalRConnection();
-
-    _getToken();
-
-    define_signalr_functions();
-
-
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routeInformationParser:  MyRouter.router.routeInformationParser,
-      routerDelegate: MyRouter.router.routerDelegate,
-    );
-  }
 }

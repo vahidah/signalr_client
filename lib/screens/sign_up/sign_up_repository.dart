@@ -12,21 +12,22 @@ class SignupRepository implements SignupRepositoryInterface {
 
   final NetworkInfo networkInfo;
 
-  SignupRepository ({required this.signupRemoteDataSource, required this.networkInfo});
-
+  SignupRepository({required this.signupRemoteDataSource, required this.networkInfo});
 
   @override
-  Future<Either<Failure, int>> image(ImageRequest imgRequest) async{
+  Future<Either<Failure, int>> image(ImageRequest imgRequest) async {
     if (await networkInfo.isConnected) {
       try {
         int response = await signupRemoteDataSource.image(imageRequest: imgRequest);
         return Right(response);
       } on AppException catch (e) {
         return Left(ServerFailure.fromAppException(e));
-      }//todo handle all exceptions
+      }
+      //we have just app exception
     } else {
-      // todo Handle Offline Mode
-      return const Right(0);
+
+      return Left(ConnectionFailure.fromAppException(
+          ConnectionException(message: "no internet!", trace: StackTrace.fromString("SignupRepository.image"))));
     }
   }
 }

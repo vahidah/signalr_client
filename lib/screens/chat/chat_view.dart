@@ -4,14 +4,12 @@ import 'package:get/get.dart';
 import 'package:signalr_client/core/classes/chat.dart';
 import 'package:signalr_client/screens/chat/widgets/message.dart';
 
-// import '/core/constants/constants.dart';
+import '/core/constants/ui.dart';
 import '/core/dependency_injection.dart';
 // import '/widgets/LoadingWidget.dart';
 // import '/widgets/my_app_bar.dart';
 import 'chat_controller.dart';
-// import '../widgets/drawer_widget.dart';
-// import '../widgets/home_header.dart';
-// import '../widgets/home_list_widget.dart';
+
 
 class ChatView extends StatelessWidget {
   final ChatController myController = getIt<ChatController>();
@@ -45,11 +43,11 @@ class ChatView extends StatelessWidget {
                     onPressed: () {
                       myController.bachToHomeScreen();
                     },
-                    icon: Icon(Icons.arrow_back, color: Colors.white),
+                    icon: Icon(Icons.arrow_back, color: ProjectColors.fontWhite),
                   ),
                   title: Text(
                     "My Id is ${myController.homeState.myId}",
-                    style: const TextStyle(fontSize: 20, color: Colors.white),
+                    style: const TextStyle(fontSize: 20, color: ProjectColors.fontWhite),
                   )),
               body:
                   // myController.homeState.rebuildChatList.value;
