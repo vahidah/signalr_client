@@ -67,7 +67,6 @@ class NewContactController extends MainController {
       result.fold((failure) =>
           FailureHandler.handle(failure, retry: () => {}),
               (r) => {base64Image = r});
-     homeState.userNameReceived.toggle();
       debugPrint("value is: ${homeState.userNameReceived.toggle()}");
       homeState.chats.insert(0, Chat(type: ChatType.contact, chatName: contactId.text,
           messages: [Message(sender: homeState.myId, text: firstMessage.text, senderUserName: homeState.userName!)],

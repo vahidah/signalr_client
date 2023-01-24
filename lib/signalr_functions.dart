@@ -18,12 +18,9 @@ import 'core/classes/message.dart';
 
 
 
-void define_signalr_functions(){
+void define_signalr_functions(HubConnection connection, HomeState myHomeState, ChatState myChatState){
 
-  final myHomeState = getIt<HomeState>();
-  final myChatState = getIt<ChatState>();
 
-  final connection = getIt<HubConnection>();
 
   connection.on('ReceiveNewMessage', (message) async{
     debugPrint("new message received");

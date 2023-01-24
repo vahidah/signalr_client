@@ -6,7 +6,7 @@ import 'dart:core';
 import 'core/navigation/router.dart';
 import 'core/constants/strings.dart';
 import 'core/dependency_injection.dart';
-import 'signalr_fucntions.dart';
+import 'signalr_functions.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -34,19 +34,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage>{
 
   bool tokenSend = false;
-  final connection = getIt<HubConnection>();
+  // final connection = getIt<HubConnection>();
 
 
-  void _initializeSignalRConnection() async {
-    await connection.start();
-  }
+  // void _initializeSignalRConnection() async {
+  //   await connection.start();
+  // }
 
   final FirebaseMessaging _firebasemessaging = FirebaseMessaging.instance;
-  //todo move it to controller
 
   _getToken() {
     _firebasemessaging.getToken().then((deviceToken) {
-      print("Device Token: $deviceToken");
+      debugPrint("Device Token: $deviceToken");
       ConstStrings.fireBaseToken = deviceToken?? "";
     });
   }
@@ -58,11 +57,11 @@ class _MyHomePageState extends State<MyHomePage>{
     // TODO: implement initState
     super.initState();
 
-    _initializeSignalRConnection();
+    // _initializeSignalRConnection();
 
-    _getToken();
+    // _getToken();
 
-    define_signalr_functions();
+    // define_signalr_functions();
 
 
   }

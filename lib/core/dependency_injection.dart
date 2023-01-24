@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -21,6 +22,8 @@ import '../screens/sign_up/sign_up_state.dart';
 import '../screens/sign_up/sign_up_controller.dart';
 import '../screens/sign_up/data_sources/signup_remote_ds.dart';
 import '../screens/sign_up/sign_up_repository.dart';
+import '../signalr_functions.dart';
+import 'constants/strings.dart';
 import 'navigation/router.dart';
 import '../core/navigation/navigation_service.dart';
 import 'constants/route_names.dart';
@@ -43,7 +46,7 @@ Future<void> init() async{
         logging: (level, message) => debugPrint(message),
       ))
       .build();
-
+  getIt.registerLazySingleton(() => connection);
 
 
   NavigationService navigationService = NavigationService();
@@ -51,6 +54,8 @@ Future<void> init() async{
 
   Connectivity connectivity = Connectivity();
   NetworkInfo networkInfo = NetworkInfo(connectivity);
+
+  debugPrint("here0");
 
 
   // home ------------------------------------------------------------------------------------------------------------------
@@ -134,7 +139,21 @@ Future<void> init() async{
   navigationService.registerController(RouteNames.signUp, signUpController);
 
 
+  final FirebaseMessaging _firebasemessaging = FirebaseMessaging.instance;
+
+
+    _firebasemessaging.getToken().then((deviceToken) {
+      print("Device Token: $deviceToken");
+      ConstStrings.fireBaseToken = deviceToken?? "";
+    });
+
+  define_signalr_functions(connection, homeState, chatState);
+
+  await connection.start();
+
   MyRouter.initialize();
+
+
 
 }
 
