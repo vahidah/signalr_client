@@ -16,10 +16,11 @@ class ChatState with ChangeNotifier {
 
 
   int myId = -1;
-  String? firebaseToken;
+  String? chatKey;
+
+  TextEditingController textController = TextEditingController();
 
 
-  // Map<String, List<Map<int, String>>> chats = <String, List<Map<int, String>>>{};
 
   List<MapEntry<String, List<Map<int, String>>>> chats = [];
   RxBool rebuildChatList = false.obs;

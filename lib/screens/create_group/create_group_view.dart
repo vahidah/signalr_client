@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:signalr_client/screens/chat/widgets/message.dart';
 
 import '/core/constants/ui.dart';
@@ -8,6 +9,7 @@ import '/core/dependency_injection.dart';
 // import '/widgets/LoadingWidget.dart';
 // import '/widgets/my_app_bar.dart';
 import 'create_group_controller.dart';
+import 'create_group_state.dart';
 // import '../widgets/drawer_widget.dart';
 // import '../widgets/home_header.dart';
 // import '../widgets/home_list_widget.dart';
@@ -21,6 +23,7 @@ class CreateGroupView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CreateGroupState state = context.watch<CreateGroupState>();
     myController.onInit();
     return SafeArea(
       child: Stack(
@@ -46,14 +49,14 @@ class CreateGroupView extends StatelessWidget {
                   ),
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       Text(
                         "New group",
-                        style: const TextStyle(fontSize: 20, color: ProjectColors.fontWhite, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 20, color: ProjectColors.fontWhite, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         "Add subject",
-                        style: const TextStyle(fontSize: 12, color: ProjectColors.fontWhite),
+                        style: TextStyle(fontSize: 12, color: ProjectColors.fontWhite),
                       ),
                     ],
                   )),
@@ -92,20 +95,20 @@ class CreateGroupView extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 10, bottom: 5,),
+                      margin: const EdgeInsets.only(left: 10, bottom: 5,),
                       width: MediaQuery.of(context).size.width - 125,
                       child: TextFormField(
-                        controller: myController.groupName,
-                        decoration: InputDecoration(
+                        controller: state.groupName,
+                        decoration: const InputDecoration(
                           hintText: "Type group subject here",
                           isDense: true,
                           contentPadding: EdgeInsets.zero
                         ),
-                        style: TextStyle(fontSize: 20, decoration: TextDecoration.none),
+                        style: const TextStyle(fontSize: 20, decoration: TextDecoration.none),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 15),
                       child: Align(alignment: Alignment.centerLeft,child: Icon(Icons.add_reaction, color:ProjectColors.iconBlackColor)),
                     )
                   ],
@@ -113,7 +116,7 @@ class CreateGroupView extends StatelessWidget {
               ),
             floatingActionButton: FloatingActionButton(
               onPressed: () => myController.createGroup(),
-              child: Icon(Icons.done, ),
+              child: const Icon(Icons.done, ),
             ),
 
             // Obx(() => myController.homeState.homeLoading.value

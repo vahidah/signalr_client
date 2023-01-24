@@ -6,6 +6,7 @@ import 'package:signalr_core/signalr_core.dart';
 import 'package:flutter/material.dart';
 import 'package:signalr_core/signalr_core.dart';
 
+import '../chat/chat_state.dart';
 import '/core/constants/route_names.dart';
 import '/core/constants/ui.dart';
 import '/core/dependency_injection.dart';
@@ -27,14 +28,11 @@ import '../../core/classes/message.dart';
 
 class HomeController extends MainController {
   final HomeState homeState = getIt<HomeState>();
+  final ChatState chatState = getIt<ChatState>();
   final HubConnection connection = getIt<HubConnection>();
   // final HomeRepository homeRepository = getIt<HomeRepository>();
-  int selectedChat = -1;
-  String selectedGroup = "none";
-  //todo move this variable to chat state
-  TextEditingController message = TextEditingController();
-  TextEditingController id = TextEditingController();
-  //todo move controllers to state
+
+
 
 
 
@@ -44,14 +42,11 @@ class HomeController extends MainController {
 
   }
 
-  void sendMessageToContact(){
-    connection.invoke('sendMessage', args: [int.parse(id.text), message.text]);
-    //todo do not pass any argument move them to screen state
-  }
-
   void goToChatScreen(String chatKey){
     
-    myNavigator.goToName(RouteNames.chat, extra: chatKey);
+    // myNavigator.goToName(RouteNames.chat, extra: chatKey);
+    chatState.chatKey = chatKey;
+    myNavigator.goToName(RouteNames.chat);
   }
   void goToNewChatScreen(){
     myNavigator.goToName(RouteNames.newChat);

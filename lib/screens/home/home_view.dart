@@ -13,6 +13,7 @@ import '/core/dependency_injection.dart';
 // import '/widgets/LoadingWidget.dart';
 // import '/widgets/my_app_bar.dart';
 import 'home_controller.dart';
+import 'home_state.dart';
 // import '../widgets/drawer_widget.dart';
 // import '../widgets/home_header.dart';
 // import '../widgets/home_list_widget.dart';
@@ -24,7 +25,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //todo add context.watch
+    HomeState state = context.watch<HomeState>();
     return SafeArea(
         child: Scaffold(
 
@@ -75,7 +76,7 @@ class HomeView extends StatelessWidget {
                 onPressed: () => myController.goToChatScreen(e.chatName),
                 child: Container(
                   height: 60,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     border: Border(bottom: BorderSide(
                       width: 1.0,
                       color: Colors.black54,
@@ -99,10 +100,10 @@ class HomeView extends StatelessWidget {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Text(e.userName?? e.chatName, style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold, color: Colors.black),),
+                              child: Text(e.userName?? e.chatName, style: const TextStyle(fontSize: 27, fontWeight: FontWeight.bold, color: Colors.black),),
                             ),
                             Text(e.messages.isNotEmpty ? "${e.messages[0].senderUserName} : ${e.messages[0].text}" : "",
-                              style: TextStyle(color: Colors.black54,),
+                              style: const TextStyle(color: Colors.black54,),
                             ),
 
                           ],
@@ -112,10 +113,10 @@ class HomeView extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
+                          children: const [
                             Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: const Text(
+                              padding: EdgeInsets.only(top: 8.0),
+                              child: Text(
                                 "19:54",
                                 style: TextStyle(color: Colors.grey),
                               ),

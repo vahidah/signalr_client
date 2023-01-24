@@ -1,27 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:signalr_client/core/classes/chat.dart';
 import 'package:signalr_client/screens/chat/widgets/message.dart';
 
 import '/core/constants/ui.dart';
 import '/core/dependency_injection.dart';
-// import '/widgets/LoadingWidget.dart';
-// import '/widgets/my_app_bar.dart';
 import 'chat_controller.dart';
+import 'chat_state.dart';
 
 
 class ChatView extends StatelessWidget {
   final ChatController myController = getIt<ChatController>();
 
-  ChatView({required this.chatKey, Key? key}) : super(key: key);
+  ChatView({Key? key}) : super(key: key);
 
-  final String chatKey;
 
   @override
   Widget build(BuildContext context) {
+    ChatState state = context.watch<ChatState>();
     debugPrint("before controller init");
-    myController.onInit(args: chatKey);
+    myController.onInit(args: state.chatKey);
     debugPrint("after controller init");
     return SafeArea(
       child: Stack(
@@ -43,7 +43,7 @@ class ChatView extends StatelessWidget {
                     onPressed: () {
                       myController.bachToHomeScreen();
                     },
-                    icon: Icon(Icons.arrow_back, color: ProjectColors.fontWhite),
+                    icon: const Icon(Icons.arrow_back, color: ProjectColors.fontWhite),
                   ),
                   title: Text(
                     "My Id is ${myController.homeState.myId}",
@@ -107,9 +107,9 @@ class ChatView extends StatelessWidget {
                                         icon: Icon(Icons.attach_file),
                                         padding: EdgeInsets.zero,
                                       ),
-                                      myController.textController.text == "" ?   IconButton(
+                                      state.textController.text == "" ?   IconButton(
                                           onPressed: () {
-                                            if(myController.textController.text  == ""){
+                                            if(state.textController.text  == ""){
                                               debugPrint("what is this");
                                             }
 
@@ -118,7 +118,7 @@ class ChatView extends StatelessWidget {
                                   ),
                                   contentPadding: EdgeInsets.all(10),
                                   hintText: "Message"),
-                              controller: myController.textController,
+                              controller: state.textController,
                               onChanged: (str){
                                 //todo move this code to controller
                                 if(str ==  ""  && myController.chatState.showSendMessageIcon.value){
@@ -134,7 +134,7 @@ class ChatView extends StatelessWidget {
                           padding: const EdgeInsets.only(left: 2, right: 2, bottom: 8),
                           child: CircleAvatar(
                             radius: 25,
-                            child: myController.textController.text == "" ?  IconButton(onPressed: () {}, icon: Icon(Icons.mic)) :
+                            child: state.textController.text == "" ?  IconButton(onPressed: () {}, icon: Icon(Icons.mic)) :
                             IconButton(
                                 onPressed: () => myController.chat?.type == ChatType.contact ? myController.sendMessageToContact() :
                                     myController.sendMessageToGroup()
@@ -146,12 +146,6 @@ class ChatView extends StatelessWidget {
                   )
                 ],
               )
-
-              // Obx(() => myController.homeState.homeLoading.value
-              //     ? const LoadingWidget()
-              //     : SingleChildScrollView(
-              //     padding: const EdgeInsets.only(bottom: 100),
-              //     child: HomeListWidget(listFlights: myController.showFlightList()))),
               )
         ],
       ),

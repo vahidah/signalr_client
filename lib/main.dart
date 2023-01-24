@@ -22,11 +22,7 @@ import 'screens/create_group/create_group_state.dart';
 import 'screens/new_chat/new_chat_state.dart';
 import 'screens/new_contact/new_contact_state.dart';
 import 'screens/sign_up/sign_up_state.dart';
-import 'core/navigation/router.dart';
-import 'signalr_functions.dart';
-import 'core/dependency_injection.dart';
-import 'core/classes/chat.dart';
-import 'core/classes/message.dart';
+
 
 
 

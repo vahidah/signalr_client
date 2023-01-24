@@ -15,5 +15,6 @@ class NewContactState with ChangeNotifier {
   setState() => notifyListeners();
 
 
-
+  TextEditingController contactId = TextEditingController();
+  TextEditingController firstMessage = TextEditingController();
 }

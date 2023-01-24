@@ -39,7 +39,7 @@ class SignUpView extends StatelessWidget {
                     style: TextStyle(color: ProjectColors.fontWhite, fontSize: 22),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width - 150,
+                    width: screenWidth - 150,
                     margin: const EdgeInsets.only(top: 10),
                     child: TextField(
                       style: const TextStyle(decoration: TextDecoration.none, color: ProjectColors.fontWhite, fontWeight: FontWeight.bold),

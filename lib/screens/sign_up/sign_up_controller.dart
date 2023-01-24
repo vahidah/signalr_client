@@ -39,15 +39,18 @@ class SignUpController extends MainController {
     myNavigator.goToName(RouteNames.newChat);
   }
 
-  void sendContactName() async {
+  void uploadImage() async{
     ImageRequest imageRequest = ImageRequest(id: homeState.myId, image: signUpState.image!);
     final result = await imageUseCaseUse(request: imageRequest);
     result.fold(
-        (failure) =>
-            FailureHandler.handle(failure, retry: () => ImageRequest(id: homeState.myId, image: signUpState.image)),
-        (r) {});
-    //todo make use case separate function
+            (failure) =>
+            FailureHandler.handle(failure, retry: () => uploadImage()),
+            (r) {});
     debugPrint("result of uploading image is: $result");
+  }
+
+  void sendContactName() async {
+
     homeState.userName = signUpState.nameController.text;
     debugPrint("sending user name ${signUpState.nameController.text}");
     connection.invoke('ReceiveUserName', args: [signUpState.nameController.text, homeState.myId]);

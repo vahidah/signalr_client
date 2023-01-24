@@ -42,7 +42,7 @@ class MyRouter {
         name: RouteNames.chat,
         path: '/chatScreen',
         title: 'chat',
-        builder: (BuildContext context, GoRouterState state) => ChatView(chatKey: (state.extra) as String,),
+        builder: (BuildContext context, GoRouterState state) => ChatView(),
       ),
       MyRoute(
         name: RouteNames.home,
@@ -93,36 +93,6 @@ class MyRouter {
       //   path: '/dispatch',
       //   title: 'Dispatch',
       //   builder: (BuildContext context, GoRouterState state) => DispatchView(flightId: state.extra as int),
-      // ),
-      // MyRoute(
-      //   name: RouteNames.frat,
-      //   path: '/frat',
-      //   title: 'Frat',
-      //   builder: (BuildContext context, GoRouterState state) => FratView(),
-      // ),
-      // MyRoute(
-      //   name: RouteNames.profile,
-      //   path: '/profile',
-      //   title: 'Profile',
-      //   builder: (BuildContext context, GoRouterState state) => ProfileView(),
-      // ),
-      // MyRoute(
-      //   name: RouteNames.signPdf,
-      //   path: '/sign',
-      //   title: 'Sign',
-      //   builder: (BuildContext context, GoRouterState state) => SignView(),
-      // ),
-      // MyRoute(
-      //   name: RouteNames.chat,
-      //   path: '/chat',
-      //   title: 'Chat',
-      //   builder: (BuildContext context, GoRouterState state) => ChatView(),
-      // ),
-      // MyRoute(
-      //   name: RouteNames.message,
-      //   path: '/message',
-      //   title: '/Message',
-      //   builder: (BuildContext context, GoRouterState state) => MessageView(),
       // ),
     ];
     _router = GoRouter(

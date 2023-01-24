@@ -14,8 +14,7 @@ class ImageUseCase extends UseCase<void, ImageRequest> {
   ImageUseCase({required this.repository});
 
   @override
-  Future<Either<Failure, void>> call({required ImageRequest request}) => repository.image(request);
-  //todo try void and no params
+  Future<Either<Failure, NoParams>> call({required ImageRequest request}) => repository.image(request);
 }
 
 class ImageRequest {

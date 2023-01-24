@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:signalr_client/screens/chat/widgets/message.dart';
+import 'package:signalr_client/screens/new_contact/new_contact_state.dart';
 
 // import '/core/constants/constants.dart';
 import '/core/dependency_injection.dart';
@@ -21,54 +23,50 @@ class NewContactView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    myController.onInit();
+    NewContactState state = context.watch<NewContactState>();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          // bottom: TabBar(
-          //   tabs: tabs,
-          //   controller: tabController,
-          // ),
             leading: IconButton(
               onPressed: () {
                 myController.backToNewChatScreen();
               },
-              icon: Icon(Icons.arrow_back, color: Colors.white),
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
             ),
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 Text(
                   "Create new contact",
-                  style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ],
             )),
         body: Obx( () => myController.homeState.userNameReceived.value ? Column(
           children: [
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 15),
+              margin: const EdgeInsets.symmetric(horizontal: 15),
               child: TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: "Enter contact Id"
                 ),
-                controller: myController.contactId,
+                controller: state.contactId,
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 15),
+              margin: const EdgeInsets.symmetric(horizontal: 15),
               child: TextFormField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     hintText: "Enter first message"
                 ),
-                controller: myController.firstMessage,
+                controller: state.firstMessage,
               ),
             ),
           ],
-        ) : Center(child: CircularProgressIndicator(),)),
+        ) : const Center(child: CircularProgressIndicator(),)),
         floatingActionButton: FloatingActionButton(
           onPressed: () => myController.sendFirstMessage(),
-          child: Icon(Icons.done),
+          child: const Icon(Icons.done),
         ),
       ),
     );

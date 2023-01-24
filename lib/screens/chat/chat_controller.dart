@@ -37,7 +37,7 @@ class ChatController extends MainController {
 
 
 
-  TextEditingController textController = TextEditingController();
+
 
 
   @override
@@ -51,16 +51,16 @@ class ChatController extends MainController {
   }
 
   void sendMessageToContact(){
-    chat?.messages.add(Message(sender: homeState.myId, text: textController.text, senderUserName: homeState.userName!));
-    connection.invoke('sendMessage', args: [int.parse(chat!.chatName), textController.text, false]);
-    textController.clear();
+    chat?.messages.add(Message(sender: homeState.myId, text: chatState.textController.text, senderUserName: homeState.userName!));
+    connection.invoke('sendMessage', args: [int.parse(chat!.chatName), chatState.textController.text, false]);
+    chatState.textController.clear();
     chatState.showSendMessageIcon.toggle();
     chatState.rebuildChatList.toggle();
   }
   void sendMessageToGroup(){
     // chat?.messages.add(Message(sender: homeState.myId, text: textController.text));
-    connection.invoke('SendMessageToGroup', args: [chat!.chatName, homeState.myId, textController.text]);
-    textController.clear();
+    connection.invoke('SendMessageToGroup', args: [chat!.chatName, homeState.myId, chatState.textController.text]);
+    chatState.textController.clear();
     chatState.showSendMessageIcon.toggle();
     chatState.rebuildChatList.toggle();
   }

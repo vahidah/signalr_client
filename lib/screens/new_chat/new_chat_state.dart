@@ -19,6 +19,6 @@ class NewChatState with ChangeNotifier {
   String? firebaseToken;
 
 
-// Map<String, List<Map<int, String>>> chats = <String, List<Map<int, String>>>{};
+
 
 }

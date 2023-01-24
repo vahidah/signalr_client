@@ -21,13 +21,11 @@ import '../../core/classes/chat.dart';
 
 
 class CreateGroupController extends MainController {
-  final CreateGroupState chatState = getIt<CreateGroupState>();
+  final CreateGroupState createGroupState = getIt<CreateGroupState>();
   final HomeState homeState = getIt<HomeState>();
   final HubConnection connection = getIt<HubConnection>();
-  // final HomeRepository homeRepository = getIt<HomeRepository>();
 
 
-  TextEditingController groupName = TextEditingController();
 
 
 
@@ -38,10 +36,10 @@ class CreateGroupController extends MainController {
   }
 
   void createGroup(){
-    if(!homeState.chats.any((element) => element.chatName == groupName.text)) {
-      homeState.chats.add(Chat(type: ChatType.group, chatName: groupName.text,
+    if(!homeState.chats.any((element) => element.chatName == createGroupState.groupName.text)) {
+      homeState.chats.add(Chat(type: ChatType.group, chatName: createGroupState.groupName.text,
           messages: []));
-      connection.invoke('AddToGroup', args: [groupName.text]);
+      connection.invoke('AddToGroup', args: [createGroupState.groupName.text]);
       homeState.rebuildChatList.toggle();
     }
   }
