@@ -61,7 +61,7 @@ class CreateGroupView extends StatelessWidget {
                     width: 60,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8.0, top: 10, bottom: 10),
-                      child: Row(
+                      child: Stack(
                         //it was previously stack
                         children: const [
                           Align(

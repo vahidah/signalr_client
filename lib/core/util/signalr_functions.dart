@@ -61,7 +61,7 @@ void define_signalr_functions(){
     int targetChat = myHomeState.chats.indexWhere((element) => element.chatName == message[0].toString());
     myHomeState.chats[targetChat].userName = message[1];
     debugPrint("receive user name");
-    newContactState.userNameReceived.toggle();
+    // newContactState.userNameReceived.toggle();
     // myHomeState.rebuildChatList.toggle();
   });
 

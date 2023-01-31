@@ -44,7 +44,6 @@ class HomeView extends StatelessWidget {
               shrinkWrap: true,
               children: [
                 ...state.chats.map((e) {
-                  debugPrint("user name is : ${e.userName}");
                   return TextButton(
                     onPressed: () => myController.goToChatScreen(e.chatName),
                     child: Container(
@@ -58,7 +57,9 @@ class HomeView extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
                             child: CircleAvatar(
-                              backgroundImage: MemoryImage(base64.decode(e.image!)),
+                              backgroundImage: e.image != null
+                                  ? MemoryImage(base64.decode(e.image!))
+                                  : const AssetImage("assets/images/4.jpg") as ImageProvider,
                               radius: 25,
                             ),
                           ),
@@ -93,7 +94,9 @@ class HomeView extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Text(
-                                    "${e.messages[0].date?.hour}: ${e.messages[0].date?.minute}",
+                                    e.messages.isNotEmpty?
+                                    "${e.messages[0].date?.hour}: ${e.messages[0].date?.minute}"
+                                    : "",
                                     style: const TextStyle(color: ProjectColors.fontGrayHome),
                                   ),
                                 ),

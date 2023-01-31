@@ -69,8 +69,7 @@ class ChatView extends StatelessWidget {
               }),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Obx(() {
-                  return Row(
+                child: Row(
                     children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width - 55,
@@ -120,7 +119,7 @@ class ChatView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Padding(
+                          Padding(
                         padding: const EdgeInsets.only(left: 2, right: 2, bottom: 8),
                         child: CircleAvatar(
                           radius: 25,
@@ -132,8 +131,7 @@ class ChatView extends StatelessWidget {
                         ),
                       )
                     ],
-                  );
-                }),
+                  ),
               )
             ],
           )),
