@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../core/dependency_injection.dart';
 import '../../core/error/failures.dart';
 import '../../core/navigation/navigation_service.dart';
-import '../navigation/navigation_service.dart';
 
 class FailureHandler {
   static final NavigationService navigationService = getIt<NavigationService>();
@@ -12,22 +11,23 @@ class FailureHandler {
   FailureHandler._();
 
   static void handle(Failure failure,{Function? retry}) {
-    navigationService.snackBar(GestureDetector(
-        onTap: (){
-          // AppB
-        },
-        child: Text("$failure")),
-        icon: Icons.error,
-        backgroundColor: Colors.red,
-        duration: const Duration(seconds: 10),
-        action: SnackBarAction(
-          textColor: Colors.white,
-          label: "Retry",
-          onPressed: () {
-            log("Retry");
-            retry?.call();
-          },
-        ));
+    debugPrint("handle failure called");
+    // navigationService.snackBar(GestureDetector(
+    //     onTap: (){
+    //       // AppB
+    //     },
+    //     child: Text("$failure")),
+    //     icon: Icons.error,
+    //     backgroundColor: Colors.red,
+    //     duration: const Duration(seconds: 10),
+    //     action: SnackBarAction(
+    //       textColor: Colors.white,
+    //       label: "Retry",
+    //       onPressed: () {
+    //         log("Retry");
+    //         retry?.call();
+    //       },
+    //     ));
   }
 
   static void handleNoElement(String name) {

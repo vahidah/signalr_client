@@ -1,13 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
-// import '/widgets/loading_dialog.dart';
-// import '/widgets/snack_bar_widget.dart';
-// import '/widgets/top_dialog_bar.dart';
-// import '../constants/ui.dart';
 import '../interfaces/controller.dart';
-// import '../util/moon_icons.dart';
 import 'router.dart';
 
 class NavigationService {
@@ -66,13 +60,16 @@ class NavigationService {
   Future<dynamic> dialog(Widget content) => showDialog(context: context!, builder: (c) => content);
 
   snackBar(Widget content, {Color? backgroundColor, SnackBarAction? action, Duration? duration, IconData? icon}) {
+    debugPrint("handle failure called 1");
     ScaffoldMessenger.of(context!).clearSnackBars();
+    debugPrint("handle failure called 2");
     ScaffoldMessenger.of(context!).showSnackBar(SnackBar(
       content: icon == null ? content : Row(children: [Icon(icon), const SizedBox(width: 8), Expanded(child: content)]),
       backgroundColor: backgroundColor,
       action: action,
       duration: duration ?? const Duration(seconds: 3),
     ));
+    debugPrint("handle failure called 3");
   }
 
   registerController(String name, MainController controller) =>

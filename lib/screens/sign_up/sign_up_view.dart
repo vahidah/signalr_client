@@ -8,18 +8,15 @@ import 'package:signalr_client/screens/chat/widgets/message.dart';
 import 'package:signalr_client/screens/sign_up/sign_up_controller.dart';
 import 'package:signalr_client/screens/sign_up/sign_up_state.dart';
 import 'package:signalr_client/screens/sign_up/widgets/pick_image_button.dart';
+import 'package:signalr_client/widgets/ProjectTextField.dart';
 import '/core/dependency_injection.dart';
 import '/core/constants/ui.dart';
 import 'sign_up_controller.dart';
-
 
 class SignUpView extends StatelessWidget {
   final SignUpController myController = getIt<SignUpController>();
 
   SignUpView({Key? key}) : super(key: key);
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -39,39 +36,24 @@ class SignUpView extends StatelessWidget {
                     style: TextStyle(color: ProjectColors.fontWhite, fontSize: 22),
                   ),
                   Container(
-                    width: screenWidth - 150,
-                    margin: const EdgeInsets.only(top: 10),
-                    child: TextField(
-                      style: const TextStyle(decoration: TextDecoration.none, color: ProjectColors.fontWhite, fontWeight: FontWeight.bold),
-                      controller: state.nameController,
-                      decoration: InputDecoration(
-
-                       contentPadding: const EdgeInsets.all(15),
-                        hintText: 'Enter user name',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(color: ProjectColors.fontWhite, width: 1),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(color: ProjectColors.fontWhite, width: 1),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(color: ProjectColors.fontWhite, width: 1),
-                        ),
-
-                      ),
-                    ),
-                  ),
+                      width: screenWidth - 150,
+                      margin: const EdgeInsets.only(top: 10),
+                      child: ProjectTextField(controller: state.nameController, hintText: 'Enter user name')),
                   SizedBox(
                     width: 200,
                     height: 200,
-                    child: state.image == null ? const Icon(Icons.camera_alt, size: 80,) : Image.file(state.image),
+                    child: state.image == null
+                        ? const Icon(
+                            Icons.camera_alt,
+                            size: 80,
+                          )
+                        : Image.file(state.image!),
                   ),
-                  PickImageButton(icon: Icons.image_search, title: "pick image from gallery",
-                      onclick: ()=> myController.pickImage(ImageSource.gallery), width: screenWidth - 150),
-
+                  PickImageButton(
+                      icon: Icons.image_search,
+                      title: "pick image from gallery",
+                      onclick: () => myController.pickImage(ImageSource.gallery),
+                      width: screenWidth - 150),
                   Container(
                     width: screenWidth - 200,
                     margin: const EdgeInsets.only(top: 10),

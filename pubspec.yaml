@@ -42,8 +42,11 @@ dependencies:
   image_picker: 0.8.6
   dartz: ^0.10.1
   dio: ^4.0.6
+  http: ^0.13.5
   shared_preferences: ^2.0.17
   connectivity_plus: ^3.0.2
+  messaging_signalr:
+    path: ../messaging_signalr
 
 
   # The following adds the Cupertino Icons font to your application.

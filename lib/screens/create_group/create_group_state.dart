@@ -6,8 +6,6 @@ class CreateGroupState with ChangeNotifier {
   setState() => notifyListeners();
 
 
-  int myId = -1;
-  String? firebaseToken;
 
 
   TextEditingController groupName = TextEditingController();

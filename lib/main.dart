@@ -3,16 +3,14 @@ import 'dart:core';
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:messaging_signalr/messaging_signalr.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/io_client.dart';
 import 'package:provider/provider.dart';
 import 'package:signalr_core/signalr_core.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'firebase_options.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'my_app.dart';
 import 'core/dependency_injection.dart';

@@ -12,22 +12,18 @@ import '../navigation/router.dart';
 
 abstract class MainController {
   late NavigationService myNavigator;
-  // late SharedPrefService prefs;
-  // late ThemeService themeService;
   final MyRouter router = MyRouter();
   bool initialized = false;
 
   MainController() {
     myNavigator = getIt<NavigationService>();
-    // prefs = getIt<SharedPrefService>();
-    // themeService = getIt<ThemeService>();
 
     if (!initialized) {
       onCreate();
     }
   }
 
-  void onInit({dynamic args}) {
+  void onInit() {
     log('$runtimeType Init');
   }
 

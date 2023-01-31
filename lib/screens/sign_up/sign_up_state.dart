@@ -14,7 +14,7 @@ class SignUpState with ChangeNotifier {
     notifyListeners();
   }
 
-  get image => _image;
+  File? get image => _image;
 
   TextEditingController nameController = TextEditingController();
 

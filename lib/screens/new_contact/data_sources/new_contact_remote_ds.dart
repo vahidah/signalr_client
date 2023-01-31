@@ -16,16 +16,22 @@ class NewContactRemoteDataSource implements NewContactDataSourceInterFace{
 
   @override
   Future<String> getImage({required GetImageRequest request}) async {
+    try {
       http.Response response = await http.post(
         Uri.parse("${Apis.getImage}/${request.contactId}",),
 
       );
 
+
       if(response.statusCode == 200){
         return base64.encode(response.bodyBytes);
       }else{
-        return "";
+        throw ServerException(code: 100, trace: StackTrace.fromString("NewContactRemoteDataSource:getImage"));
       }
+    } catch (e, t) {
+      throw ServerException(code: 100, trace: t);
+    }
+
 
   }
 }

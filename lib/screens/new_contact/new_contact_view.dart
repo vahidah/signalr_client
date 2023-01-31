@@ -1,18 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:signalr_client/screens/chat/widgets/message.dart';
 import 'package:signalr_client/screens/new_contact/new_contact_state.dart';
 
-// import '/core/constants/constants.dart';
+
+import '../../widgets/ProjectTextField.dart';
 import '/core/dependency_injection.dart';
-// import '/widgets/LoadingWidget.dart';
-// import '/widgets/my_app_bar.dart';
+import '/core/constants/ui.dart';
 import 'new_contact_controller.dart';
-// import '../widgets/drawer_widget.dart';
-// import '../widgets/home_header.dart';
-// import '../widgets/home_list_widget.dart';
+
 
 class NewContactView extends StatelessWidget {
   final NewContactController myController = getIt<NewContactController>();
@@ -31,36 +27,30 @@ class NewContactView extends StatelessWidget {
               onPressed: () {
                 myController.backToNewChatScreen();
               },
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              icon: const Icon(Icons.arrow_back, color: ProjectColors.fontWhite),
             ),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "Create new contact",
-                  style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ],
+            title: const Text(
+              "Create new contact",
+              style: TextStyle(fontSize: 20, color: ProjectColors.fontWhite, fontWeight: FontWeight.bold),
             )),
-        body: Obx( () => myController.homeState.userNameReceived.value ? Column(
+        body: Obx( () => state.userNameReceived.value ? Column(
           children: [
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 15),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  hintText: "Enter contact Id"
-                ),
+              child: ProjectTextField(
+                style: const TextStyle(
+                    decoration: TextDecoration.none, color: ProjectColors.fontBlackHome, fontWeight: FontWeight.bold),
                 controller: state.contactId,
-              ),
-            ),
+                hintText: "Enter contact Id",
+              )),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 15),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                    hintText: "Enter first message"
-                ),
+              child: ProjectTextField(
+                style: const TextStyle(
+                    decoration: TextDecoration.none, color: ProjectColors.fontBlackHome, fontWeight: FontWeight.bold),
+                hintText: "Enter first message",
                 controller: state.firstMessage,
-              ),
+              )
             ),
           ],
         ) : const Center(child: CircularProgressIndicator(),)),

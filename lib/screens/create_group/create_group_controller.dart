@@ -30,17 +30,13 @@ class CreateGroupController extends MainController {
 
 
 
-  @override
-  void onInit({dynamic args}) {
 
-  }
 
   void createGroup(){
     if(!homeState.chats.any((element) => element.chatName == createGroupState.groupName.text)) {
       homeState.chats.add(Chat(type: ChatType.group, chatName: createGroupState.groupName.text,
           messages: []));
       connection.invoke('AddToGroup', args: [createGroupState.groupName.text]);
-      homeState.rebuildChatList.toggle();
     }
   }
   void backToHomeScreen(){

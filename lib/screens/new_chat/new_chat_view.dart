@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:signalr_client/screens/chat/widgets/message.dart';
+import 'package:provider/provider.dart';
+import 'package:signalr_client/screens/new_chat/new_chat_state.dart';
 
+import '../../core/constants/ui.dart';
 import '/core/dependency_injection.dart';
 import 'new_chat_controller.dart';
 
@@ -15,6 +15,7 @@ class NewChatView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NewChatState state = context.watch<NewChatState>();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -22,16 +23,11 @@ class NewChatView extends StatelessWidget {
               onPressed: () {
                 myController.backToHomeScreen();
               },
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              icon: const Icon(Icons.arrow_back, color: ProjectColors.fontWhite),
             ),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "Create new chat",
-                  style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-              ],
+            title: const Text(
+              "Create new chat",
+              style: TextStyle(fontSize: ProjectSizes.newChatText, color: ProjectColors.fontWhite, fontWeight: FontWeight.bold),
             )),
         body: Column(
           children: [
@@ -39,18 +35,18 @@ class NewChatView extends StatelessWidget {
               children: const [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Icon(Icons.group, color: Colors.black, size: 20,),
+                  child: Icon(Icons.group, color: ProjectColors.iconBlackColor, size: ProjectSizes.newChatIcon,),
                 ),
-                Text("New group or join Group",  style: TextStyle(color: Colors.black, fontSize: 20),),
+                Text("New group or join Group",  style: TextStyle(color: ProjectColors.iconBlackColor, fontSize: ProjectSizes.newChatText),),
               ],
             )),
             TextButton(onPressed: () => myController.goToNewContactScreen(), child: Row(
               children: const [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Icon(Icons.add_reaction, color: Colors.black, size: 20,),
+                  child: Icon(Icons.add_reaction, color: ProjectColors.lightBlackHome, size: ProjectSizes.newChatIcon,),
                 ),
-                Text("New contact", style: TextStyle(color: Colors.black, fontSize: 20),)
+                Text("New contact", style: TextStyle(color: ProjectColors.fontBlackHome, fontSize: ProjectSizes.newChatText),)
               ],
             ))
           ],

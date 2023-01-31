@@ -4,7 +4,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
 import '/core/error/failures.dart';
-import '/core/interfaces/request.dart';
 import '/core/interfaces/usecase.dart';
 import '../sign_up_repository.dart';
 

@@ -1,6 +1,4 @@
-import 'dart:io';
 
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:signalr_client/core/interfaces/usecase.dart';
@@ -31,8 +29,8 @@ class SignUpRemoteDataSource implements SignUpDataSourceInterface {
     try {
       var data = await imageRequest.formData();
 
-
-      final response = await dio.post(Apis.getImage, data: data);
+      debugPrint("dio send request");
+      final response = await dio.post(Apis.getImage, data: data,options: Options(sendTimeout: 2000, receiveTimeout: 2000, ) );
 
       debugPrint("status code is ${response.statusCode}");
       debugPrint("");
@@ -41,10 +39,11 @@ class SignUpRemoteDataSource implements SignUpDataSourceInterface {
         debugPrint("successfully upload image");
         return NoParams();
       } else {
-        debugPrint("upload image failed");
-        return NoParams();
+        debugPrint("upload image failed response from server gotten");
+        throw ServerException(code: response.statusCode!, trace: StackTrace.fromString("SignUpRemoteDataSource:image"));
       }
     } catch (e, t) {
+      debugPrint("upload image failed");
       throw ServerException(code: -100, trace: t);
     }
   }

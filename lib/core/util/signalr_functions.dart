@@ -1,24 +1,29 @@
-import 'dart:async';
+
 import 'dart:core';
-import 'dart:io';
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:signalr_client/screens/new_contact/new_contact_state.dart';
 import 'package:signalr_core/signalr_core.dart';
 
 
-import 'package:signalr_client/core/constants/strings.dart';
-import 'core/constants/apis.dart';
-import 'core/dependency_injection.dart';
-import 'screens/home/home_state.dart';
-import 'screens/chat/chat_state.dart';
-import 'core/classes/chat.dart';
-import 'core/classes/message.dart';
+import 'package:signalr_client/core/constants/constant_values.dart';
+import '../constants/apis.dart';
+import '../dependency_injection.dart';
+import '../../screens/home/home_state.dart';
+import '../../screens/chat/chat_state.dart';
+import '../classes/chat.dart';
+import '../classes/message.dart';
 
 
 
-void define_signalr_functions(HubConnection connection, HomeState myHomeState, ChatState myChatState){
+void define_signalr_functions(){
+
+  HubConnection connection = getIt<HubConnection>();
+  HomeState myHomeState = getIt<HomeState>();
+  ChatState myChatState = getIt<ChatState>();
+  NewContactState newContactState = getIt<NewContactState>();
 
 
 
@@ -29,8 +34,7 @@ void define_signalr_functions(HubConnection connection, HomeState myHomeState, C
       myHomeState.chats[targetIndex].messages.add( Message(sender: message![0], text: message[1], senderUserName: message[2]));
       myHomeState.chats.insert(0, myHomeState.chats[targetIndex]);
       myHomeState.chats.removeAt(targetIndex + 1);
-      myChatState.rebuildChatList.toggle();
-      myHomeState.rebuildChatList.toggle();
+      myChatState.setState();
     }else{
       debugPrint("send request to get image");
       Map<String, String> requestHeaders = {
@@ -46,7 +50,7 @@ void define_signalr_functions(HubConnection connection, HomeState myHomeState, C
       myHomeState.chats.insert(0, Chat(type: ChatType.contact, chatName: message[0].toString(), messages:
       [Message(sender: message[0], text: message[1], senderUserName: message[2],)],userName: message[2],
       image: base64Image),);
-      myHomeState.rebuildChatList.toggle();
+      // myHomeState.rebuildChatList.toggle();
     }
 
     debugPrint("new message received from ${message[0]}");
@@ -57,8 +61,8 @@ void define_signalr_functions(HubConnection connection, HomeState myHomeState, C
     int targetChat = myHomeState.chats.indexWhere((element) => element.chatName == message[0].toString());
     myHomeState.chats[targetChat].userName = message[1];
     debugPrint("receive user name");
-    myHomeState.userNameReceived.toggle();
-    myHomeState.rebuildChatList.toggle();
+    newContactState.userNameReceived.toggle();
+    // myHomeState.rebuildChatList.toggle();
   });
 
   connection.on('GroupMessage', (message) {
@@ -69,24 +73,23 @@ void define_signalr_functions(HubConnection connection, HomeState myHomeState, C
       myHomeState.chats[targetIndex].messages.add(Message(sender: message[1], text: message[2], senderUserName: message[3]));
       myHomeState.chats.insert(0, myHomeState.chats[targetIndex]);
       myHomeState.chats.removeAt(targetIndex + 1);
-      myChatState.rebuildChatList.toggle();
-      myHomeState.rebuildChatList.toggle();
+      myChatState.setState();
     }else{
       debugPrint("here1");
       myHomeState.chats.insert(0, Chat(type: ChatType.contact, chatName: message[0].toString(), messages:
       [Message(sender: message[1], text: message[2], senderUserName: message[3]),]));
-      myHomeState.rebuildChatList.toggle();
+      // myHomeState.rebuildChatList.toggle();
     }
 
   });
 
   connection.on('ReceiveId', (message) {
-    myHomeState.myId = message![0];
-    debugPrint("client id is ${myHomeState.myId}");
-    connection.invoke('ReceiveFireBaseToken', args: [ConstStrings.fireBaseToken]);
+    ConstValues.myId = message![0];
+    debugPrint("client id is ${ConstValues.myId}");
+    connection.invoke('ReceiveFireBaseToken', args: [ConstValues.fireBaseToken]);
     debugPrint("connection status:  ${connection.state}");
     debugPrint("sending token");
-    myHomeState.idReceived.toggle();
+    // myHomeState.idReceived.toggle();
   });
 
 }

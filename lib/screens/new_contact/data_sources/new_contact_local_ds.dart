@@ -14,7 +14,7 @@ class NewContactLocalDataSource implements NewContactDataSourceInterFace{
 
   @override
   Future<String> getImage({required GetImageRequest request}) {
-    // TODO: implement getImage
+    //no local data source required yet
     throw UnimplementedError();
   }
 

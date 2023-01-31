@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:async';
 import 'dart:core';
 import 'dart:io';
@@ -6,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:signalr_core/signalr_core.dart';
 
+import '../../core/constants/constant_values.dart';
 import '../../core/util/failure_handler.dart';
 import '/core/constants/route_names.dart';
 import '/core/dependency_injection.dart';
@@ -24,36 +24,35 @@ class SignUpController extends MainController {
 
 
 
-  @override
-  void onCreate() {
 
-    super.onCreate();
-  }
 
-  @override
-  void onInit({dynamic args}) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
-  }
+  // @override
+  // void onInit({dynamic args}) {
+  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
+  // }
 
   void backToNewChatScreen() {
     myNavigator.goToName(RouteNames.newChat);
   }
 
-  void uploadImage() async{
-    ImageRequest imageRequest = ImageRequest(id: homeState.myId, image: signUpState.image!);
+  Future<void> uploadImage() async{
+    ImageRequest imageRequest = ImageRequest(id: ConstValues.myId, image: signUpState.image!);
     final result = await imageUseCaseUse(request: imageRequest);
     result.fold(
-            (failure) =>
-            FailureHandler.handle(failure, retry: () => uploadImage()),
-            (r) {});
-    debugPrint("result of uploading image is: $result");
+            (failure) {
+              debugPrint("fold failure state");
+            FailureHandler.handle(failure, retry: () => uploadImage());},
+            (r) {debugPrint("image uploaded successfully");});
+
   }
 
   void sendContactName() async {
-
-    homeState.userName = signUpState.nameController.text;
+    debugPrint("before upload image");
+    await uploadImage();
+    debugPrint("after upload image");
+    ConstValues.userName = signUpState.nameController.text;
     debugPrint("sending user name ${signUpState.nameController.text}");
-    connection.invoke('ReceiveUserName', args: [signUpState.nameController.text, homeState.myId]);
+    connection.invoke('ReceiveUserName', args: [signUpState.nameController.text, ConstValues.myId]);
     myNavigator.goToName(RouteNames.home);
   }
 
