@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:core';
 import 'dart:io';
+import 'package:messaging_signalr/messaging_signalr.dart';
 import 'package:signalr_core/signalr_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,8 +24,8 @@ import '../../core/classes/chat.dart';
 class CreateGroupController extends MainController {
   final CreateGroupState createGroupState = getIt<CreateGroupState>();
   final HomeState homeState = getIt<HomeState>();
-  final HubConnection connection = getIt<HubConnection>();
-
+  // final HubConnection connection = getIt<HubConnection>();
+  final SignalRMessaging signalRMessaging = getIt<SignalRMessaging>();
 
 
 
@@ -33,12 +34,14 @@ class CreateGroupController extends MainController {
 
 
   void createGroup(){
-    if(!homeState.chats.any((element) => element.chatName == createGroupState.groupName.text)) {
-      homeState.chats.add(Chat(type: ChatType.group, chatName: createGroupState.groupName.text,
-          messages: []));
-      connection.invoke('AddToGroup', args: [createGroupState.groupName.text]);
-    }
+    // if(!homeState.chats.any((element) => element.chatName == createGroupState.groupName.text)) {
+    //   homeState.chats.add(Chat(type: ChatType.group, chatName: createGroupState.groupName.text,
+    //       messages: []));
+    //   connection.invoke('AddToGroup', args: [createGroupState.groupName.text]);
+    // }
+    signalRMessaging.createGroup(newGroupName: createGroupState.groupName.text);
   }
+
   void backToHomeScreen(){
     myNavigator.goToName(RouteNames.newChat);
   }

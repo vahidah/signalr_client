@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
+import 'package:messaging_signalr/messaging_signalr.dart';
 import 'package:signalr_client/core/constants/ui.dart';
 import '../../../core/classes/chat.dart';
 import '../../../core/classes/message.dart';

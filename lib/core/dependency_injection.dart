@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:messaging_signalr/messaging_signalr.dart';
 import 'package:signalr_client/screens/chat/chat_repository.dart';
 import 'package:signalr_client/screens/chat/data_sources/chat_local_ds.dart';
 import 'package:signalr_client/screens/chat/data_sources/chat_remote_ds.dart';
@@ -36,7 +37,6 @@ import '../screens/sign_up/sign_up_state.dart';
 import '../screens/sign_up/sign_up_controller.dart';
 import '../screens/sign_up/data_sources/signup_remote_ds.dart';
 import '../screens/sign_up/sign_up_repository.dart';
-import 'util/signalr_functions.dart';
 import 'constants/constant_values.dart';
 import 'database/share_pref.dart';
 import 'navigation/router.dart';
@@ -49,15 +49,16 @@ import 'package:signalr_client/screens/new_contact/new_contact_repositroy.dart';
 final getIt = GetIt.instance;
 
 Future<void> init() async {
-  final connection = HubConnectionBuilder()
-      .withUrl(
-          'http://10.0.2.2:5000/Myhub',
-          HttpConnectionOptions(
-            client: IOClient(HttpClient()..badCertificateCallback = (x, y, z) => true),
-            logging: (level, message) => debugPrint(message),
-          ))
-      .build();
-  getIt.registerLazySingleton(() => connection);
+  // final connection = HubConnectionBuilder()
+  //     .withUrl(
+  //         'http://10.0.2.2:5000/Myhub',
+  //         HttpConnectionOptions(
+  //           client: IOClient(HttpClient()..badCertificateCallback = (x, y, z) => true),
+  //           logging: (level, message) => debugPrint(message),
+  //         ))
+  //     .build();
+
+  // getIt.registerLazySingleton(() => connection);
 
   SharedPreferences sp = await SharedPreferences.getInstance();
 
@@ -66,8 +67,6 @@ Future<void> init() async {
   NavigationService navigationService = NavigationService();
   getIt.registerSingleton(navigationService);
   getIt.registerLazySingleton(() => sharedPrefService);
-
-
 
   Connectivity connectivity = Connectivity();
   NetworkInfo networkInfo = NetworkInfo(connectivity);
@@ -91,9 +90,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => homeRepository);
 
   ///controller
-  HomeController homePageController = HomeController();
-  getIt.registerLazySingleton(() => homePageController);
-  navigationService.registerController(RouteNames.home, homePageController);
+
 
   // chat ------------------------------------------------------------------------------------------------------------------
   ///State
@@ -107,10 +104,7 @@ Future<void> init() async {
   ChatRepository chatRepository = ChatRepository(
       networkInfo: networkInfo, chatRemoteDataSource: chatRemoteDataSource, chatLocalDataSource: chatLocalDataSource);
 
-  ///controller
-  ChatController chatPageController = ChatController();
-  getIt.registerLazySingleton(() => chatPageController);
-  navigationService.registerController(RouteNames.chat, chatPageController);
+
 
   // create Group ------------------------------------------------------------------------------------------------------------------
   ///state
@@ -128,9 +122,6 @@ Future<void> init() async {
       createGroupLocalDataSource: createGroupLocalDataSource,
       createGroupRemoteDataSource: createGroupRemoteDataSource);
 
-  CreateGroupController createGroupPageController = CreateGroupController();
-  getIt.registerLazySingleton(() => createGroupPageController);
-  navigationService.registerController(RouteNames.createGroup, createGroupPageController);
 
   // new Chat ------------------------------------------------------------------------------------------------------------------
 
@@ -151,9 +142,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => newChatRepository);
 
   //controller
-  NewChatController newChatPageController = NewChatController();
-  getIt.registerLazySingleton(() => newChatPageController);
-  navigationService.registerController(RouteNames.newChat, newChatPageController);
+
 
   // new contact ------------------------------------------------------------------------------------------------------------------
   NewContactState newContactState = NewContactState();
@@ -173,9 +162,7 @@ Future<void> init() async {
 
   //controller
 
-  NewContactController newContactPageController = NewContactController();
-  getIt.registerLazySingleton(() => newContactPageController);
-  navigationService.registerController(RouteNames.newContact, newContactPageController);
+
 
   // sign Up ------------------------------------------------------------------------------------------------------------------
 
@@ -195,10 +182,7 @@ Future<void> init() async {
       signUpLocalDataSource: signUpLocalDataSource);
   getIt.registerLazySingleton(() => signupRepository);
 
-  //controller
-  SignUpController signUpController = SignUpController();
-  getIt.registerLazySingleton(() => signUpController);
-  navigationService.registerController(RouteNames.signUp, signUpController);
+
 
   //end screens section
 
@@ -207,16 +191,55 @@ Future<void> init() async {
   final FirebaseMessaging _firebasemessaging = FirebaseMessaging.instance;
   debugPrint("here2");
 
-  _firebasemessaging.getToken().then((deviceToken) {
-    print("Device Token: $deviceToken");
+  await _firebasemessaging.getToken().then((deviceToken) {
+    debugPrint("Device Token: $deviceToken");
     ConstValues.fireBaseToken = deviceToken ?? "";
   });
   debugPrint("here3");
 
-  define_signalr_functions();
+  // define_signalr_functions();
   debugPrint("here4");
 
-  await connection.start();
+  SignalRMessaging.init(
+      serverAddress: 'http://10.0.2.2:5000/Myhub',
+      firebaseToken: ConstValues.fireBaseToken,
+      haveImage: true,
+      eventCall: (){chatState.setState();homeState.setState();});
+
+  debugPrint("in dependency injection 5");
+
+  getIt.registerLazySingleton(() => SignalRMessaging.instance);
+
+  // await connection.start();
+
+  debugPrint("in dependency injection 6");
+  //controllers
+  //home
+  HomeController homePageController = HomeController();
+  getIt.registerLazySingleton(() => homePageController);
+  navigationService.registerController(RouteNames.home, homePageController);
+  //chat
+  ChatController chatPageController = ChatController();
+  getIt.registerLazySingleton(() => chatPageController);
+  navigationService.registerController(RouteNames.chat, chatPageController);
+  //createGroup
+  CreateGroupController createGroupPageController = CreateGroupController();
+  getIt.registerLazySingleton(() => createGroupPageController);
+  navigationService.registerController(RouteNames.createGroup, createGroupPageController);
+  //new chat
+  NewChatController newChatPageController = NewChatController();
+  getIt.registerLazySingleton(() => newChatPageController);
+  navigationService.registerController(RouteNames.newChat, newChatPageController);
+  //new contact
+  NewContactController newContactPageController = NewContactController();
+  getIt.registerLazySingleton(() => newContactPageController);
+  navigationService.registerController(RouteNames.newContact, newContactPageController);
+  //signup
+  SignUpController signUpController = SignUpController();
+  getIt.registerLazySingleton(() => signUpController);
+  navigationService.registerController(RouteNames.signUp, signUpController);
+
+  debugPrint("in dependency injection 7");
 
   MyRouter.initialize();
 }

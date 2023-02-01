@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:messaging_signalr/messaging_signalr.dart';
 import 'package:signalr_core/signalr_core.dart';
 
 import '../../core/constants/constant_values.dart';
@@ -19,24 +20,18 @@ class SignUpController extends MainController {
   final SignUpState signUpState = getIt<SignUpState>();
   final HomeState homeState = getIt<HomeState>();
   final SignupRepository signupRepository = getIt<SignupRepository>();
-  final connection = getIt<HubConnection>();
+  //final connection = getIt<HubConnection>();
   late ImageUseCase imageUseCaseUse = ImageUseCase(repository: signupRepository);
+  final SignalRMessaging signalRMessaging = getIt<SignalRMessaging>();
 
 
-
-
-
-  // @override
-  // void onInit({dynamic args}) {
-  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
-  // }
 
   void backToNewChatScreen() {
     myNavigator.goToName(RouteNames.newChat);
   }
 
   Future<void> uploadImage() async{
-    ImageRequest imageRequest = ImageRequest(id: ConstValues.myId, image: signUpState.image!);
+    ImageRequest imageRequest = ImageRequest(id: signalRMessaging.myId, image: signUpState.image!);
     final result = await imageUseCaseUse(request: imageRequest);
     result.fold(
             (failure) {
@@ -47,12 +42,13 @@ class SignUpController extends MainController {
   }
 
   void sendContactName() async {
-    debugPrint("before upload image");
-    await uploadImage();
-    debugPrint("after upload image");
-    ConstValues.userName = signUpState.nameController.text;
-    debugPrint("sending user name ${signUpState.nameController.text}");
-    connection.invoke('ReceiveUserName', args: [signUpState.nameController.text, ConstValues.myId]);
+    // debugPrint("before upload image");
+    // await uploadImage();
+    // debugPrint("after upload image");
+    // ConstValues.userName = signUpState.nameController.text;
+    // debugPrint("sending user name ${signUpState.nameController.text}");
+    // connection.invoke('ReceiveUserName', args: [signUpState.nameController.text, ConstValues.myId]);
+    await signalRMessaging.sendContactName(image: signUpState.image!, userName: signUpState.nameController.text);
     myNavigator.goToName(RouteNames.home);
   }
 

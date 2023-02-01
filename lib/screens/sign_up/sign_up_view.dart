@@ -22,6 +22,7 @@ class SignUpView extends StatelessWidget {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     SignUpState state = context.watch<SignUpState>();
+    debugPrint("in signup view 1");
     return SafeArea(
       child: Scaffold(
         backgroundColor: ProjectColors.backGround,

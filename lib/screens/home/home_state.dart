@@ -10,7 +10,9 @@ class HomeState with ChangeNotifier {
 
 
 
-  RxList<Chat> chats = <Chat>[].obs;
+  // RxList<Chat> chats = <Chat>[].obs;
+
+
 
 
 

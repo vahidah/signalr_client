@@ -2,12 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:messaging_signalr/messaging_signalr.dart';
 import 'package:provider/provider.dart';
-import 'package:signalr_client/core/classes/chat.dart';
 import 'package:signalr_client/screens/chat/widgets/message.dart';
 
-import '../../core/constants/constant_values.dart';
 import '/core/constants/ui.dart';
 import '/core/dependency_injection.dart';
 import 'chat_controller.dart';
@@ -15,7 +13,7 @@ import 'chat_state.dart';
 
 class ChatView extends StatelessWidget {
   final ChatController myController = getIt<ChatController>();
-
+  final SignalRMessaging signalRMessaging = getIt<SignalRMessaging>();
   ChatView({Key? key}) : super(key: key);
 
   @override
@@ -33,10 +31,13 @@ class ChatView extends StatelessWidget {
               title: Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage: MemoryImage(base64.decode(state.chat!.value.image!)),
+                    backgroundImage: signalRMessaging.selectedChat!.image != null
+                        ? MemoryImage(base64.decode(signalRMessaging.selectedChat!.image!))
+                        : const AssetImage("assets/images/4.jpg") as ImageProvider,
                   ),
+                  const SizedBox(width: 20,),
                   Text(
-                    "My Id is ${ConstValues.myId}",
+                    signalRMessaging.selectedChat!.userName?? signalRMessaging.selectedChat!.chatId,
                     style: const TextStyle(fontSize: 20, color: ProjectColors.fontWhite),
                   ),
                 ],
@@ -51,22 +52,19 @@ class ChatView extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
               ),
-              Obx(() {
-                debugPrint("rebuild this chat");
-                return SizedBox(
+              SizedBox(
                   height: MediaQuery.of(context).size.height - 140,
                   child: ListView(
                     shrinkWrap: true,
-                    children: state.chat!.value.messages.map((e) {
+                    children: signalRMessaging.selectedChat!.messages.map((e) {
                       return MessageWidget(
-                        clientMessage: e.sender == ConstValues.myId,
-                        chatType: state.chat!.value.type,
+                        clientMessage: e.sender == signalRMessaging.myId,
+                        chatType: signalRMessaging.selectedChat!.type,
                         message: e,
                       );
                     }).toList(),
                   ),
-                );
-              }),
+                ),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Row(
@@ -126,7 +124,7 @@ class ChatView extends StatelessWidget {
                           child: state.textController.text == ""
                               ? IconButton(onPressed: () {}, icon: const Icon(Icons.mic))
                               : IconButton(
-                                  onPressed: () => myController.sendMessage(state.chat!.value.type == ChatType.contact),
+                                  onPressed: () => myController.sendMessage(signalRMessaging.selectedChat!.type == ChatType.contact),
                                   icon: const Icon(Icons.send)),
                         ),
                       )

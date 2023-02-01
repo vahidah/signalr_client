@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../core/classes/chat.dart';
+// import '../../core/classes/chat.dart';
+import 'package:messaging_signalr/messaging_signalr.dart';
 
 class ChatState with ChangeNotifier {
   setState() => notifyListeners();
@@ -9,7 +10,7 @@ class ChatState with ChangeNotifier {
 
 
   RxString? chatKey;
-  Rx<Chat>? chat;
+  // Rx<Chat>? chat;
 
 
   TextEditingController textController = TextEditingController();
