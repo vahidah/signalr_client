@@ -77,8 +77,7 @@ Future<void> init() async {
   ///state
   HomeState homeState = HomeState();
   getIt.registerLazySingleton(() => homeState);
-  ChatState chatState = ChatState();
-  getIt.registerLazySingleton(() => chatState);
+
 
   ///Data Sources
   HomeLocalDataSource homeLocalDataSource = HomeLocalDataSource(sharedPreferences: sp);
@@ -94,7 +93,8 @@ Future<void> init() async {
 
   // chat ------------------------------------------------------------------------------------------------------------------
   ///State
-  //initialize in home state
+  ChatState chatState = ChatState();
+  getIt.registerLazySingleton(() => chatState);
 
   ///Data Sources
   ChatLocalDataSource chatLocalDataSource = ChatLocalDataSource(sharedPreferences: sp);
@@ -208,7 +208,7 @@ Future<void> init() async {
 
   debugPrint("in dependency injection 5");
 
-  getIt.registerLazySingleton(() => SignalRMessaging.instance);
+  getIt.registerLazySingleton(() => SignalRMessaging());
 
   // await connection.start();
 
