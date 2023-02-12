@@ -10,24 +10,25 @@ class FailureHandler {
 
   FailureHandler._();
 
-  static void handle(Failure failure,{Function? retry}) {
+  static void handle(Failure? failure,{Function? retry,}) {
+    //remember failure is not nullable
     debugPrint("handle failure called");
-    // navigationService.snackBar(GestureDetector(
-    //     onTap: (){
-    //       // AppB
-    //     },
-    //     child: Text("$failure")),
-    //     icon: Icons.error,
-    //     backgroundColor: Colors.red,
-    //     duration: const Duration(seconds: 10),
-    //     action: SnackBarAction(
-    //       textColor: Colors.white,
-    //       label: "Retry",
-    //       onPressed: () {
-    //         log("Retry");
-    //         retry?.call();
-    //       },
-    //     ));
+    navigationService.snackBar(GestureDetector(
+        onTap: (){
+          // AppB
+        },
+        child: Text("$failure")),
+        icon: Icons.error,
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 10),
+        action: SnackBarAction(
+          textColor: Colors.white,
+          label: "Retry",
+          onPressed: () {
+            log("Retry");
+            retry?.call();
+          },
+        ));
   }
 
   static void handleNoElement(String name) {

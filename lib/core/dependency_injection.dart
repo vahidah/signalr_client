@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +18,6 @@ import 'package:signalr_client/screens/new_chat/data_sources/remote_data_source.
 import 'package:signalr_client/screens/new_chat/new_chat_repository.dart';
 import 'package:signalr_client/screens/new_contact/data_sources/new_contact_local_ds.dart';
 import 'package:signalr_client/screens/sign_up/data_sources/signup_local_ds.dart';
-import 'package:signalr_core/signalr_core.dart';
-import 'package:http/io_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screens/home/home_state.dart';
@@ -49,16 +46,8 @@ import 'package:signalr_client/screens/new_contact/new_contact_repositroy.dart';
 final getIt = GetIt.instance;
 
 Future<void> init() async {
-  // final connection = HubConnectionBuilder()
-  //     .withUrl(
-  //         'http://10.0.2.2:5000/Myhub',
-  //         HttpConnectionOptions(
-  //           client: IOClient(HttpClient()..badCertificateCallback = (x, y, z) => true),
-  //           logging: (level, message) => debugPrint(message),
-  //         ))
-  //     .build();
 
-  // getIt.registerLazySingleton(() => connection);
+
 
   SharedPreferences sp = await SharedPreferences.getInstance();
 
@@ -103,6 +92,7 @@ Future<void> init() async {
   ///Repository
   ChatRepository chatRepository = ChatRepository(
       networkInfo: networkInfo, chatRemoteDataSource: chatRemoteDataSource, chatLocalDataSource: chatLocalDataSource);
+  getIt.registerLazySingleton(() => chatRepository);
 
 
 
@@ -121,6 +111,7 @@ Future<void> init() async {
       networkInfo: networkInfo,
       createGroupLocalDataSource: createGroupLocalDataSource,
       createGroupRemoteDataSource: createGroupRemoteDataSource);
+  getIt.registerLazySingleton(() => createGroupRepository);
 
 
   // new Chat ------------------------------------------------------------------------------------------------------------------
@@ -201,10 +192,10 @@ Future<void> init() async {
   debugPrint("here4");
 
   SignalRMessaging.init(
-      serverAddress: 'http://10.0.2.2:5000/Myhub',
+      serverAddress: 'http://167.235.239.170:5024/Myhub',
       firebaseToken: ConstValues.fireBaseToken,
-      haveImage: true,
       eventCall: (){chatState.setState();homeState.setState();});
+    //serverAddress: 'http://10.0.2.2:5000/Myhub',
 
   debugPrint("in dependency injection 5");
 

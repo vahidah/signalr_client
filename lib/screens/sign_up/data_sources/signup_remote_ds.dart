@@ -44,6 +44,7 @@ class SignUpRemoteDataSource implements SignUpDataSourceInterface {
       }
     } catch (e, t) {
       debugPrint("upload image failed");
+
       throw ServerException(code: -100, trace: t);
     }
   }

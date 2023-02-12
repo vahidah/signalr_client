@@ -47,6 +47,7 @@ class HomeView extends StatelessWidget {
               shrinkWrap: true,
               children: [
                 ...signalRMessaging.chats.map((e) {
+                  debugPrint(e.image == null ? "null": "not null");
                   return TextButton(
                     onPressed: () => myController.goToChatScreen(e.chatId),
                     child: Container(

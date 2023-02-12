@@ -19,7 +19,6 @@ import '../../core/classes/message.dart';
 class NewContactController extends MainController {
   final NewContactState newContactState = getIt<NewContactState>();
   final HomeState homeState = getIt<HomeState>();
-  // final connection = getIt<HubConnection>();
   final SignalRMessaging signalRMessaging = getIt<SignalRMessaging>();
 
   final NewContactRepository newContactRepository = getIt<NewContactRepository>();
@@ -73,6 +72,7 @@ class NewContactController extends MainController {
     //           image: base64Image));
     //   connection.invoke('sendMessage',
     //       args: [int.parse(newContactState.contactId.text), newContactState.firstMessage.text, true]);
+    debugPrint("sending First Message to contact");
     signalRMessaging.sendFirstMessage(int.parse(newContactState.contactId.text), newContactState.firstMessage.text);
     newContactState.firstMessage.clear();
     newContactState.contactId.clear();

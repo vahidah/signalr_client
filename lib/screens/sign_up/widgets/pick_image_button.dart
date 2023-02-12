@@ -30,7 +30,7 @@ class PickImageButton extends StatelessWidget {
           children: [
             Icon(icon),
             const SizedBox(width: 10,),
-            Text(title, style: TextStyle(fontWeight: FontWeight.bold),)
+            Text(title, style: const TextStyle(fontWeight: FontWeight.bold),)
           ],
         ),
       ),

@@ -19,7 +19,6 @@ import 'home_state.dart';
 class HomeController extends MainController {
   final HomeState homeState = getIt<HomeState>();
   final ChatState chatState = getIt<ChatState>();
-  // final HubConnection connection = getIt<HubConnection>();
 
 
 

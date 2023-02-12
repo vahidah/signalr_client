@@ -16,7 +16,23 @@ class SignUpState with ChangeNotifier {
 
   File? get image => _image;
 
+  bool _loading = false;
+
+  set setLoading(bool newValue) {
+
+    _loading = newValue;
+    notifyListeners();
+  }
+
+  bool? get loading => _loading;
+
   TextEditingController nameController = TextEditingController();
+
+  // void setLoading(bool newValue) {
+  //   _loading = newValue;
+  //   setState();
+  // }
+
 
 
 }

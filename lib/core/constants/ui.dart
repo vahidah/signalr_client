@@ -5,7 +5,7 @@ class ProjectColors{
 
   ProjectColors._();
 
-  static const backGround = Colors.blue;
+  static const projectBlue = Colors.blue;
   static const fontWhite = Colors.white;
   static const iconBlackColor = Colors.black45;
   static const lightBlackHome = Colors.black54;

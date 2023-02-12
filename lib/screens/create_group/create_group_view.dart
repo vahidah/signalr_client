@@ -78,7 +78,7 @@ class CreateGroupView extends StatelessWidget {
                           Align(
                             alignment: Alignment.bottomRight,
                             child: CircleAvatar(
-                              backgroundColor: ProjectColors.backGround,
+                              backgroundColor: ProjectColors.projectBlue,
                               radius: 12,
                               child: Icon(Icons.add),
                             ),
