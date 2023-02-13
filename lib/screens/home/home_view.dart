@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:signalr_client/core/constants/ui.dart';
 
 import '../../core/constants/constant_values.dart';
+import '../../core/util/funcions.dart';
 import '/core/dependency_injection.dart';
 import 'home_controller.dart';
 import 'home_state.dart';
@@ -58,15 +59,20 @@ class HomeView extends StatelessWidget {
                                   width: 1.0, color: ProjectColors.lightBlackHome, style: BorderStyle.solid))),
                       child: Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: CircleAvatar(
-                              backgroundImage: e.image != null
-                                  ? MemoryImage(base64.decode(e.image!))
-                                  : const AssetImage("assets/images/4.jpg") as ImageProvider,
-                              radius: 25,
+                          Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding: const EdgeInsets.all(10),
+                            height:50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                                color: ProjectColors.projectBlue,
+                                borderRadius: BorderRadius.circular(25)
+                              //more than 50% of width makes circle
                             ),
-                          ),
+                            child: e.image == null ?FittedBox(
+                              fit: BoxFit.fitWidth,
+                              child: Text(firstTwoChOfName(e.userName ?? e.chatId), style: const TextStyle(color: ProjectColors.fontWhite),),
+                          ) : Image.memory(base64.decode(e.image!))),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,6 +92,8 @@ class HomeView extends StatelessWidget {
                                   style: const TextStyle(
                                     color: ProjectColors.lightBlackHome,
                                   ),
+                                  softWrap:false ,
+                                  maxLines: 1,
                                 ),
                               ],
                             ),

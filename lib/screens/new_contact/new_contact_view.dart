@@ -36,7 +36,7 @@ class NewContactView extends StatelessWidget {
         body: Obx( () => state.userNameReceived.value ? Column(
           children: [
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 15),
+              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               child: ProjectTextField(
                 style: const TextStyle(
                     decoration: TextDecoration.none, color: ProjectColors.fontBlackHome, fontWeight: FontWeight.bold),

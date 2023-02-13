@@ -42,7 +42,7 @@ class MyRouter {
       ),
       MyRoute(
         name: RouteNames.createGroup,
-        path: '/create geGroup',
+        path: RouteNames.createGroup,
         title: 'Creatroup',
         builder: (BuildContext context, GoRouterState state) => CreateGroupView(),
       ),

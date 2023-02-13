@@ -1,0 +1,330 @@
+{
+  "project_info": {
+    "project_number": "928133064448",
+    "project_id": "notif-test-9915e",
+    "storage_bucket": "notif-test-9915e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928133064448:android:981092cf586af307b3f5e5",
+        "android_client_info": {
+          "package_name": "com.abomis.turnaround"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928133064448-ivd2mlg3mnak08pfuiqmub91uqoer62f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abomis.turnaround",
+            "certificate_hash": "358a7e2d4793b175089a88847619772ba6d3ddf8"
+          }
+        },
+        {
+          "client_id": "928133064448-naej12dcrrlqttb6ivj53eap6eb3lf83.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abomis.turnaround",
+            "certificate_hash": "2f5662f142c86d9404ff9e4ef46113055502f90d"
+          }
+        },
+        {
+          "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBilI-ZGsNXxKfEbKpWAIv-IpwkaJ0L48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "928133064448-29f2rag0tgnta3jtrpnshmmp16mi10ge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.testNotifConfig"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928133064448:android:58600fd33bdc33d5b3f5e5",
+        "android_client_info": {
+          "package_name": "com.abomis.turnaround.flavorDev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBilI-ZGsNXxKfEbKpWAIv-IpwkaJ0L48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "928133064448-29f2rag0tgnta3jtrpnshmmp16mi10ge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.testNotifConfig"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928133064448:android:988f80e3bf69da7bb3f5e5",
+        "android_client_info": {
+          "package_name": "com.example.flutter_notif_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBilI-ZGsNXxKfEbKpWAIv-IpwkaJ0L48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "928133064448-29f2rag0tgnta3jtrpnshmmp16mi10ge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.testNotifConfig"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928133064448:android:4f931a6918cb0140b3f5e5",
+        "android_client_info": {
+          "package_name": "com.example.notif1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBilI-ZGsNXxKfEbKpWAIv-IpwkaJ0L48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "928133064448-29f2rag0tgnta3jtrpnshmmp16mi10ge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.testNotifConfig"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928133064448:android:95d0f610755a870fb3f5e5",
+        "android_client_info": {
+          "package_name": "com.example.notif_channel_test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBilI-ZGsNXxKfEbKpWAIv-IpwkaJ0L48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "928133064448-29f2rag0tgnta3jtrpnshmmp16mi10ge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.testNotifConfig"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928133064448:android:702bdf8e3dd5fbdab3f5e5",
+        "android_client_info": {
+          "package_name": "com.example.notif_device"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928133064448-8tjuadrtd635bkjo8a756fsuea5td13g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.notif_device",
+            "certificate_hash": "f84437db4d355882898856b855f795d304c9dbbe"
+          }
+        },
+        {
+          "client_id": "928133064448-k8u7h2vla8vvtl1gud6h85r3u1ter0g7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.notif_device",
+            "certificate_hash": "2f5662f142c86d9404ff9e4ef46113055502f90d"
+          }
+        },
+        {
+          "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBilI-ZGsNXxKfEbKpWAIv-IpwkaJ0L48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "928133064448-29f2rag0tgnta3jtrpnshmmp16mi10ge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.testNotifConfig"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928133064448:android:bea88c5de1df9402b3f5e5",
+        "android_client_info": {
+          "package_name": "com.example.signalr_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBilI-ZGsNXxKfEbKpWAIv-IpwkaJ0L48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "928133064448-29f2rag0tgnta3jtrpnshmmp16mi10ge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.testNotifConfig"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928133064448:android:3596db6a65c3ef92b3f5e5",
+        "android_client_info": {
+          "package_name": "com.example.web_socket_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBilI-ZGsNXxKfEbKpWAIv-IpwkaJ0L48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928133064448-im6b6c178tvpgigghh9n0jv9nhned18p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "928133064448-29f2rag0tgnta3jtrpnshmmp16mi10ge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.testNotifConfig"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

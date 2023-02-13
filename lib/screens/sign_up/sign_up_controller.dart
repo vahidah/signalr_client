@@ -30,6 +30,7 @@ class SignUpController extends MainController {
 
 
   Future<void> sendContactNameSignalrPackage() async{
+    //
     try{
       await signalRMessaging.sendContactName(image: signUpState.image, userName: signUpState.nameController.text);
     }catch(e, t){
@@ -41,7 +42,7 @@ class SignUpController extends MainController {
           child: const Text("upload image failed")),
           icon: Icons.error,
           backgroundColor: Colors.red,
-          duration: const Duration(seconds: 120),
+          duration: const Duration(seconds: 20),
           action: SnackBarAction(
             textColor: Colors.white,
             label: "Retry",
@@ -71,4 +72,6 @@ class SignUpController extends MainController {
       signUpState.setImage = File(image.path);
     }
   }
+
+
 }
