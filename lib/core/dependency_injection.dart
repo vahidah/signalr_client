@@ -77,7 +77,6 @@ Future<void> init() async {
       networkInfo: networkInfo, homeLocalDataSource: homeLocalDataSource, homeRemoteDataSource: homeRemoteDataSource);
   getIt.registerLazySingleton(() => homeRepository);
 
-  ///controller
 
 
   // chat ------------------------------------------------------------------------------------------------------------------
@@ -132,7 +131,6 @@ Future<void> init() async {
 
   getIt.registerLazySingleton(() => newChatRepository);
 
-  //controller
 
 
   // new contact ------------------------------------------------------------------------------------------------------------------
@@ -151,7 +149,6 @@ Future<void> init() async {
       networkInfo: networkInfo);
   getIt.registerLazySingleton(() => newContactRepository);
 
-  //controller
 
 
 
@@ -194,7 +191,11 @@ Future<void> init() async {
   SignalRMessaging.init(
       serverAddress: 'http://167.235.239.170:5024/Myhub',
       firebaseToken: ConstValues.fireBaseToken,
-      eventCall: (){chatState.setState();homeState.setState();});
+      eventCall: (){chatState.setState();homeState.setState();},
+      onSendMessage: (){
+        chatState.setChat = SignalRMessaging().chats.firstWhere((element) => element.chatId == chatState.chatKey.value);
+        homeState.setState();},
+  );
     //serverAddress: 'http://10.0.2.2:5000/Myhub',
 
   debugPrint("in dependency injection 5");

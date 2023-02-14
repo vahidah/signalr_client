@@ -10,12 +10,18 @@ import '../../core/util/funcions.dart';
 import '/core/constants/ui.dart';
 import '/core/dependency_injection.dart';
 import 'chat_controller.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'chat_state.dart';
 
 class ChatView extends StatelessWidget {
-  final ChatController myController = getIt<ChatController>();
-  final SignalRMessaging signalRMessaging = getIt<SignalRMessaging>();
+
   ChatView({Key? key}) : super(key: key);
+
+  final ChatController myController = getIt<ChatController>();
+
+  final SignalRMessaging signalRMessaging = getIt<SignalRMessaging>();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +36,7 @@ class ChatView extends StatelessWidget {
                 icon: const Icon(Icons.arrow_back, color: ProjectColors.fontWhite),
               ),
               title: InkWell(
-                onTap: () => myController.myNavigator.snackBar(Text("contact id is: ${signalRMessaging.selectedChat!.chatId}")),
+                onTap: () => myController.myNavigator.snackBar(Text("contact id is: ${state.selectedChat.chatId}")),
                 child: Row(
                   children: [
                     Container(
@@ -42,13 +48,13 @@ class ChatView extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20)
                           //more than 50% of width makes circle
                         ),
-                        child: signalRMessaging.selectedChat!.image == null ?FittedBox(
+                        child: state.selectedChat.image == null ?FittedBox(
                           fit: BoxFit.fitWidth,
-                          child: Text(firstTwoChOfName(signalRMessaging.selectedChat!.userName ?? signalRMessaging.selectedChat!.chatId), style: const TextStyle(color: ProjectColors.projectBlue),),
-                        ) : Image.memory(base64.decode(signalRMessaging.selectedChat!.image!))),
+                          child: Text(firstTwoChOfName(state.selectedChat.userName ?? state.selectedChat.chatId), style: const TextStyle(color: ProjectColors.projectBlue),),
+                        ) : Image.memory(base64.decode(state.selectedChat.image!))),
                     const SizedBox(width: 10,),
                     Text(
-                      signalRMessaging.selectedChat!.userName?? signalRMessaging.selectedChat!.chatId,
+                      state.selectedChat.userName?? state.selectedChat.chatId,
                       style: const TextStyle(fontSize: 20, color: ProjectColors.fontWhite),
                     ),
                   ],
@@ -69,15 +75,19 @@ class ChatView extends StatelessWidget {
                   Expanded(
                     child: SizedBox(
                         height: MediaQuery.of(context).size.height - 140,
-                        child: ListView(
+                        child: ScrollablePositionedList.builder(
+                          itemPositionsListener: state.itemPositionsListener,
+                          itemScrollController: state.itemScrollController,
                           shrinkWrap: true,
-                          children: signalRMessaging.selectedChat!.messages.map((e) {
-                            return MessageWidget(
-                              clientMessage: e.sender == signalRMessaging.myId,
-                              chatType: signalRMessaging.selectedChat!.type,
-                              message: e,
-                            );
-                          }).toList(),
+                          itemCount: state.selectedChat.messages.length,
+                          itemBuilder: (BuildContext context, int index) {
+                          final currentItem =  state.selectedChat.messages[index];
+                          return MessageWidget(
+                            clientMessage: currentItem.sender == signalRMessaging.myId,
+                            chatType: state.selectedChat.type,
+                            message: currentItem,
+                          );
+                          },
                         ),
                       ),
                   ),
@@ -140,7 +150,7 @@ class ChatView extends StatelessWidget {
                             child: state.textController.text == ""
                                 ? IconButton(onPressed: () {}, icon: const Icon(Icons.mic))
                                 : IconButton(
-                                onPressed: () => myController.sendMessage(signalRMessaging.selectedChat!.type == ChatType.contact),
+                                onPressed: () => myController.sendMessage(state.selectedChat.type == ChatType.contact),
                                 icon: const Icon(Icons.send)),
                           ),
                         )

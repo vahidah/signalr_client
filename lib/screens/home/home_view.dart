@@ -87,7 +87,7 @@ class HomeView extends StatelessWidget {
                                 ),
                                 Text(
                                   e.messages.isNotEmpty
-                                      ? "${e.messages[0].senderUserName} : ${e.messages[0].text}"
+                                      ? "${e.messages.last.senderUserName} : ${e.messages.last.text}"
                                       : "",
                                   style: const TextStyle(
                                     color: ProjectColors.lightBlackHome,
@@ -107,7 +107,7 @@ class HomeView extends StatelessWidget {
                                   padding: const EdgeInsets.only(top: 8.0),
                                   child: Text(
                                     e.messages.isNotEmpty?
-                                    "${e.messages[0].date?.hour}: ${e.messages[0].date?.minute}"
+                                    "${e.messages.last.date?.hour}: ${e.messages.last.date?.minute}"
                                     : "",
                                     style: const TextStyle(color: ProjectColors.fontGrayHome),
                                   ),

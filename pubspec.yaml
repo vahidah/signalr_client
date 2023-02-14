@@ -46,6 +46,7 @@ dependencies:
   shared_preferences: ^2.0.17
   connectivity_plus: ^3.0.2
   flutter_spinkit: ^5.1.0
+  scrollable_positioned_list: ^0.3.5
   messaging_signalr:
     path: ../messaging_signalr
 

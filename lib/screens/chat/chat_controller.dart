@@ -1,7 +1,7 @@
 import 'dart:core';
+import 'package:flutter/animation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
-
-
 
 import '/core/constants/route_names.dart';
 import '/core/dependency_injection.dart';
@@ -9,62 +9,67 @@ import '/core/interfaces/controller.dart';
 import 'chat_state.dart';
 import '../home/home_state.dart';
 
-
-
-
-
 class ChatController extends MainController {
   final ChatState chatState = getIt<ChatState>();
   final HomeState homeState = getIt<HomeState>();
   final SignalRMessaging signalRMessaging = getIt<SignalRMessaging>();
   // final HubConnection connection = getIt<HubConnection>();
 
-
-
-
-
+  int indexBeforeAdd = 0;
 
   @override
   void onInit() {
+    chatState.setChat = signalRMessaging.chats.firstWhere((element) {
+      return element.chatId == chatState.chatKey.value;
+    });
+    debugPrint("after set chat");
+    final scrollListener = chatState.itemPositionsListener;
 
-    // debugPrint("finding chatKey");
-    // chatState.chat = signalRMessaging.chats.firstWhere((element) {
-    //   debugPrint("chatkey is : ${chatState.chatKey} and element key is : ${element.chatName}");
-    //   return element.chatName == chatState.chatKey!.value;
-    // }).obs;
-    signalRMessaging.setSelectedChat(chatState.chatKey!.value);
+    scrollListener.itemPositions.addListener(() {
+      //todo use it just for check seen of message
+      final itemPositionsList = scrollListener.itemPositions.value.toList();
+
+      debugPrint("print trailing edges");
+
+      for (var element in itemPositionsList) {
+
+        debugPrint(element.itemTrailingEdge.toString());
+
+      }
+      int lastIndex = chatState.selectedChat.messages.length - 1;
+      // indexBeforeAdd != lastIndex && itemPositionsList.isNotEmpty && lastIndex != itemPositionsList.last.index
+      //indexBeforeAdd != lastIndex &&  (lastIndex != itemPositionsList.last.index || itemPositionsList.last.itemTrailingEdge > 1)
+      debugPrint("${indexBeforeAdd != lastIndex}, ${lastIndex != itemPositionsList.last.index},  ${itemPositionsList.last.itemTrailingEdge > 1}");
+      if (indexBeforeAdd != lastIndex &&
+          (lastIndex != itemPositionsList.last.index || itemPositionsList.last.itemTrailingEdge > 1)) {
+        int lastIndex = chatState.selectedChat.messages.length - 1;
+          debugPrint("scroll jumped");
+          debugPrint("${itemPositionsList.last.index}");
+          debugPrint("$lastIndex");
+          chatState.itemScrollController.scrollTo(index: lastIndex, duration: const Duration(microseconds: 100));
+        indexBeforeAdd = lastIndex;
+      }
+    });
+
     super.onInit();
   }
 
-  void sendMessage(bool privateChat){
-    // if(privateChat) {
-    //   chatState.chat!.value.messages.add(
-    //       Message(sender: ConstValues.myId, text: chatState.textController.text, senderUserName: ConstValues.userName));
-    //   connection.invoke(
-    //       'sendMessage', args: [int.parse(chatState.chat!.value.chatName), chatState.textController.text, false]);
-    // }else {
-    //   connection.invoke('SendMessageToGroup', args: [chatState.chat!.value.chatName, ConstValues.myId, chatState.textController.text]);
-    // }
-    signalRMessaging.sendMessage(privateChat: privateChat, message: chatState.textController.text);
+  void sendMessage(bool privateChat) {
+    signalRMessaging.sendMessage(
+        privateChat: privateChat, message: chatState.textController.text, chatId: chatState.chatKey.value);
     chatState.textController.clear();
     chatState.setState();
   }
 
-  void bachToHomeScreen(){
+  void bachToHomeScreen() {
     myNavigator.goToName(RouteNames.home);
   }
 
-  void textControllerChanged(String str){
-
+  void textControllerChanged(String str) {
     if (str == "") {
       chatState.setShowSendMessageIcon = false;
     } else if (str != "") {
       chatState.setShowSendMessageIcon = true;
     }
   }
-
-
-
-
-
 }
