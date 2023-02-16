@@ -8,6 +8,8 @@ class ProjectTextField extends StatelessWidget {
       {Key? key,
       this.contentPadding = const EdgeInsets.all(20),
       this.hintText,
+      required this.validate,
+      this.errorText,
       required this.controller,
       this.inputBorder,
       this.style = const TextStyle(
@@ -19,6 +21,8 @@ class ProjectTextField extends StatelessWidget {
   final InputBorder? inputBorder;
   final TextEditingController controller;
   final TextStyle style;
+  final bool validate;
+  final String? errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +30,15 @@ class ProjectTextField extends StatelessWidget {
       style: style,
       decoration: InputDecoration(
         contentPadding: contentPadding,
+          errorStyle: const TextStyle(fontSize: 15),
         border: inputBorder ??
             OutlineInputBorder(
+
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(color: ProjectColors.fontWhite, width: 1),
             ),
         hintText: hintText,
+        errorText: validate? null : errorText ,
       ),
       controller: controller,
     );

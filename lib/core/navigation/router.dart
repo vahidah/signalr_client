@@ -6,7 +6,7 @@ import '/screens/home/home_view.dart';
 import '/screens/chat/chat_view.dart';
 import '/screens/create_group/create_group_view.dart';
 import '/screens/new_chat/new_chat_view.dart';
-import '/screens/new_contact/new_contact_view.dart';
+import '/screens/add_contact/new_contact_view.dart';
 import '/screens/sign_up/sign_up_view.dart';
 import '../constants/route_names.dart';
 

@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
 
@@ -57,6 +58,11 @@ class SignUpController extends MainController {
   void sendContactName() async {
 
     debugPrint("in sendContactName Function 1");
+    if(signUpState.nameController.text.isEmpty){
+      signUpState.validate.toggle();
+      return;
+
+    }
     signUpState.setState();
     signUpState.setLoading = true;
     await sendContactNameSignalrPackage();

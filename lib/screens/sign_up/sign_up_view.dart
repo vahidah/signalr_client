@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -39,7 +40,12 @@ class SignUpView extends StatelessWidget {
                         Container(
                             width: screenWidth - 150,
                             margin: const EdgeInsets.only(top: 10),
-                            child: ProjectTextField(controller: state.nameController, hintText: 'Enter user name')),
+                            child: Obx(() => ProjectTextField(
+                                  controller: state.nameController,
+                                  hintText: 'Enter user name',
+                                  validate: state.validate.value,
+                                  errorText: "Username cant be empty",
+                                ))),
                         SizedBox(
                           width: 200,
                           height: 200,

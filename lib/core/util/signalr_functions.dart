@@ -4,7 +4,7 @@
 // import 'package:get/get.dart';
 // import 'package:http/http.dart' as http;
 // import 'package:flutter/material.dart';
-// import 'package:signalr_client/screens/new_contact/new_contact_state.dart';
+// import 'package:signalr_client/screens/add_contact/new_contact_state.dart';
 // import 'package:signalr_core/signalr_core.dart';
 //
 //

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:signalr_client/screens/new_contact/new_contact_state.dart';
+import 'package:signalr_client/screens/add_contact/new_contact_state.dart';
 
 
 import '../../widgets/ProjectTextField.dart';
@@ -33,25 +33,20 @@ class NewContactView extends StatelessWidget {
               "Create new contact",
               style: TextStyle(fontSize: 20, color: ProjectColors.fontWhite, fontWeight: FontWeight.bold),
             )),
-        body: Obx( () => state.userNameReceived.value ? Column(
+        body: Obx( () => state.getContactInfoCompleted.value ? Column(
           children: [
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: ProjectTextField(
-                style: const TextStyle(
-                    decoration: TextDecoration.none, color: ProjectColors.fontBlackHome, fontWeight: FontWeight.bold),
+              child: TextField(
+                  style: const TextStyle(
+                          decoration: TextDecoration.none, color: ProjectColors.fontBlackHome, fontWeight: FontWeight.bold),
                 controller: state.contactId,
-                hintText: "Enter contact Id",
-              )),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 15),
-              child: ProjectTextField(
-                style: const TextStyle(
-                    decoration: TextDecoration.none, color: ProjectColors.fontBlackHome, fontWeight: FontWeight.bold),
-                hintText: "Enter first message",
-                controller: state.firstMessage,
+                  decoration: const InputDecoration(
+                    hintText: "Enter contact Id",
+                  )
               )
             ),
+
           ],
         ) : const Center(child: CircularProgressIndicator(),)),
         floatingActionButton: FloatingActionButton(

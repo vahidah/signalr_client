@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dartz/dartz.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
-import 'package:signalr_client/screens/new_contact/new_contact_repositroy.dart';
-import 'package:signalr_client/screens/new_contact/usecases/get_image_usecase.dart';
+import 'package:signalr_client/screens/add_contact/new_contact_repositroy.dart';
+import 'package:signalr_client/screens/add_contact/usecases/get_image_usecase.dart';
 import 'package:signalr_core/signalr_core.dart';
 
+import '../../core/navigation/navigation_service.dart';
 import '/core/constants/route_names.dart';
 import '/core/dependency_injection.dart';
 import '/core/interfaces/controller.dart';
@@ -20,7 +21,7 @@ class NewContactController extends MainController {
   final NewContactState newContactState = getIt<NewContactState>();
   final HomeState homeState = getIt<HomeState>();
   final SignalRMessaging signalRMessaging = getIt<SignalRMessaging>();
-
+  static final NavigationService navigationService = getIt<NavigationService>();
   final NewContactRepository newContactRepository = getIt<NewContactRepository>();
   late GetImageUseCase getImageUseCase = GetImageUseCase(repository: newContactRepository);
 
@@ -73,8 +74,20 @@ class NewContactController extends MainController {
     //   connection.invoke('sendMessage',
     //       args: [int.parse(newContactState.contactId.text), newContactState.firstMessage.text, true]);
     debugPrint("sending First Message to contact");
-    signalRMessaging.sendFirstMessage(int.parse(newContactState.contactId.text), newContactState.firstMessage.text);
-    newContactState.firstMessage.clear();
+    newContactState.getContactInfoCompleted.toggle();
+    try{
+    await signalRMessaging.addNewContact(contactId: int.parse(newContactState.contactId.text));
+    myNavigator.goToName(RouteNames.home);
+    } catch(e, t){
+      debugPrint("exception caught");
+      navigationService.snackBar(GestureDetector(
+          onTap: (){},
+          child:  Text(e.toString().split(":")[1])),
+          icon: Icons.error,
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 20),
+      );
+    }
     newContactState.contactId.clear();
 
     }

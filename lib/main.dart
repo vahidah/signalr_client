@@ -18,7 +18,7 @@ import 'screens/home/home_state.dart';
 import 'screens/chat/chat_state.dart';
 import 'screens/create_group/create_group_state.dart';
 import 'screens/new_chat/new_chat_state.dart';
-import 'screens/new_contact/new_contact_state.dart';
+import 'screens/add_contact/new_contact_state.dart';
 import 'screens/sign_up/sign_up_state.dart';
 
 

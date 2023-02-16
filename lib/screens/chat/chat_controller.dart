@@ -46,7 +46,7 @@ class ChatController extends MainController {
           debugPrint("scroll jumped");
           debugPrint("${itemPositionsList.last.index}");
           debugPrint("$lastIndex");
-          chatState.itemScrollController.scrollTo(index: lastIndex, duration: const Duration(microseconds: 100));
+          chatState.itemScrollController.scrollTo(index: lastIndex, duration: const Duration(milliseconds: 400), curve: Curves.easeInOutCubic,);
         indexBeforeAdd = lastIndex;
       }
     });

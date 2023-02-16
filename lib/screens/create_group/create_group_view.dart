@@ -93,11 +93,20 @@ class CreateGroupView extends StatelessWidget {
                       bottom: 5,
                     ),
                     width: MediaQuery.of(context).size.width - 125,
-                    child: ProjectTextField(
-                      hintText: "Type group subject here",
+                    child:
+                    // ProjectTextField(
+                    //   hintText: "Type group subject here",
+                    //   style: const TextStyle(fontSize: 15, decoration: TextDecoration.none),
+                    //   contentPadding:const EdgeInsets.symmetric(horizontal: 12),
+                    //     controller: state.groupName
+                    // )
+                    TextField(
                       style: const TextStyle(fontSize: 15, decoration: TextDecoration.none),
-                      contentPadding:const EdgeInsets.symmetric(horizontal: 12),
-                        controller: state.groupName
+                          controller: state.groupName,
+                        decoration: const InputDecoration(
+                          contentPadding:EdgeInsets.symmetric(horizontal: 12),
+                          hintText: "Type group subject here",
+                        )
                     )
                   ),
                   const Padding(

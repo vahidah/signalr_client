@@ -16,9 +16,10 @@ import 'package:signalr_client/screens/home/home_repository.dart';
 import 'package:signalr_client/screens/new_chat/data_sources/local_data_source.dart';
 import 'package:signalr_client/screens/new_chat/data_sources/remote_data_source.dart';
 import 'package:signalr_client/screens/new_chat/new_chat_repository.dart';
-import 'package:signalr_client/screens/new_contact/data_sources/new_contact_local_ds.dart';
+import 'package:signalr_client/screens/add_contact/data_sources/add_contact_local_ds.dart';
 import 'package:signalr_client/screens/sign_up/data_sources/signup_local_ds.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart';
 
 import '../screens/home/home_state.dart';
 import '../screens/home/home_controller.dart';
@@ -28,8 +29,8 @@ import '../screens/create_group/create_group_state.dart';
 import '../screens/create_group/create_group_controller.dart';
 import '../screens/new_chat/new_chat_state.dart';
 import '../screens/new_chat/new_chat_controller.dart';
-import '../screens/new_contact/new_contact_state.dart';
-import '../screens/new_contact/new_contact_controller.dart';
+import '../screens/add_contact/new_contact_state.dart';
+import '../screens/add_contact/new_contact_controller.dart';
 import '../screens/sign_up/sign_up_state.dart';
 import '../screens/sign_up/sign_up_controller.dart';
 import '../screens/sign_up/data_sources/signup_remote_ds.dart';
@@ -40,8 +41,8 @@ import 'navigation/router.dart';
 import '../core/navigation/navigation_service.dart';
 import 'constants/route_names.dart';
 import '../../core/platform/network_info.dart';
-import 'package:signalr_client/screens/new_contact/data_sources/new_contact_remote_ds.dart';
-import 'package:signalr_client/screens/new_contact/new_contact_repositroy.dart';
+import 'package:signalr_client/screens/add_contact/data_sources/add_contact_remote_ds.dart';
+import 'package:signalr_client/screens/add_contact/new_contact_repositroy.dart';
 
 final getIt = GetIt.instance;
 
@@ -189,12 +190,15 @@ Future<void> init() async {
   debugPrint("here4");
 
   SignalRMessaging.init(
-      serverAddress: 'http://167.235.239.170:5024/Myhub',
+      serverAddress: 'http://167.235.239.170:5025/Myhub',
       firebaseToken: ConstValues.fireBaseToken,
       eventCall: (){chatState.setState();homeState.setState();},
       onSendMessage: (){
         chatState.setChat = SignalRMessaging().chats.firstWhere((element) => element.chatId == chatState.chatKey.value);
         homeState.setState();},
+      onGetContactInfo: (){
+        newContactState.getContactInfoCompleted.toggle();
+      },
   );
     //serverAddress: 'http://10.0.2.2:5000/Myhub',
 

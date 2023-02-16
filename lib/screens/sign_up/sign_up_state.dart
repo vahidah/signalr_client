@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 
 
@@ -26,12 +27,11 @@ class SignUpState with ChangeNotifier {
 
   bool? get loading => _loading;
 
+
+  RxBool validate = true.obs;
+
   TextEditingController nameController = TextEditingController();
 
-  // void setLoading(bool newValue) {
-  //   _loading = newValue;
-  //   setState();
-  // }
 
 
 

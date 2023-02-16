@@ -55,13 +55,16 @@ class MessageWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          DateFormat('yyyy-MM-dd – kk:mm').format(message.date!),
+                          DateTime.now().day > message.date!.day
+                              ? DateFormat('yyyy-MM-dd – kk:mm').format(message.date!)
+                              : DateFormat('kk:mm').format(message.date!),
+                          //its work as this app is memory less
                           style: const TextStyle(color: ProjectColors.fontGrayHome, fontSize: 13),
                         ),
                         const SizedBox(
                           width: 5,
                         ),
-                        clientMessage ? const Icon(Icons.done_all) : Container()
+                        clientMessage ? const Icon(Icons.done_all, size: 20,) : Container()
                       ],
                     ),
                   ),
