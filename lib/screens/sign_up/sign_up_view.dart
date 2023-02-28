@@ -25,7 +25,7 @@ class SignUpView extends StatelessWidget {
     debugPrint("in signup view 1");
     return SafeArea(
       child: Scaffold(
-        backgroundColor: ProjectColors.projectBlue,
+        backgroundColor: ProjectColors.signUpBackGround,
         body: state.loading == false
             ? Center(
                 child: SingleChildScrollView(
@@ -73,7 +73,7 @@ class SignUpView extends StatelessWidget {
                             style: TextButton.styleFrom(),
                             child: const Text(
                               "Login",
-                              style: TextStyle(fontSize: 24),
+                              style: TextStyle(fontSize: 24, color: ProjectColors.textBlackColorsType1),
                             ),
                           ),
                         )

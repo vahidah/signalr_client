@@ -26,9 +26,15 @@ class HomeController extends MainController {
     myNavigator.goToName(RouteNames.newChat);
   }
 
+  String firstPartOfChat(String str){
+    return str.length > 15 ? "${str.substring(0,14)}..." : str;
+  }
+
+  onSearch(String searched){
 
 
 
+  }
 
 
 }

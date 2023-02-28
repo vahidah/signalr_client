@@ -33,7 +33,7 @@ class SignUpController extends MainController {
   Future<void> sendContactNameSignalrPackage() async{
     //
     try{
-      await signalRMessaging.sendContactName(image: signUpState.image, userName: signUpState.nameController.text);
+      await signalRMessaging.sendUserName(image: signUpState.image, userName: signUpState.nameController.text);
     }catch(e, t){
       debugPrint("exception caught");
       navigationService.snackBar(GestureDetector(

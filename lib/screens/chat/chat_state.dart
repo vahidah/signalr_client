@@ -15,16 +15,37 @@ class ChatState with ChangeNotifier {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener = ItemPositionsListener.create();
 
-  TextEditingController textController = TextEditingController();
+  TextEditingController textMessageController = TextEditingController();
+  TextEditingController emojiController = TextEditingController();
+
+  FocusNode textInputFocus = FocusNode();
 
   bool _showSendMessageIcon = false;
 
   bool get showSendMessageIcon => _showSendMessageIcon;
 
   set setShowSendMessageIcon(bool newValue){
-    setState();
     _showSendMessageIcon  = newValue;
+    setState();
   }
+
+  bool _emojiPickerVisible = true;
+
+  bool get emojiPickerVisible => _emojiPickerVisible;
+
+  set setEmojiPickerVisible(bool newValue){
+    _emojiPickerVisible  = newValue;
+    setState();
+  }
+
+  // bool _isKeyBoardVisible = false;
+  //
+  // bool get isKeyBoardVisible => _isKeyBoardVisible;
+  //
+  // set isKeyBoardVisible(bool newValue){
+  //   setState();
+  //   _isKeyBoardVisible  = newValue;
+  // }
 
   Chat? _selectedChat;
 
@@ -35,22 +56,6 @@ class ChatState with ChangeNotifier {
     // todo test calling notify listeners at end
 
 
-
-    // final itemPositionsList = itemPositionsListener.itemPositions.value.toList();
-    //
-    // int lastIndex = _selectedChat!.messages.length - 1;
-    //
-    // if(itemPositionsList.isNotEmpty){
-    //   debugPrint("indexes : ${itemPositionsList.last.index}, $lastIndex");
-    // }else{
-    //   debugPrint("its empty");
-    // }
-    // if (itemPositionsList.isNotEmpty && lastIndex != itemPositionsList.last.index) {
-    //   debugPrint("scroll jumped");
-    //   debugPrint("${itemPositionsList.last.index}");
-    //   debugPrint("$lastIndex");
-    //   itemScrollController.scrollTo(index: lastIndex, duration: const Duration(microseconds: 400));
-    // }
   }
 
 

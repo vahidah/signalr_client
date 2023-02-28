@@ -23,6 +23,7 @@ class NewContactView extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: ProjectColors.backGroundOrangeType3,
             leading: IconButton(
               onPressed: () {
                 myController.backToNewChatScreen();
@@ -39,7 +40,7 @@ class NewContactView extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               child: TextField(
                   style: const TextStyle(
-                          decoration: TextDecoration.none, color: ProjectColors.fontBlackHome, fontWeight: FontWeight.bold),
+                          decoration: TextDecoration.none, color: ProjectColors.textBlackColorsType1, fontWeight: FontWeight.bold),
                 controller: state.contactId,
                   decoration: const InputDecoration(
                     hintText: "Enter contact Id",
@@ -50,6 +51,7 @@ class NewContactView extends StatelessWidget {
           ],
         ) : const Center(child: CircularProgressIndicator(),)),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: ProjectColors.backGroundOrangeType1,
           onPressed: () => myController.sendFirstMessage(),
           child: const Icon(Icons.done),
         ),

@@ -7,8 +7,6 @@ import 'package:signalr_client/widgets/ProjectTextField.dart';
 
 import '/core/constants/ui.dart';
 import '/core/dependency_injection.dart';
-// import '/widgets/LoadingWidget.dart';
-// import '/widgets/my_app_bar.dart';
 import 'create_group_controller.dart';
 import 'create_group_state.dart';
 
@@ -23,7 +21,7 @@ class CreateGroupView extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-
+            backgroundColor: ProjectColors.backGroundOrangeType3,
             leading: IconButton(
               onPressed: () {
                 myController.backToHomeScreen();
@@ -43,7 +41,7 @@ class CreateGroupView extends StatelessWidget {
                 ),
               ],
             )),
-        body: Stack(
+        body: state.createGroupCompleted ? Stack(
           children: [
             Image.asset(
               "assets/images/chatbackwhatsapp.png",
@@ -67,7 +65,7 @@ class CreateGroupView extends StatelessWidget {
                           Align(
                             alignment: Alignment.center,
                             child: CircleAvatar(
-                              backgroundColor: ProjectColors.fontGrayHome,
+                              backgroundColor: ProjectColors.backGroundOrangeType3,
                               radius: 50,
                               child: Icon(
                                 Icons.camera_alt,
@@ -78,7 +76,7 @@ class CreateGroupView extends StatelessWidget {
                           Align(
                             alignment: Alignment.bottomRight,
                             child: CircleAvatar(
-                              backgroundColor: ProjectColors.projectBlue,
+                              backgroundColor: ProjectColors.backGroundOrangeType1,
                               radius: 12,
                               child: Icon(Icons.add),
                             ),
@@ -105,7 +103,7 @@ class CreateGroupView extends StatelessWidget {
                           controller: state.groupName,
                         decoration: const InputDecoration(
                           contentPadding:EdgeInsets.symmetric(horizontal: 12),
-                          hintText: "Type group subject here",
+                          hintText: "Type group title here",
                         )
                     )
                   ),
@@ -113,19 +111,20 @@ class CreateGroupView extends StatelessWidget {
                     padding: EdgeInsets.only(left: 15),
                     child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Icon(Icons.add_reaction, color: ProjectColors.iconBlackColor)),
+                        child: Icon(Icons.add_reaction, color: ProjectColors.backGroundOrangeType1)),
                   )
                 ],
               ),
             )
           ],
-        ),
-        floatingActionButton: FloatingActionButton(
+        ) : const Center(child: CircularProgressIndicator(),),
+        floatingActionButton: state.createGroupCompleted ? FloatingActionButton(
+          backgroundColor: ProjectColors.backGroundOrangeType1,
           onPressed: () => myController.createGroup(),
           child: const Icon(
             Icons.done,
           ),
-        ),
+        ) : null,
       ),
     );
   }

@@ -7,9 +7,9 @@ class HomeState with ChangeNotifier {
   setState() => notifyListeners();
 
 
+  final TextEditingController searchController = TextEditingController();
 
-
-
+  FocusNode searchFocus = FocusNode();
   // RxList<Chat> chats = <Chat>[].obs;
 
 

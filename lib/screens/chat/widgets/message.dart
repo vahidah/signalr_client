@@ -23,7 +23,7 @@ class MessageWidget extends StatelessWidget {
         ),
         child: Card(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            margin: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+            margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
             color: clientMessage ? ProjectColors.ownMessageText : ProjectColors.fontWhite,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

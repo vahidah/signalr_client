@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:signalr_client/core/constants/ui.dart';
 import 'dart:core';
 
 import 'core/navigation/router.dart';
@@ -10,8 +11,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("in my app");
     return MaterialApp.router(
+      theme: ThemeData(
+        colorScheme: ThemeData().colorScheme.copyWith(),
+      ),
       // routeInformationParser:  MyRouter.router.routeInformationParser,
       // routerDelegate: MyRouter.router.routerDelegate,
       routerConfig: MyRouter.router,

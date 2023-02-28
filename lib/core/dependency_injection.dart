@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
+import 'package:signalr_client/core/util/package_error_snackbar.dart';
 import 'package:signalr_client/screens/chat/chat_repository.dart';
 import 'package:signalr_client/screens/chat/data_sources/chat_local_ds.dart';
 import 'package:signalr_client/screens/chat/data_sources/chat_remote_ds.dart';
@@ -178,6 +179,9 @@ Future<void> init() async {
   debugPrint("here1");
 
   final FirebaseMessaging _firebasemessaging = FirebaseMessaging.instance;
+
+
+
   debugPrint("here2");
 
   await _firebasemessaging.getToken().then((deviceToken) {
@@ -186,21 +190,35 @@ Future<void> init() async {
   });
   debugPrint("here3");
 
-  // define_signalr_functions();
-  debugPrint("here4");
 
   SignalRMessaging.init(
       serverAddress: 'http://167.235.239.170:5025/Myhub',
       firebaseToken: ConstValues.fireBaseToken,
-      eventCall: (){chatState.setState();homeState.setState();},
       onSendMessage: (){
         chatState.setChat = SignalRMessaging().chats.firstWhere((element) => element.chatId == chatState.chatKey.value);
         homeState.setState();},
       onGetContactInfo: (){
+        navigationService.goToName(RouteNames.home);
         newContactState.getContactInfoCompleted.toggle();
       },
+      onReceiveNewMessage: (){
+        homeState.setState();
+        chatState.setState();
+      },
+      onGetContactInfoCanceled: (String message){
+          PackageErrorSnackBar.showSnackBar(message, true);
+          newContactState.getContactInfoCompleted.toggle();
+      },
+      onCreateGroup: (String message){
+
+        navigationService.goToName(RouteNames.home);
+        createGroupState.setCrateGroupCompleted = true;
+        PackageErrorSnackBar.showSnackBar(message, false);
+      }
   );
     //serverAddress: 'http://10.0.2.2:5000/Myhub',
+  // localhost:5124/ChatHub
+  //167.235.239.170:5025
 
   debugPrint("in dependency injection 5");
 
