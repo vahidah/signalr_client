@@ -192,7 +192,7 @@ Future<void> init() async {
 
 
   SignalRMessaging.init(
-      serverAddress: 'http://167.235.239.170:5025/Myhub',
+      serverAddress: 'http://10.0.2.2:5000/Myhub',
       firebaseToken: ConstValues.fireBaseToken,
       onSendMessage: (){
         chatState.setChat = SignalRMessaging().chats.firstWhere((element) => element.chatId == chatState.chatKey.value);
@@ -217,14 +217,13 @@ Future<void> init() async {
       }
   );
     //serverAddress: 'http://10.0.2.2:5000/Myhub',
-  // localhost:5124/ChatHub
+  // 10.0.2.2:5124/ChatHub
   //167.235.239.170:5025
 
   debugPrint("in dependency injection 5");
 
   getIt.registerLazySingleton(() => SignalRMessaging());
 
-  // await connection.start();
 
   debugPrint("in dependency injection 6");
   //controllers

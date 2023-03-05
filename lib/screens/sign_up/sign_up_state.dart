@@ -25,10 +25,12 @@ class SignUpState with ChangeNotifier {
     notifyListeners();
   }
 
-  bool? get loading => _loading;
+  bool get loading => _loading;
 
 
   RxBool validate = true.obs;
+
+  RxBool checkBoxValue = true.obs;
 
   TextEditingController nameController = TextEditingController();
 

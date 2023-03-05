@@ -79,5 +79,9 @@ class SignUpController extends MainController {
     }
   }
 
+  void buttonTaped(){
+    debugPrint("what the hell?");
+  }
+
 
 }

@@ -14,11 +14,14 @@ class ProjectColors{
   static const ownMessageText = Color(0xffdcf8c6);
   static const snackBarError = Colors.red;
   static const snackBarInfo = Colors.cyan;
-  static const signUpBackGround = Colors.white;
+  static const backGroundWhiteType1 = Colors.white;
+  static const backGroundBlackType1 = Colors.black45;
+  static const backGroundGreenType1 = Colors.green;
   static const textBlackColorsType1 = Colors.black;
   static const backGroundOrangeType1 = Colors.orange;
   static const backGroundOrangeType2 = Colors.orangeAccent;
   static const backGroundOrangeType3 = Colors.deepOrange;
+  static const backGroundHalfTransparentType1 = Color.fromRGBO(255, 184, 77, 0.6);
   // static const backGroundOrangeType2 = Colors.orangeAccent;
 
 
