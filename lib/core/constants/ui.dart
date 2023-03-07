@@ -7,8 +7,9 @@ class ProjectColors{
 
   static const projectBlue = Colors.blue;
   static const fontWhite = Colors.white;
+  static const fontBlackColorType1 = Colors.black;
   static const boldBlackChatTitle = Colors.black87;
-  static const iconBlackColor = Colors.black45;
+  static const fontBlackColorType2 = Colors.black45;
   static const lightBlackHome = Colors.black54;
   static const fontGrayHome = Colors.grey;
   static const ownMessageText = Color(0xffdcf8c6);
@@ -16,8 +17,9 @@ class ProjectColors{
   static const snackBarInfo = Colors.cyan;
   static const backGroundWhiteType1 = Colors.white;
   static const backGroundBlackType1 = Colors.black45;
+  static const backGroundBlackType2 = Colors.black;
+  static const backGroundBlackType3 = Colors.black12;
   static const backGroundGreenType1 = Colors.green;
-  static const textBlackColorsType1 = Colors.black;
   static const backGroundOrangeType1 = Colors.orange;
   static const backGroundOrangeType2 = Colors.orangeAccent;
   static const backGroundOrangeType3 = Colors.deepOrange;

@@ -38,7 +38,7 @@ class NewChatView extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Icon(Icons.group, color: ProjectColors.backGroundOrangeType1, size: ProjectSizes.newChatIcon,),
                 ),
-                Text("New group or join Group",  style: TextStyle(color: ProjectColors.backGroundOrangeType1, fontSize: ProjectSizes.newChatText),),
+                Text("New group or join Group",  style: TextStyle(color: ProjectColors.fontBlackColorType1, fontSize: ProjectSizes.newChatText),),
               ],
             )),
             TextButton(onPressed: () => myController.goToNewContactScreen(), child: Row(
@@ -47,7 +47,7 @@ class NewChatView extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Icon(Icons.add_reaction, color: ProjectColors.backGroundOrangeType1, size: ProjectSizes.newChatIcon,),
                 ),
-                Text("New contact", style: TextStyle(color: ProjectColors.backGroundOrangeType1, fontSize: ProjectSizes.newChatText),)
+                Text("New contact", style: TextStyle(color: ProjectColors.fontBlackColorType1, fontSize: ProjectSizes.newChatText),)
               ],
             ))
           ],

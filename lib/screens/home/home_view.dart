@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:signalr_client/core/constants/ui.dart';
 
 import '../../core/constants/constant_values.dart';
-import '../../core/util/functions.dart';
+import '../../core/util/Extensions.dart';
 import '../chat/chat_controller.dart';
 import '/core/dependency_injection.dart';
 import 'home_controller.dart';
@@ -29,55 +29,10 @@ class HomeView extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: ProjectColors.backGroundOrangeType3,
           title: Text(
-            "My ID IS ${signalRMessaging.myId}",
-            style: const TextStyle(fontSize: 20, color: ProjectColors.textBlackColorsType1),
+            "MY ID IS ${signalRMessaging.myId}",
+            style: const TextStyle(fontSize: 20, color: ProjectColors.fontBlackColorType1),
           ),
           actions: [
-            SizedBox(
-              width: 200,
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                decoration: BoxDecoration(
-                  color: ProjectColors.backGroundOrangeType2,
-                  borderRadius: BorderRadius.circular(32),
-                ),
-                child: TextField(
-                  onTapOutside: (info) {
-                    state.searchFocus.unfocus();
-                  },
-                  onChanged: (str) {
-                    state.setState();
-                  },
-                  focusNode: state.searchFocus,
-                  controller: state.searchController,
-                  style: const TextStyle(fontSize: 15),
-                  decoration: InputDecoration(
-                    hintStyle: const TextStyle(fontSize: 15),
-                    hintText: 'Search',
-                    suffixIcon: IconButton(
-                        onPressed: () {
-                          debugPrint("hi");
-                        },
-                        icon: const Icon(Icons.search)),
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.all(15),
-                  ),
-                ),
-              ),
-              // TextField(
-              //   onTapOutside: (info){
-              //     state.searchFocus.unfocus();
-              //   },
-              //     focusNode: state.searchFocus,
-              //   controller: state.searchController,
-              //     decoration: const InputDecoration(
-              //       contentPadding: EdgeInsets.symmetric(horizontal: 4),
-              //       errorStyle: TextStyle(fontSize: 15),
-              //       border: InputBorder.none,
-              //       hintText: "Search",
-              //     )
-              // ),
-            ),
             // IconButton(
             //     onPressed: () {},
             //     icon: const Icon(
@@ -101,9 +56,42 @@ class HomeView extends StatelessWidget {
             : ListView(
                 shrinkWrap: true,
                 children: [
+                  SizedBox(
+                    width: 200,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      decoration: BoxDecoration(
+                        color: ProjectColors.backGroundOrangeType2,
+                        borderRadius: BorderRadius.circular(32),
+                      ),
+                      child: TextField(
+                        onTapOutside: (info) {
+                          state.searchFocus.unfocus();
+                        },
+                        onChanged: (str) {
+                          state.setState();
+                        },
+                        focusNode: state.searchFocus,
+                        controller: state.searchController,
+                        style: const TextStyle(fontSize: 15),
+                        decoration: InputDecoration(
+                          hintStyle: const TextStyle(fontSize: 15),
+                          hintText: 'Search',
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                debugPrint("hi");
+                              },
+                              icon: const Icon(Icons.search)),
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.all(15),
+                        ),
+                      ),
+                    ),
+                  ),
                   ...signalRMessaging.chats.map((e) {
                     debugPrint(e.image == null ? "null" : "not null");
-                    return (e.userName ?? e.chatId).contains(state.searchController.text)
+                    return (e.userName?.toLowerCase() ?? e.chatId.toLowerCase())
+                            .contains(state.searchController.text.toLowerCase())
                         ? TextButton(
                             onPressed: () => myController.goToChatScreen(e.chatId),
                             child: Container(
@@ -127,7 +115,7 @@ class HomeView extends StatelessWidget {
                                           ? FittedBox(
                                               fit: BoxFit.fitWidth,
                                               child: Text(
-                                                firstTwoChOfName(e.userName ?? e.chatId).toUpperCase(),
+                                                e.userName?.showInAvatar() ?? e.chatId.showInAvatar(),
                                                 style: const TextStyle(color: ProjectColors.fontWhite),
                                               ),
                                             )
@@ -139,7 +127,7 @@ class HomeView extends StatelessWidget {
                                         Padding(
                                           padding: const EdgeInsets.only(bottom: 8.0),
                                           child: Text(
-                                            e.userName ?? e.chatId,
+                                            e.userName?.capitalizeFirstLetter() ?? e.chatId.capitalizeFirstLetter(),
                                             style: const TextStyle(
                                                 fontSize: 27,
                                                 fontWeight: FontWeight.bold,
@@ -149,9 +137,9 @@ class HomeView extends StatelessWidget {
                                         Padding(
                                           padding: const EdgeInsets.only(bottom: 8.0),
                                           child: Text(
-                                            (chatController.lastMessage.containsKey(e.chatId) &&
-                                                    chatController.lastMessage[e.chatId] != "")
-                                                ? "draft: ${chatController.lastMessage[e.chatId]}"
+                                            (chatController.draftMessage.containsKey(e.chatId) &&
+                                                    chatController.draftMessage[e.chatId] != "")
+                                                ? "draft: ${chatController.draftMessage[e.chatId]}"
                                                 : e.messages.isNotEmpty
                                                     ? "${e.type == ChatType.contact ? "" : "${e.messages.last.senderUserName} : "}${myController.firstPartOfChat(e.messages.last.text)}"
                                                     : e.type == ChatType.contact

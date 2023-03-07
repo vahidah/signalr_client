@@ -60,7 +60,7 @@ class ChatState with ChangeNotifier {
 
 
 
-  Chat get selectedChat => _selectedChat!;
+  Chat? get selectedChat => _selectedChat;
 
 
 

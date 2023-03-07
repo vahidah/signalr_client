@@ -13,5 +13,5 @@ class NewContactState with ChangeNotifier {
 
 
 
-  TextEditingController contactId = TextEditingController();
+  TextEditingController contactIdController = TextEditingController();
 }

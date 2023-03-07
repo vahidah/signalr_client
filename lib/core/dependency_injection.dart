@@ -192,7 +192,7 @@ Future<void> init() async {
 
 
   SignalRMessaging.init(
-      serverAddress: 'http://10.0.2.2:5000/Myhub',
+      serverAddress: 'http://167.235.239.170:5025/Myhub',
       firebaseToken: ConstValues.fireBaseToken,
       onSendMessage: (){
         chatState.setChat = SignalRMessaging().chats.firstWhere((element) => element.chatId == chatState.chatKey.value);
@@ -202,6 +202,7 @@ Future<void> init() async {
         newContactState.getContactInfoCompleted.toggle();
       },
       onReceiveNewMessage: (){
+
         homeState.setState();
         chatState.setState();
       },
@@ -218,7 +219,7 @@ Future<void> init() async {
   );
     //serverAddress: 'http://10.0.2.2:5000/Myhub',
   // 10.0.2.2:5124/ChatHub
-  //167.235.239.170:5025
+  //167.235.239.170:5025/Myhub
 
   debugPrint("in dependency injection 5");
 

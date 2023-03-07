@@ -1,4 +1,4 @@
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intel;
 
 import 'package:flutter/material.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
@@ -25,8 +25,9 @@ class MessageWidget extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
             color: clientMessage ? ProjectColors.ownMessageText : ProjectColors.fontWhite,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child:
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 chatType == ChatType.group && !clientMessage
                     ? Padding(
@@ -48,40 +49,27 @@ class MessageWidget extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 10, bottom: 3),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          DateTime.now().day > message.date!.day
-                              ? DateFormat('yyyy-MM-dd – kk:mm').format(message.date!)
-                              : DateFormat('kk:mm').format(message.date!),
-                          //its work as this app is memory less
-                          style: const TextStyle(color: ProjectColors.fontGrayHome, fontSize: 13),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        clientMessage ? const Icon(Icons.done_all, size: 20,) : Container()
-                      ],
-                    ),
+                  padding: const EdgeInsets.only(right: 10, bottom: 3, left: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        DateTime.now().day > message.date!.day
+                            ? intel.DateFormat('yyyy-MM-dd – kk:mm').format(message.date!)
+                            : intel.DateFormat('kk:mm').format(message.date!),
+                        //its work as this app is memory less
+                        style: const TextStyle(color: ProjectColors.fontGrayHome, fontSize: 13),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      clientMessage ? const Icon(Icons.done_all, size: 20,) : Container()
+                    ],
                   ),
                 )
               ],
             )
-            // Stack(
-            //   children: [
-            //     Text("hey"),
-            //     Row(
-            //       children: [
-            //         Text("20:58"),
-            //         Icon(Icons.done_all)
-            //       ],
-            //     )
-            //   ],
-            // ),
             ),
       ),
     );

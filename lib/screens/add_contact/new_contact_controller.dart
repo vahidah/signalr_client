@@ -25,6 +25,13 @@ class NewContactController extends MainController {
   late GetImageUseCase getImageUseCase = GetImageUseCase(repository: newContactRepository);
 
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    newContactState.contactIdController.clear();
+    super.onInit();
+  }
+
 
   void backToNewChatScreen() {
     myNavigator.goToName(RouteNames.newChat);
@@ -75,9 +82,9 @@ class NewContactController extends MainController {
     debugPrint("sending First Message to contact");
     newContactState.getContactInfoCompleted.toggle();
 
-    await signalRMessaging.addNewContact(contactId: int.parse(newContactState.contactId.text));
+    await signalRMessaging.addNewContact(contactId: int.parse(newContactState.contactIdController.text));
 
-    newContactState.contactId.clear();
+    newContactState.contactIdController.clear();
 
     }
 

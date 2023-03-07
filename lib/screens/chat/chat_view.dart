@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
 import 'package:provider/provider.dart';
+import 'package:signalr_client/core/util/Extensions.dart';
 import 'package:signalr_client/screens/chat/widgets/message.dart';
+import 'package:signalr_client/screens/chat/widgets/message_date.dart';
 
-import '../../core/util/functions.dart';
 import '/core/constants/ui.dart';
 import '/core/dependency_injection.dart';
 import 'chat_controller.dart';
@@ -23,11 +25,12 @@ class ChatView extends StatelessWidget {
   final ChatController myController = getIt<ChatController>();
 
   final SignalRMessaging signalRMessaging = getIt<SignalRMessaging>();
-
   @override
   Widget build(BuildContext context) {
     ChatState state = context.watch<ChatState>();
-    debugPrint("in chat_view; the value of emojiPickerVisible is: ${state.emojiPickerVisible}");
+    DateTime? lastDateShown;
+    myController.computeItemNumber();
+    myController.datesShown = 0;
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
@@ -39,7 +42,7 @@ class ChatView extends StatelessWidget {
                 icon: const Icon(Icons.arrow_back, color: ProjectColors.fontWhite),
               ),
               title: InkWell(
-                onTap: () => myController.myNavigator.snackBar(Text("contact id is: ${state.selectedChat.chatId}")),
+                onTap: () => myController.myNavigator.snackBar(Text("contact id is: ${state.selectedChat!.chatId}")),
                 child: Row(
                   children: [
                     Container(
@@ -47,23 +50,23 @@ class ChatView extends StatelessWidget {
                         height: 40,
                         width: 40,
                         decoration:
-                            BoxDecoration(color: ProjectColors.fontWhite, borderRadius: BorderRadius.circular(20)
-                                //more than 50% of width makes circle
-                                ),
-                        child: state.selectedChat.image == null
+                            BoxDecoration(color: ProjectColors.fontWhite, borderRadius: BorderRadius.circular(20)),
+                        child: state.selectedChat!.image == null
                             ? FittedBox(
                                 fit: BoxFit.fitWidth,
                                 child: Text(
-                                  firstTwoChOfName(state.selectedChat.userName ?? state.selectedChat.chatId),
+                                  state.selectedChat!.userName?.showInAvatar() ??
+                                      state.selectedChat!.chatId.showInAvatar(),
                                   style: const TextStyle(color: ProjectColors.projectBlue),
                                 ),
                               )
-                            : Image.memory(base64.decode(state.selectedChat.image!))),
+                            : Image.memory(base64.decode(state.selectedChat!.image!))),
                     const SizedBox(
                       width: 10,
                     ),
                     Text(
-                      state.selectedChat.userName ?? state.selectedChat.chatId,
+                      state.selectedChat!.userName?.capitalizeFirstLetter() ??
+                          state.selectedChat!.chatId.capitalizeFirstLetter(),
                       style: const TextStyle(fontSize: 20, color: ProjectColors.fontWhite),
                     ),
                   ],
@@ -92,14 +95,36 @@ class ChatView extends StatelessWidget {
                           itemPositionsListener: state.itemPositionsListener,
                           itemScrollController: state.itemScrollController,
                           shrinkWrap: true,
-                          itemCount: state.selectedChat.messages.length,
+                          itemCount: myController.itemNumber,
                           itemBuilder: (BuildContext context, int index) {
-                            final currentItem = state.selectedChat.messages[index];
-                            return MessageWidget(
-                              clientMessage: currentItem.sender == signalRMessaging.myId,
-                              chatType: state.selectedChat.type,
-                              message: currentItem,
-                            );
+                            debugPrint("index value is $index");
+                            if(index == 0) {
+                              debugPrint("index 0 item : ${myController.datesShown}");
+                              DateTime currentDate = state.selectedChat!.messages[0].date!;
+                              lastDateShown = currentDate;
+                              myController.datesShown = 1;
+                              debugPrint("index 0 item : ${myController.datesShown}");
+                              return Padding(
+                                padding: const EdgeInsets.only(top:10),
+                                child: MessageDate(date: currentDate),
+                              );
+                            }else{
+                              //todo is this method correct?
+                              debugPrint("index is : $index");
+                              debugPrint("values ${myController.datesShown} and $index");
+                              if(!state.selectedChat!.messages[index  - myController.datesShown].date!.isSameDate(lastDateShown!)){
+                                DateTime currentDate = state.selectedChat!.messages[index  - myController.datesShown].date!;
+                                lastDateShown = currentDate;
+                                myController.datesShown++;
+                                return MessageDate(date: currentDate);
+                              }else {
+                                return MessageWidget(
+                                  clientMessage: state.selectedChat!.messages[index - myController.datesShown].sender == signalRMessaging.myId,
+                                  chatType: state.selectedChat!.type,
+                                  message: state.selectedChat!.messages[index - myController.datesShown],
+                                );
+                              }
+                            }
                           },
                         ),
                       ),
@@ -173,7 +198,7 @@ class ChatView extends StatelessWidget {
                                 : IconButton(
                                     color: ProjectColors.backGroundOrangeType3,
                                     onPressed: () =>
-                                        myController.sendMessage(state.selectedChat.type == ChatType.contact),
+                                        myController.sendMessage(state.selectedChat!.type == ChatType.contact),
                                     icon: const Icon(Icons.send)),
                           ),
                         )

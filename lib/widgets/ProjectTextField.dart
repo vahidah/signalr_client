@@ -13,7 +13,7 @@ class ProjectTextField extends StatelessWidget {
       required this.controller,
       this.inputBorder,
       this.style = const TextStyle(
-          decoration: TextDecoration.none, color: ProjectColors.textBlackColorsType1, fontWeight: FontWeight.bold)})
+          decoration: TextDecoration.none, color: ProjectColors.fontBlackColorType1, fontWeight: FontWeight.bold)})
       : super(key: key);
 
   final EdgeInsets contentPadding;

@@ -31,7 +31,12 @@ class CreateGroupController extends MainController {
 
 
 
-
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    createGroupState.groupName.clear();
+    super.onInit();
+  }
 
 
   void createGroup() async{

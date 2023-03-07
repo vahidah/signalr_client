@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
+import 'package:signalr_client/core/util/Extensions.dart';
 
 import '/core/constants/route_names.dart';
 import '/core/dependency_injection.dart';
@@ -18,16 +19,61 @@ class ChatController extends MainController {
 
   bool emojiAdded = false;
 
-  Map<String,String> lastMessage = <String,String>{};
+  Map<String,String> draftMessage = <String,String>{};
 
   int indexBeforeAdd = 0;
+
+  int itemNumber = 0;
+  int datesShown = 0;
+
+  DateTime? a;
+
+  List<DateTime> days = [];
+
+  DateFormat format = DateFormat("MMMM dd");
+
+  void computeItemNumber(){
+    debugPrint("computeItemNumber called");
+    if(chatState.selectedChat != null && chatState.selectedChat!.messages.isNotEmpty) {
+      for (var element in chatState.selectedChat!.messages) {
+        bool haveThisDay = false;
+        for (var day in days) {
+          if (day.isSameDate(element.date!)) {
+            haveThisDay = true;
+          }
+        }
+        if (!haveThisDay) {
+          days.add(element.date!);
+        }
+      }
+      itemNumber = days.length + chatState.selectedChat!.messages.length;
+    }
+
+    debugPrint("itemNumberValue: $itemNumber");
+  }
 
   @override
   void onInit() {
 
+    days.clear();
+
+
+    chatState.setChat = signalRMessaging.chats.firstWhere((element) {
+      return element.chatId == chatState.chatKey.value;
+    });
+
+
+    if(chatState.selectedChat!.messages.isEmpty){
+      itemNumber = 0;
+    }else{
+      itemNumber = 1 + days.length + chatState.selectedChat!.messages.length;
+    }
+
     chatState.textMessageController.clear();
-    if(lastMessage.containsKey(chatState.chatKey.value)){
-      chatState.textMessageController.text = lastMessage[chatState.chatKey.value]!;
+    chatState.emojiController.clear();
+
+    if(draftMessage.containsKey(chatState.chatKey.value)){
+      chatState.textMessageController.text = draftMessage[chatState.chatKey.value]!;
     }
 
     chatState.textMessageController.addListener(() {
@@ -40,9 +86,7 @@ class ChatController extends MainController {
       }
     });
 
-    chatState.setChat = signalRMessaging.chats.firstWhere((element) {
-      return element.chatId == chatState.chatKey.value;
-    });
+
     debugPrint("after set chat");
     final scrollListener = chatState.itemPositionsListener;
 
@@ -55,14 +99,13 @@ class ChatController extends MainController {
       for (var element in itemPositionsList) {
         debugPrint(element.itemTrailingEdge.toString());
       }
-      int lastIndex = chatState.selectedChat.messages.length - 1;
+      int lastIndex = chatState.selectedChat!.messages.length - 1;
       // indexBeforeAdd != lastIndex && itemPositionsList.isNotEmpty && lastIndex != itemPositionsList.last.index
       //indexBeforeAdd != lastIndex &&  (lastIndex != itemPositionsList.last.index || itemPositionsList.last.itemTrailingEdge > 1)
-      debugPrint(
-          "${indexBeforeAdd != lastIndex}, ${lastIndex != itemPositionsList.last.index},  ${itemPositionsList.last.itemTrailingEdge > 1}");
+
       if (indexBeforeAdd != lastIndex &&
           (lastIndex != itemPositionsList.last.index || itemPositionsList.last.itemTrailingEdge > 1)) {
-        int lastIndex = chatState.selectedChat.messages.length - 1;
+        int lastIndex = chatState.selectedChat!.messages.length - 1;
         debugPrint("scroll jumped");
         debugPrint("${itemPositionsList.last.index}");
         debugPrint("$lastIndex");
@@ -82,6 +125,7 @@ class ChatController extends MainController {
     signalRMessaging.sendMessage(
         privateChat: privateChat, message: chatState.textMessageController.text, chatId: chatState.chatKey.value);
     chatState.textMessageController.clear();
+    draftMessage.remove(chatState.selectedChat!.chatId);
     chatState.setState();
   }
 
@@ -92,7 +136,7 @@ class ChatController extends MainController {
   void textControllerChanged(String str) {
 
     //store last message
-    lastMessage[chatState.chatKey.value] = str;
+    draftMessage[chatState.chatKey.value] = str;
 
 
     //change icon

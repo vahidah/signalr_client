@@ -26,10 +26,10 @@ class SignUpView extends StatelessWidget {
     debugPrint("in signup view 1");
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         body: state.loading == false
-            ?
-        Stack(alignment: AlignmentDirectional.bottomCenter, children: [
+            ? Stack(alignment: AlignmentDirectional.bottomCenter, children: [
                 Container(
                   decoration: const BoxDecoration(
                       gradient: LinearGradient(
@@ -41,34 +41,37 @@ class SignUpView extends StatelessWidget {
                     end: Alignment.topRight,
                   )),
                 ),
-                Container(
-                  height: 60,
-                  width: 250,
-                  margin: const EdgeInsets.only(bottom: 250),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      stops: [0.9, 1],
-                      colors: [
-                        ProjectColors.backGroundHalfTransparentType1,
-                        ProjectColors.backGroundBlackType1,
-                      ],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
+                GestureDetector(
+                  onTap: () => myController.sendContactName(),
+                  child: Container(
+                    height: 60,
+                    width: 250,
+                    margin: const EdgeInsets.only(bottom: 260),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        stops: [0.9, 1],
+                        colors: [
+                          ProjectColors.backGroundHalfTransparentType1,
+                          ProjectColors.backGroundBlackType1,
+                        ],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ),
+                      border: Border.all(color: ProjectColors.backGroundHalfTransparentType1, width: 0),
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(40),
+                        bottomRight: Radius.circular(40),
+                      ),
+                      // color: ProjectColors.backGroundHalfTransparentType1
                     ),
-                    border: Border.all(color: ProjectColors.backGroundHalfTransparentType1, width: 0),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(40),
-                      bottomRight: Radius.circular(40),
-                    ),
-                    // color: ProjectColors.backGroundHalfTransparentType1
+                    child: const Center(
+                        child: Text("LOGIN", style: TextStyle(color: ProjectColors.fontBlackColorType1, fontSize: 20))),
                   ),
-                  child: const Center(
-                      child: Text("LOGIN", style: TextStyle(color: ProjectColors.textBlackColorsType1, fontSize: 20))),
                 ),
                 Container(
-                  height: 200,
-                  width: 300,
-                  margin: const EdgeInsets.only(bottom: 311),
+                  height: 250,
+                  width: 360,
+                  margin: const EdgeInsets.only(bottom: 321),
                   decoration: BoxDecoration(
                     border: Border.all(color: ProjectColors.backGroundHalfTransparentType1, width: 0),
                     borderRadius: const BorderRadius.all(Radius.circular(30)),
@@ -78,7 +81,7 @@ class SignUpView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 20),
+                        padding: const EdgeInsets.only(left: 25),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -89,66 +92,87 @@ class SignUpView extends StatelessWidget {
                               child: const Center(
                                 child: Icon(
                                   Icons.person,
+                                  size: 29,
                                   color: ProjectColors.fontWhite,
                                 ),
                               ),
                             ),
                             Container(
-                              width: 200,
+                              width: 260,
                               height: 50,
                               color: ProjectColors.backGroundWhiteType1,
                               //const Color.fromRGBO(255, 165, 0, 1),
-                              child: TextField(
-                                decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.only(left: 10, top: 5),
+                              child: Obx ( () => TextField(
+
+                                decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.only(left: 10, top: 5),
                                   border: InputBorder.none,
                                   hintText: "Name",
-                                  hintStyle: TextStyle(color: ProjectColors.textBlackColorsType1),
+                                  hintStyle: const TextStyle(color: ProjectColors.fontBlackColorType1),
+                                  errorText: state.validate.value ? null : "Username cant be empty",
                                 ),
                                 controller: state.nameController,
-                              ),
+                              )),
                             )
                           ],
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 25, top: 15, left: 25),
+                        padding: const EdgeInsets.only(bottom: 45, top: 32, left: 32),
                         child: Row(
                           children: [
-                            Obx(() =>
-                            GestureDetector(
-                              child: Container(
-                                width: 15,
-                                height: 15,
-                                color: state.checkBoxValue.value
-                                    ? ProjectColors.backGroundGreenType1
-                                    : ProjectColors.backGroundWhiteType1,
-                                child: Center(
-                                    child: state.checkBoxValue.value
-                                        ? const Icon(
-                                      Icons.done,
-                                      color: ProjectColors.fontWhite,
-                                      size: 14,
-                                    )
-                                        : Container()),
-                              ),
-                              onTap: () {
-                                debugPrint("onTapCalled");
-                                state.checkBoxValue.toggle();
-                              },
-                            )),
+                            Obx(() => GestureDetector(
+                                  child: Container(
+                                    width: 15,
+                                    height: 15,
+                                    color: state.checkBoxValue.value
+                                        ? ProjectColors.backGroundGreenType1
+                                        : ProjectColors.backGroundWhiteType1,
+                                    child: Center(
+                                        child: state.checkBoxValue.value
+                                            ? const Icon(
+                                                Icons.done,
+                                                color: ProjectColors.fontWhite,
+                                                size: 14,
+                                              )
+                                            : Container()),
+                                  ),
+                                  onTap: () {
+                                    debugPrint("onTapCalled");
+                                    state.checkBoxValue.toggle();
+                                  },
+                                )),
                             const Padding(
                               padding: EdgeInsets.only(left: 20),
                               child: Text("Remember me"),
                             )
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
-
-
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 501),
+                  child: Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                        color: ProjectColors.backGroundOrangeType2,
+                        border: Border.all(width: 0, color: ProjectColors.backGroundOrangeType2),
+                        borderRadius: BorderRadius.circular(60)),
+                    child: state.image == null
+                        ? IconButton(
+                            icon: Icon(
+                              Icons.person_2_outlined,
+                              color: ProjectColors.fontWhite,
+                              size: 70,
+                            ),
+                            onPressed: () => myController.pickImage(ImageSource.gallery),
+                          )
+                        : CircleAvatar(radius: 60, backgroundImage: FileImage(state.image!),),
+                  ),
+                )
               ])
             //         // Center(
             //         //   child: SingleChildScrollView(

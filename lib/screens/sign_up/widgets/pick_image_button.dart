@@ -20,7 +20,7 @@ class PickImageButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onclick,
         style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(ProjectColors.textBlackColorsType1),
+            foregroundColor: MaterialStateProperty.all(ProjectColors.fontBlackColorType1),
             backgroundColor: MaterialStateProperty.all(ProjectColors.backGroundOrangeType1)),
         child: Row(
           children: [

@@ -40,8 +40,8 @@ class NewContactView extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               child: TextField(
                   style: const TextStyle(
-                          decoration: TextDecoration.none, color: ProjectColors.textBlackColorsType1, fontWeight: FontWeight.bold),
-                controller: state.contactId,
+                          decoration: TextDecoration.none, color: ProjectColors.fontBlackColorType1, fontWeight: FontWeight.bold),
+                controller: state.contactIdController,
                   decoration: const InputDecoration(
                     hintText: "Enter contact Id",
                   )
