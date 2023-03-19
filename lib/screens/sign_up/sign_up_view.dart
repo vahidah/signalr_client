@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:signalr_client/screens/sign_up/sign_up_controller.dart';
@@ -23,7 +25,6 @@ class SignUpView extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
     SignUpState state = context.watch<SignUpState>();
     final NavigationService navigationService = getIt<NavigationService>();
-    debugPrint("in signup view 1");
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -64,8 +65,11 @@ class SignUpView extends StatelessWidget {
                       ),
                       // color: ProjectColors.backGroundHalfTransparentType1
                     ),
-                    child: const Center(
-                        child: Text("LOGIN", style: TextStyle(color: ProjectColors.fontBlackColorType1, fontSize: 20))),
+                    child: Center(
+                        child: Text("LOGIN",
+                            style: GoogleFonts.alegreya(textStyle: TextStyle(color: ProjectColors.fontBlackColorType1, fontSize: 20)),
+                            //style: TextStyle(color: ProjectColors.fontBlackColorType1, fontSize: 20)
+                        )),
                   ),
                 ),
                 Container(
@@ -103,13 +107,15 @@ class SignUpView extends StatelessWidget {
                               color: ProjectColors.backGroundWhiteType1,
                               //const Color.fromRGBO(255, 165, 0, 1),
                               child: Obx ( () => TextField(
-
+                                style: GoogleFonts.alegreya(),
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.only(left: 10, top: 5),
                                   border: InputBorder.none,
                                   hintText: "Name",
-                                  hintStyle: const TextStyle(color: ProjectColors.fontBlackColorType1),
+                                  hintStyle: GoogleFonts.alegreya(color: ProjectColors.fontBlackColorType1),
+                                  //const TextStyle(color: ProjectColors.fontBlackColorType1),
                                   errorText: state.validate.value ? null : "Username cant be empty",
+                                  errorStyle: GoogleFonts.alegreya()
                                 ),
                                 controller: state.nameController,
                               )),
@@ -142,9 +148,12 @@ class SignUpView extends StatelessWidget {
                                     state.checkBoxValue.toggle();
                                   },
                                 )),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Text("Remember me"),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Text(
+                                  "Remember me",
+                                style: GoogleFonts.alegreya(),
+                              ),
                             )
                           ],
                         ),
@@ -163,7 +172,7 @@ class SignUpView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(60)),
                     child: state.image == null
                         ? IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.person_2_outlined,
                               color: ProjectColors.fontWhite,
                               size: 70,
@@ -174,60 +183,6 @@ class SignUpView extends StatelessWidget {
                   ),
                 )
               ])
-            //         // Center(
-            //         //   child: SingleChildScrollView(
-            //         //     child: Column(
-            //         //         crossAxisAlignment: CrossAxisAlignment.center,
-            //         //         mainAxisAlignment: MainAxisAlignment.center,
-            //         //         children: [
-            //         //           const Text(
-            //         //             "Please enter your name",
-            //         //             style: TextStyle(color: ProjectColors.fontWhite, fontSize: 22),
-            //         //           ),
-            //         //           Container(
-            //         //               width: screenWidth - 150,
-            //         //               margin: const EdgeInsets.only(top: 10),
-            //         //               child: Obx(() => ProjectTextField(
-            //         //                     controller: state.nameController,
-            //         //                     hintText: 'Enter user name',
-            //         //                     validate: state.validate.value,
-            //         //                     errorText: "Username cant be empty",
-            //         //                   ))),
-            //         //           SizedBox(
-            //         //             width: 200,
-            //         //             height: 200,
-            //         //             child: state.image == null
-            //         //                 ? const Icon(
-            //         //                     Icons.camera_alt,
-            //         //                     size: 80,
-            //         //                   )
-            //         //                 : Image.file(state.image!),
-            //         //           ),
-            //         //           PickImageButton(
-            //         //               icon: Icons.image_search,
-            //         //               title: "pick image from gallery",
-            //         //               onclick: () => myController.pickImage(ImageSource.gallery),
-            //         //               width: screenWidth - 150),
-            //         //           Container(
-            //         //             width: screenWidth - 200,
-            //         //             margin: const EdgeInsets.only(top: 10),
-            //         //             decoration: BoxDecoration(
-            //         //               color: ProjectColors.fontWhite,
-            //         //               borderRadius: BorderRadius.circular(20),
-            //         //             ),
-            //         //             child: TextButton(
-            //         //               onPressed: () => myController.sendContactName(),
-            //         //               style: TextButton.styleFrom(),
-            //         //               child: const Text(
-            //         //                 "Login",
-            //         //                 style: TextStyle(fontSize: 24, color: ProjectColors.textBlackColorsType1),
-            //         //               ),
-            //         //             ),
-            //         //           )
-            //         //         ]),
-            //         //   ),
-            //         // ),
-            //       ])
             : const SpinKitPouringHourGlassRefined(
                 color: ProjectColors.fontWhite,
               ),

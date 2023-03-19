@@ -8,4 +8,5 @@ import '../usecases/image_usecase.dart';
 abstract class SignUpDataSourceInterface {
   Future<NoParams> image({required ImageRequest imageRequest});
 
+
 }

@@ -34,7 +34,16 @@ class CreateGroupController extends MainController {
   @override
   void onInit() {
     // TODO: implement onInit
-    createGroupState.groupName.clear();
+    createGroupState.groupNameController.clear();
+
+    createGroupState.groupNameController.addListener(() {
+      debugPrint("listener called1");
+      if(createGroupState.groupNameController.text.isNotEmpty){
+        createGroupState.showError.value = false;
+      }
+      //is this way true or it cause to page get built with no reason
+    });
+
     super.onInit();
   }
 
@@ -45,16 +54,20 @@ class CreateGroupController extends MainController {
     //       messages: []));
     //   connection.invoke('AddToGroup', args: [createGroupState.groupName.text]);
     // }
+    if(createGroupState.groupNameController.text.isEmpty){
+      createGroupState.showError.value = true;
+      return;
+    }
     createGroupState.setCrateGroupCompleted = false;
     debugPrint("create group1");
-    await signalRMessaging.createGroup(newGroupName: createGroupState.groupName.text);
+    await signalRMessaging.createGroup(newGroupName: createGroupState.groupNameController.text);
     debugPrint("create group2");
     createGroupState.setCrateGroupCompleted = true;
     // navigationService.snackBar(content)
   }
 
   void backToHomeScreen(){
-    myNavigator.goToName(RouteNames.newChat);
+    nav.goToName(RouteNames.newChat);
   }
 
 

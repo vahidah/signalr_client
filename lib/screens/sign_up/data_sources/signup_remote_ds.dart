@@ -48,4 +48,5 @@ class SignUpRemoteDataSource implements SignUpDataSourceInterface {
       throw ServerException(code: -100, trace: t);
     }
   }
+
 }

@@ -1,3 +1,4 @@
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart' as intel;
 
 import 'package:flutter/material.dart';
@@ -34,7 +35,8 @@ class MessageWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 10.0, top: 7),
                         child: Text(
                           message.senderUserName,
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: GoogleFonts.alegreya(textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+                          //,
                         ),
                       )
                     : const SizedBox(
@@ -45,7 +47,7 @@ class MessageWidget extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 7, bottom: 7, right: 16, left: 10),
                   child: Text(
                     message.text,
-                    style: const TextStyle(fontSize: 16),
+                    style: GoogleFonts.alegreya(textStyle:  const TextStyle(fontSize: 16)),
                   ),
                 ),
                 Padding(
@@ -59,7 +61,8 @@ class MessageWidget extends StatelessWidget {
                             ? intel.DateFormat('yyyy-MM-dd – kk:mm').format(message.date!)
                             : intel.DateFormat('kk:mm').format(message.date!),
                         //its work as this app is memory less
-                        style: const TextStyle(color: ProjectColors.fontGrayHome, fontSize: 13),
+                        style: GoogleFonts.alegreya(textStyle:  const TextStyle(color: ProjectColors.fontGrayHome, fontSize: 13)),
+
                       ),
                       const SizedBox(
                         width: 5,

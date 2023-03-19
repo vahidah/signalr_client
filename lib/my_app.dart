@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:signalr_client/core/constants/constant_values.dart';
 import 'package:signalr_client/core/constants/ui.dart';
 import 'dart:core';
 
@@ -12,12 +14,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+
       theme: ThemeData(
         colorScheme: ThemeData().colorScheme.copyWith(),
+        textTheme: GoogleFonts.alegreyaTextTheme()
       ),
       // routeInformationParser:  MyRouter.router.routeInformationParser,
       // routerDelegate: MyRouter.router.routerDelegate,
-      routerConfig: MyRouter.router,
+      routerConfig:  MyRouter.router,
     );
   }
 }

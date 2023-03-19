@@ -98,14 +98,15 @@ class CreateGroupView extends StatelessWidget {
                     //   contentPadding:const EdgeInsets.symmetric(horizontal: 12),
                     //     controller: state.groupName
                     // )
-                    TextField(
+                    Obx( () =>TextField(
                       style: const TextStyle(fontSize: 15, decoration: TextDecoration.none),
-                          controller: state.groupName,
-                        decoration: const InputDecoration(
+                          controller: state.groupNameController,
+                        decoration: InputDecoration(
                           contentPadding:EdgeInsets.symmetric(horizontal: 12),
                           hintText: "Type group title here",
+                          errorText: state.showError.value? "Please Enter group Name" : null
                         )
-                    )
+                    ))
                   ),
                   const Padding(
                     padding: EdgeInsets.only(left: 15),

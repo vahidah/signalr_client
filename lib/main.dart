@@ -19,13 +19,13 @@ import 'screens/sign_up/sign_up_state.dart';
 
 
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await init();
+
   runZonedGuarded(
       () => runApp(
             MultiProvider(

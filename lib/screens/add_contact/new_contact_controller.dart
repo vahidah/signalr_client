@@ -9,6 +9,7 @@ import 'package:signalr_client/screens/add_contact/usecases/get_image_usecase.da
 import 'package:signalr_core/signalr_core.dart';
 
 import '../../core/navigation/navigation_service.dart';
+import '../../core/util/package_error_snackbar.dart';
 import '/core/constants/route_names.dart';
 import '/core/dependency_injection.dart';
 import '/core/interfaces/controller.dart';
@@ -27,14 +28,28 @@ class NewContactController extends MainController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
+
     newContactState.contactIdController.clear();
+
+
+    newContactState.contactIdController.addListener(() {
+
+
+      debugPrint("in listener");
+      if(newContactState.contactIdController.text.isNum ||newContactState.contactIdController.text.isEmpty){
+        newContactState.correctContactId.value = true;
+      }else{
+        newContactState.correctContactId.value = false;
+      }
+
+    });
+
     super.onInit();
   }
 
 
   void backToNewChatScreen() {
-    myNavigator.goToName(RouteNames.newChat);
+    nav.goToName(RouteNames.newChat);
   }
 
   // Future<String> getImage()async{
@@ -79,9 +94,12 @@ class NewContactController extends MainController {
     //           image: base64Image));
     //   connection.invoke('sendMessage',
     //       args: [int.parse(newContactState.contactId.text), newContactState.firstMessage.text, true]);
+    if(!newContactState.correctContactId.value){
+      PackageErrorSnackBar.showSnackBar("enter contactId(id include just number)",true);
+      return;
+    }
     debugPrint("sending First Message to contact");
     newContactState.getContactInfoCompleted.toggle();
-
     await signalRMessaging.addNewContact(contactId: int.parse(newContactState.contactIdController.text));
 
     newContactState.contactIdController.clear();

@@ -1,9 +1,11 @@
+import 'package:dartz/dartz.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
+import 'package:signalr_client/core/constants/SpKeys.dart';
 import 'package:signalr_client/core/util/package_error_snackbar.dart';
 import 'package:signalr_client/screens/chat/chat_repository.dart';
 import 'package:signalr_client/screens/chat/data_sources/chat_local_ds.dart';
@@ -182,17 +184,22 @@ Future<void> init() async {
 
 
 
-  debugPrint("here2");
+
 
   await _firebasemessaging.getToken().then((deviceToken) {
     debugPrint("Device Token: $deviceToken");
     ConstValues.fireBaseToken = deviceToken ?? "";
   });
-  debugPrint("here3");
 
+
+
+  debugPrint("the value of signalrId is : ${sharedPrefService.getInt(SpKeys.signalrId)}");
+  ConstValues.isUserLoggedIn = sharedPrefService.getInt(SpKeys.signalrId)== null ? false : true;
 
   SignalRMessaging.init(
-      serverAddress: 'http://167.235.239.170:5025/Myhub',
+      signalrId: sharedPrefService.getInt(SpKeys.signalrId),
+      userName: sharedPrefService.getString(SpKeys.username),
+      serverAddress: 'http://10.0.2.2:5124/ChatHub',
       firebaseToken: ConstValues.fireBaseToken,
       onSendMessage: (){
         chatState.setChat = SignalRMessaging().chats.firstWhere((element) => element.chatId == chatState.chatKey.value);
@@ -254,6 +261,9 @@ Future<void> init() async {
   navigationService.registerController(RouteNames.signUp, signUpController);
 
   debugPrint("in dependency injection 7");
+
+  signUpController.onInit();
+  //is this job correct? but there is no other place that we can fist page onInit method
 
   MyRouter.initialize();
 }

@@ -23,13 +23,13 @@ class NewChatController extends MainController {
   //   // connection.invoke('sendMessage', args: [int.parse(id.text), message.text]);
   // }
   void backToHomeScreen(){
-    myNavigator.goToName(RouteNames.home);
+    nav.goToName(RouteNames.home);
   }
   void goToNewContactScreen(){
-    myNavigator.goToName(RouteNames.newContact);
+    nav.goToName(RouteNames.newContact);
   }
   void goToCreateGroupScreen(){
-    myNavigator.goToName(RouteNames.createGroup);
+    nav.goToName(RouteNames.createGroup);
   }
 
 

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:signalr_client/core/constants/ui.dart';
 
@@ -19,7 +20,7 @@ class MessageDate extends StatelessWidget {
           child: Center(
               child: Text(
             DateFormat('MMMM dd').format(date),
-            style: const TextStyle(color: ProjectColors.fontWhite, fontSize: 18),
+            style: GoogleFonts.alegreya(textStyle: const TextStyle(color: ProjectColors.fontWhite, fontSize: 18)),
           )),
         ),
       ],

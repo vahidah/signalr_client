@@ -130,7 +130,7 @@ class ChatController extends MainController {
   }
 
   void bachToHomeScreen() {
-    myNavigator.goToName(RouteNames.home);
+    nav.goToName(RouteNames.home);
   }
 
   void textControllerChanged(String str) {

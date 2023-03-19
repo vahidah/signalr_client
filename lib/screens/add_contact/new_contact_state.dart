@@ -9,6 +9,8 @@ class NewContactState with ChangeNotifier {
 
   RxBool getContactInfoCompleted = true.obs;
 
+  RxBool correctContactId = true.obs;
+
 
 
 

@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:signalr_client/core/constants/SpKeys.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
 
@@ -25,8 +26,22 @@ class SignUpController extends MainController {
 
 
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+
+    signUpState.nameController.addListener(() {
+      debugPrint("listener called");
+      if(signUpState.nameController.text.isNotEmpty) {
+        signUpState.validate.value = true;
+      }
+    });
+
+    super.onInit();
+  }
+
   void backToNewChatScreen() {
-    myNavigator.goToName(RouteNames.newChat);
+    nav.goToName(RouteNames.newChat);
   }
 
 
@@ -35,7 +50,6 @@ class SignUpController extends MainController {
     try{
       await signalRMessaging.sendUserName(image: signUpState.image, userName: signUpState.nameController.text);
     }catch(e, t){
-      debugPrint("exception caught");
       navigationService.snackBar(GestureDetector(
           onTap: (){
             // AppB
@@ -57,7 +71,7 @@ class SignUpController extends MainController {
 
   void sendContactName() async {
 
-    debugPrint("in sendContactName Function 1");
+
     if(signUpState.nameController.text.isEmpty){
       signUpState.validate.toggle();
       return;
@@ -66,9 +80,12 @@ class SignUpController extends MainController {
     signUpState.setState();
     signUpState.setLoading = true;
     await sendContactNameSignalrPackage();
-    myNavigator.goToName(RouteNames.home);
+    prefs.setInt(SpKeys.signalrId, signalRMessaging.myId);
+    prefs.setString(SpKeys.username, signalRMessaging.userName!);
 
-    debugPrint("in sendContactName Function 2");
+    nav.goToName(RouteNames.home);
+
+
   }
 
   Future pickImage(ImageSource source) async {

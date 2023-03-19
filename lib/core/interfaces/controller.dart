@@ -1,27 +1,27 @@
 import 'dart:developer';
 
-// import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+
 import 'package:flutter/material.dart';
 
+import '../database/share_pref.dart';
 import '/core/dependency_injection.dart';
-// import '../data_base/share_pref.dart';
 import '../navigation/navigation_service.dart';
 import '../navigation/router.dart';
-// import '../util/app_config.dart';
-// import '../util/theme_service.dart';
+
 
 abstract class MainController {
-  late NavigationService myNavigator;
+  late NavigationService nav;
+  late SharedPrefService prefs;
   final MyRouter router = MyRouter();
-  bool initialized = false;
-
   MainController() {
-    myNavigator = getIt<NavigationService>();
-
-    if (!initialized) {
+    nav = getIt<NavigationService>();
+    prefs = getIt<SharedPrefService>();
+    if(!initialized) {
       onCreate();
     }
   }
+  bool initialized = false;
+
 
   void onInit() {
     log('$runtimeType Init');

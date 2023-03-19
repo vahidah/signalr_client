@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../constants/constant_values.dart';
 import '/screens/home/home_view.dart';
 import '/screens/chat/chat_view.dart';
 import '/screens/create_group/create_group_view.dart';
@@ -87,7 +88,7 @@ class MyRouter {
     ];
     debugPrint("in initialize router2");
     _router = GoRouter(
-      initialLocation: RouteNames.signUp,
+      initialLocation: ConstValues.isUserLoggedIn? RouteNames.home: RouteNames.signUp ,
       // refreshListenable: getIt<SplashState>(),
 
       routes: _routes,
