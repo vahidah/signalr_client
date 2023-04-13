@@ -27,11 +27,10 @@ class NewContactView extends StatelessWidget {
               },
               icon: const Icon(Icons.arrow_back, color: ProjectColors.fontWhite),
             ),
-            title: Text(
+            title: const Text(
               "Create new contact",
-              style: GoogleFonts.alegreya(
-                  textStyle:
-                      const TextStyle(fontSize: 20, color: ProjectColors.fontWhite, fontWeight: FontWeight.bold)),
+              style:
+                      TextStyle(fontSize: 20, color: ProjectColors.fontWhite, fontWeight: FontWeight.bold),
             )),
         body: Obx(() => state.getContactInfoCompleted.value
             ? Column(

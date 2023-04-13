@@ -14,13 +14,13 @@ class MessageDate extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 40,
-          width: 100,
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          margin: const EdgeInsets.symmetric(vertical: 5),
           decoration: BoxDecoration(border: Border.all(width: 0, color: ProjectColors.backGroundBlackType3), borderRadius: BorderRadius.circular(10),color: ProjectColors.backGroundBlackType3),
           child: Center(
               child: Text(
             DateFormat('MMMM dd').format(date),
-            style: GoogleFonts.alegreya(textStyle: const TextStyle(color: ProjectColors.fontWhite, fontSize: 18)),
+            style: const TextStyle(color: ProjectColors.fontWhite, fontSize: 18),
           )),
         ),
       ],

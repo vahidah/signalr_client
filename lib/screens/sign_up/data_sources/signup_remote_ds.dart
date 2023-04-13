@@ -28,10 +28,11 @@ class SignUpRemoteDataSource implements SignUpDataSourceInterface {
       final response = await dio
           .post(Apis.getImage,
               data: data,
-              options: Options(
-                sendTimeout: 2000,
-                receiveTimeout: 2000,
-              ));
+              // options: Options(
+              //   sendTimeout: 2000,
+              //   receiveTimeout: 2000,
+              // )
+      );
 
       debugPrint("status code is ${response.statusCode}");
 

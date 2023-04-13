@@ -23,8 +23,8 @@ class MessageWidget extends StatelessWidget {
           maxWidth: MediaQuery.of(context).size.width - 100,
         ),
         child: Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             color: clientMessage ? ProjectColors.ownMessageText : ProjectColors.fontWhite,
             child:
             Column(
@@ -32,48 +32,54 @@ class MessageWidget extends StatelessWidget {
               children: [
                 chatType == ChatType.group && !clientMessage
                     ? Padding(
-                        padding: const EdgeInsets.only(left: 10.0, top: 7),
-                        child: Text(
-                          message.senderUserName,
-                          style: GoogleFonts.alegreya(textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
-                          //,
-                        ),
-                      )
-                    : const SizedBox(
-                        width: 0,
-                        height: 0,
-                      ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 7, bottom: 7, right: 16, left: 10),
+                  padding: const EdgeInsets.only(left: 10.0, top: 7),
                   child: Text(
-                    message.text,
-                    style: GoogleFonts.alegreya(textStyle:  const TextStyle(fontSize: 16)),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10, bottom: 3, left: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        DateTime.now().day > message.date!.day
-                            ? intel.DateFormat('yyyy-MM-dd – kk:mm').format(message.date!)
-                            : intel.DateFormat('kk:mm').format(message.date!),
-                        //its work as this app is memory less
-                        style: GoogleFonts.alegreya(textStyle:  const TextStyle(color: ProjectColors.fontGrayHome, fontSize: 13)),
-
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      clientMessage ? const Icon(Icons.done_all, size: 20,) : Container()
-                    ],
+                    message.senderUserName,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    //,
                   ),
                 )
+                    : const SizedBox(
+                  width: 0,
+                  height: 0,
+                ),
+
+                Row(
+
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 8, right: 0, left: 10),
+                          child: Text(
+                            message.text,
+                            style: const TextStyle(fontSize: 18),
+                            softWrap: true,
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10, left: 10, ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text( intel.DateFormat('kk:mm').format(message.date!),
+                            //its work as this app is memory less
+                            style: TextStyle(color: clientMessage ? ProjectColors.fontGreen : ProjectColors.fontGray, fontSize: 13),),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          clientMessage ? const Icon(Icons.done_all, size: 20, color: ProjectColors.fontGreen,) : Container()
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
               ],
             )
-            ),
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'package:dartz/dartz.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -17,13 +18,17 @@ class ChatController extends MainController {
   final HomeState homeState = getIt<HomeState>();
   final SignalRMessaging signalRMessaging = getIt<SignalRMessaging>();
 
-  bool emojiAdded = false;
+
+  //we store it to know the last item added is emoji or character
+
 
   Map<String,String> draftMessage = <String,String>{};
 
   int indexBeforeAdd = 0;
+  bool firstTimeOpenKeyboard = false;
 
   int itemNumber = 0;
+
   int datesShown = 0;
 
   DateTime? a;
@@ -33,7 +38,7 @@ class ChatController extends MainController {
   DateFormat format = DateFormat("MMMM dd");
 
   void computeItemNumber(){
-    debugPrint("computeItemNumber called");
+
     if(chatState.selectedChat != null && chatState.selectedChat!.messages.isNotEmpty) {
       for (var element in chatState.selectedChat!.messages) {
         bool haveThisDay = false;
@@ -58,6 +63,9 @@ class ChatController extends MainController {
     days.clear();
 
 
+
+
+
     chatState.setChat = signalRMessaging.chats.firstWhere((element) {
       return element.chatId == chatState.chatKey.value;
     });
@@ -76,39 +84,33 @@ class ChatController extends MainController {
       chatState.textMessageController.text = draftMessage[chatState.chatKey.value]!;
     }
 
+    // chatState.textMessageController.ad
+
     chatState.textMessageController.addListener(() {
-      if(!emojiAdded) {
-        debugPrint("when does it called?");
-        if (chatState.textInputFocus.hasFocus) {
-          chatState.setEmojiPickerVisible = true;
-        }
-        emojiAdded = false;
-      }
+
+
+      // if(!emojiAdded) {
+      //   debugPrint("when does it called?");
+      //   if (chatState.textInputFocus.hasFocus) {
+      //     chatState.setEmojiPickerVisible = true;
+      //   }
+      //   emojiAdded = false;
+      // }
     });
 
 
-    debugPrint("after set chat");
+
     final scrollListener = chatState.itemPositionsListener;
 
     scrollListener.itemPositions.addListener(() {
       //todo use it just for check seen of message
       final itemPositionsList = scrollListener.itemPositions.value.toList();
 
-      debugPrint("print trailing edges");
-
-      for (var element in itemPositionsList) {
-        debugPrint(element.itemTrailingEdge.toString());
-      }
       int lastIndex = chatState.selectedChat!.messages.length - 1;
-      // indexBeforeAdd != lastIndex && itemPositionsList.isNotEmpty && lastIndex != itemPositionsList.last.index
-      //indexBeforeAdd != lastIndex &&  (lastIndex != itemPositionsList.last.index || itemPositionsList.last.itemTrailingEdge > 1)
 
       if (indexBeforeAdd != lastIndex &&
           (lastIndex != itemPositionsList.last.index || itemPositionsList.last.itemTrailingEdge > 1)) {
         int lastIndex = chatState.selectedChat!.messages.length - 1;
-        debugPrint("scroll jumped");
-        debugPrint("${itemPositionsList.last.index}");
-        debugPrint("$lastIndex");
         chatState.itemScrollController.scrollTo(
           index: lastIndex,
           duration: const Duration(milliseconds: 400),
@@ -149,36 +151,62 @@ class ChatController extends MainController {
 
   Future toggleEmojiKeyboard() async {
     // await SystemChannels.textInput.invokeMethod("TextInput.hide");
-    await Future.delayed(const Duration(milliseconds: 100));
+    // await Future.delayed(const Duration(milliseconds: 100));
     debugPrint("in toggleEmojiKeyboard");
 
 
+
     chatState.setEmojiPickerVisible = !chatState.emojiPickerVisible;
+    //
+    if(!firstTimeOpenKeyboard){
+      chatState.showEmojiIcon.value = !chatState.showEmojiIcon.value;
+      firstTimeOpenKeyboard = false;
+    }
+
 
     if (!chatState.emojiPickerVisible) {
       debugPrint("unfocus");
-      SystemChannels.textInput.invokeMethod('TextInput.hide');
-      // chatState.textInputFocus.unfocus();
+      await SystemChannels.textInput.invokeMethod('TextInput.hide');
+      chatState.textInputFocus.unfocus();
+
+    }else{
+      debugPrint("request focus");
+
+        chatState.textInputFocus.requestFocus();
+
     }
   }
 
   void onEmojiSelected(Category? category, Emoji emoji) {
     var cursorPos =
         chatState.textMessageController.selection.base.offset;
+
     String firstPart = chatState.textMessageController.text.substring(0, cursorPos);
     String secondPart = chatState.textMessageController.text.substring(cursorPos, chatState.textMessageController.text.length);
-    var newText = firstPart + emoji.emoji + secondPart;
-    emojiAdded = true;
+
+    String newText = firstPart + emoji.emoji + secondPart;
+    int lengthDiff = newText.length - chatState.textMessageController.text.length;
     chatState.textMessageController.text = newText;
+
     chatState.textMessageController.selection =
-        TextSelection.collapsed(offset: cursorPos + 2);
+        TextSelection.collapsed(offset: cursorPos + lengthDiff);
 
 
   }
 
   void tapOnTextField(){
-    debugPrint("when does it called?");
-    if(chatState.textInputFocus.hasFocus){
-      chatState.setEmojiPickerVisible = true;}
+    if(!chatState.emojiPickerVisible){
+      chatState.setEmojiPickerVisible = true;
+    }
+  }
+
+  Future<bool> onWillPop() async{
+    if(!chatState.emojiPickerVisible){
+      chatState.setEmojiPickerVisible= true;
+
+    }else{
+      nav.goToName(RouteNames.home);
+    }
+    return false;
   }
 }

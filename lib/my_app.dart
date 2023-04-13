@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
 
       theme: ThemeData(
         colorScheme: ThemeData().colorScheme.copyWith(),
-        textTheme: GoogleFonts.alegreyaTextTheme()
+        textTheme: GoogleFonts.robotoTextTheme()
       ),
       // routeInformationParser:  MyRouter.router.routeInformationParser,
       // routerDelegate: MyRouter.router.routerDelegate,

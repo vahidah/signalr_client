@@ -21,7 +21,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('in home view builder 1');
+
     //seems that state didn't used but we pass its set state to package to whenever we received new message rebuild this page
     HomeState state = context.watch<HomeState>();
     debugPrint('in home view builder 2');
@@ -29,10 +29,8 @@ class HomeView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ProjectColors.backGroundOrangeType3,
-          title: Text(
-            "MY ID IS ${signalRMessaging.myId}",
-            style: GoogleFonts.alegreya(fontSize: 20, color: ProjectColors.fontBlackColorType1)
-          ),
+          title: Text("MY ID IS ${signalRMessaging.myId}",
+              style: const TextStyle(fontSize: 20, color: ProjectColors.fontBlackColorType1)),
           actions: const [
             // IconButton(
             //     onPressed: () {},
@@ -49,19 +47,14 @@ class HomeView extends StatelessWidget {
           ],
         ),
         body: signalRMessaging.chats.isEmpty
-            ? Center(
-                child: Text(
-                "No Chat Yet!",
-                style: GoogleFonts.alegreya(textStyle: const TextStyle(fontSize: 30))
-
-              ))
+            ? const Center(child: Text("No Chat Yet!", style: TextStyle(fontSize: 30)))
             : ListView(
                 shrinkWrap: true,
                 children: [
                   SizedBox(
                     width: 200,
                     child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                       decoration: BoxDecoration(
                         color: ProjectColors.backGroundOrangeType2,
                         borderRadius: BorderRadius.circular(32),
@@ -75,13 +68,12 @@ class HomeView extends StatelessWidget {
                         },
                         focusNode: state.searchFocus,
                         controller: state.searchController,
-                        style: GoogleFonts.alegreya(textStyle: const TextStyle(fontSize: 15)),
+                        style: const TextStyle(fontSize: 15),
                         decoration: InputDecoration(
-                          hintStyle: GoogleFonts.alegreya(textStyle: const TextStyle(fontSize: 15)),
+                          hintStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           hintText: 'Search',
                           suffixIcon: IconButton(
                               onPressed: () {
-                                debugPrint("hi");
                               },
                               icon: const Icon(Icons.search)),
                           border: InputBorder.none,
@@ -91,13 +83,12 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                   ...signalRMessaging.chats.map((e) {
-                    debugPrint(e.image == null ? "null" : "not null");
                     return (e.userName?.toLowerCase() ?? e.chatId.toLowerCase())
                             .contains(state.searchController.text.toLowerCase())
                         ? TextButton(
                             onPressed: () => myController.goToChatScreen(e.chatId),
                             child: Container(
-                              height: 65,
+                              height: 75,
                               decoration: const BoxDecoration(
                                   border: Border(
                                       bottom: BorderSide(
@@ -118,7 +109,7 @@ class HomeView extends StatelessWidget {
                                               fit: BoxFit.fitWidth,
                                               child: Text(
                                                 e.userName?.showInAvatar() ?? e.chatId.showInAvatar(),
-                                                style: GoogleFonts.alegreya(textStyle: TextStyle(color: ProjectColors.fontWhite)),
+                                                style: const TextStyle(color: ProjectColors.fontWhite),
                                               ),
                                             )
                                           : Image.memory(base64.decode(e.image!))),
@@ -130,10 +121,10 @@ class HomeView extends StatelessWidget {
                                           padding: const EdgeInsets.only(bottom: 8.0),
                                           child: Text(
                                             e.userName?.capitalizeFirstLetter() ?? e.chatId.capitalizeFirstLetter(),
-                                            style: GoogleFonts.alegreya(textStyle: const TextStyle(
-                                                fontSize: 27,
+                                            style: const TextStyle(
+                                                fontSize: 18,
                                                 fontWeight: FontWeight.bold,
-                                                color: ProjectColors.boldBlackChatTitle)),
+                                                color: ProjectColors.boldBlackChatTitle),
                                           ),
                                         ),
                                         Padding(
@@ -147,11 +138,10 @@ class HomeView extends StatelessWidget {
                                                     : e.type == ChatType.contact
                                                         ? "say hi to ${e.userName}!"
                                                         : "say hi to all!",
-                                            style: GoogleFonts.alegreya(textStyle: const TextStyle(
-                                                fontSize: 27,
+                                            style: const TextStyle(
+                                                fontSize: 17,
                                                 fontWeight: FontWeight.bold,
-                                                color: ProjectColors.boldBlackChatTitle)),
-                                            softWrap: false,
+                                                color: ProjectColors.boldBlackChatTitle),
                                             maxLines: 1,
                                           ),
                                         ),
@@ -169,9 +159,7 @@ class HomeView extends StatelessWidget {
                                             e.messages.isNotEmpty
                                                 ? "${e.messages.last.date?.hour}: ${e.messages.last.date?.minute}"
                                                 : "",
-
-                                            style: GoogleFonts.alegreya(textStyle: const  TextStyle(color: ProjectColors.fontGrayHome))
-                                            ,
+                                            style: const TextStyle(color: ProjectColors.fontGray),
                                           ),
                                         ),
                                       ],

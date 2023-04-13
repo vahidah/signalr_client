@@ -23,6 +23,7 @@ class SignUpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
     SignUpState state = context.watch<SignUpState>();
     final NavigationService navigationService = getIt<NavigationService>();
     return SafeArea(
@@ -32,6 +33,8 @@ class SignUpView extends StatelessWidget {
         body: state.loading == false
             ? Stack(alignment: AlignmentDirectional.bottomCenter, children: [
                 Container(
+                  width: screenWidth,
+                  height: screenHeight,
                   decoration: const BoxDecoration(
                       gradient: LinearGradient(
                     colors: [
@@ -107,15 +110,14 @@ class SignUpView extends StatelessWidget {
                               color: ProjectColors.backGroundWhiteType1,
                               //const Color.fromRGBO(255, 165, 0, 1),
                               child: Obx ( () => TextField(
-                                style: GoogleFonts.alegreya(),
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.only(left: 10, top: 5),
                                   border: InputBorder.none,
                                   hintText: "Name",
-                                  hintStyle: GoogleFonts.alegreya(color: ProjectColors.fontBlackColorType1),
+                                  hintStyle: const TextStyle(color: ProjectColors.fontBlackColorType1),
                                   //const TextStyle(color: ProjectColors.fontBlackColorType1),
                                   errorText: state.validate.value ? null : "Username cant be empty",
-                                  errorStyle: GoogleFonts.alegreya()
+
                                 ),
                                 controller: state.nameController,
                               )),
@@ -148,11 +150,10 @@ class SignUpView extends StatelessWidget {
                                     state.checkBoxValue.toggle();
                                   },
                                 )),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 20),
                               child: Text(
                                   "Remember me",
-                                style: GoogleFonts.alegreya(),
                               ),
                             )
                           ],

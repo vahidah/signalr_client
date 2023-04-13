@@ -38,6 +38,8 @@ class ChatState with ChangeNotifier {
     setState();
   }
 
+
+  RxBool showEmojiIcon = true.obs;
   // bool _isKeyBoardVisible = false;
   //
   // bool get isKeyBoardVisible => _isKeyBoardVisible;

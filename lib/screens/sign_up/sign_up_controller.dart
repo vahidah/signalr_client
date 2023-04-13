@@ -77,13 +77,14 @@ class SignUpController extends MainController {
       return;
 
     }
-    signUpState.setState();
+
     signUpState.setLoading = true;
     await sendContactNameSignalrPackage();
     prefs.setInt(SpKeys.signalrId, signalRMessaging.myId);
     prefs.setString(SpKeys.username, signalRMessaging.userName!);
 
     nav.goToName(RouteNames.home);
+    signUpState.setLoading = false;
 
 
   }
@@ -94,10 +95,6 @@ class SignUpController extends MainController {
     if (image != null) {
       signUpState.setImage = File(image.path);
     }
-  }
-
-  void buttonTaped(){
-    debugPrint("what the hell?");
   }
 
 
