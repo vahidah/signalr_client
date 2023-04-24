@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:signalr_client/core/util/Extensions.dart';
 import 'package:signalr_client/screens/chat/widgets/message.dart';
 import 'package:signalr_client/screens/chat/widgets/message_date.dart';
+import 'package:signalr_client/widgets/back_button.dart';
 
 import '/core/constants/ui.dart';
 import '/core/dependency_injection.dart';
@@ -39,12 +40,7 @@ class ChatView extends StatelessWidget {
         child: Scaffold(
             appBar: AppBar(
                 backgroundColor: ProjectColors.backGroundOrangeType3,
-                leading: IconButton(
-                  onPressed: () {
-                    myController.bachToHomeScreen();
-                  },
-                  icon: const Icon(Icons.arrow_back, color: ProjectColors.fontWhite),
-                ),
+                leading: BackButtonLocal(onTap: myController.bachToHomeScreen, color: ProjectColors.fontWhite, size: ProjectSizes.chatPageIconFont,),
                 title: InkWell(
                   onTap: () => myController.nav.snackBar(
                     Text(
@@ -54,22 +50,28 @@ class ChatView extends StatelessWidget {
                   child: Row(
                     children: [
                       Container(
-                          padding: const EdgeInsets.all(10),
+
                           height: 40,
                           width: 40,
                           decoration:
                               BoxDecoration(color: ProjectColors.fontWhite, borderRadius: BorderRadius.circular(20)),
                           child: state.selectedChat!.image == null
-                              ? FittedBox(
-                                  fit: BoxFit.fitWidth,
-                                  child: Text(
-                                    state.selectedChat!.userName?.showInAvatar() ??
-                                        state.selectedChat!.chatId.showInAvatar(),
-                                    style: const TextStyle(
-                                        color: ProjectColors.projectBlue, fontWeight: FontWeight.bold, fontSize: 50),
+                              ? Padding(
+                            padding: const EdgeInsets.all(10),
+                                child: FittedBox(
+                                    fit: BoxFit.fitWidth,
+                                    child: Text(
+                                      state.selectedChat!.userName?.showInAvatar() ??
+                                          state.selectedChat!.chatId.showInAvatar(),
+                                      style: const TextStyle(
+                                          color: ProjectColors.projectBlue, fontWeight: FontWeight.bold, fontSize: 50),
+                                    ),
                                   ),
-                                )
-                              : Image.memory(base64.decode(state.selectedChat!.image!))),
+                              )
+                              : CircleAvatar(
+                            backgroundImage: MemoryImage(base64.decode(state.selectedChat!.image!)),
+                            radius: 30,
+                          )),
                       const SizedBox(
                         width: 10,
                       ),
@@ -92,160 +94,169 @@ class ChatView extends StatelessWidget {
                 )),
             body:
                 // myController.homeState.rebuildChatList.value;
-                Stack(
-              children: [
-                Image.asset(
-                  "assets/images/background.jpg",
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  fit: BoxFit.cover,
-                ),
-
                 Column(
                   children: [
                     Expanded(
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height - 140,
-                        child: ScrollablePositionedList.builder(
-                          itemPositionsListener: state.itemPositionsListener,
-                          itemScrollController: state.itemScrollController,
-                          shrinkWrap: true,
-                          itemCount: myController.itemNumber,
-                          itemBuilder: (BuildContext context, int index) {
-                            debugPrint("index value is $index");
-                            if (index == 0) {
-                              debugPrint("index 0 item : ${myController.datesShown}");
-                              DateTime currentDate = state.selectedChat!.messages[0].date!;
-                              lastDateShown = currentDate;
-                              myController.datesShown = 1;
-                              debugPrint("index 0 item : ${myController.datesShown}");
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: MessageDate(date: currentDate),
-                              );
-                            } else {
-                              //todo is this method correct?
-                              debugPrint("index is : $index");
-                              debugPrint("values ${myController.datesShown} and $index");
-                              if (!state.selectedChat!.messages[index - myController.datesShown].date!
-                                  .isSameDate(lastDateShown!)) {
-                                DateTime currentDate =
-                                    state.selectedChat!.messages[index - myController.datesShown].date!;
-                                lastDateShown = currentDate;
-                                myController.datesShown++;
-                                return MessageDate(date: currentDate);
-                              } else {
-                                return MessageWidget(
-                                  clientMessage: state.selectedChat!.messages[index - myController.datesShown].sender ==
-                                      signalRMessaging.myId,
-                                  chatType: state.selectedChat!.type,
-                                  message: state.selectedChat!.messages[index - myController.datesShown],
-                                );
-                              }
-                            }
-                          },
-                        ),
+                      child: Stack(
+              children: [
+                      Image.asset(
+                        "assets/images/background.jpg",
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                        fit: BoxFit.cover,
                       ),
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        // AnimatedIcon(icon: AnimatedIcons., progress: ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: Container(
-                            // margin: const EdgeInsets.only(left: 2, right: 2),
-                            // shape: RoundedRectangleBorder(
-                            //   borderRadius: BorderRadius.circular(25),
-                            // ),
-                            // height: 125,
-                            color: Colors.white,
-                            child: TextField(
-                              style: const TextStyle(fontSize: 18),
-                              onTap: myController.tapOnTextField,
-                              // on
-                              focusNode: state.textInputFocus,
-                              textAlignVertical: TextAlignVertical.center,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: 5,
-                              minLines: 1,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                prefixIcon: Obx(() => AnimatedSwitcher(
-                                      duration: const Duration(milliseconds: 1000),
-                                      transitionBuilder: (Widget child, Animation<double> animation) {
-                                        return ScaleTransition(scale: animation, child: child);
-                                      },
-                                      child: IconButton(
-                                        focusColor: ProjectColors.backGroundOrangeType1,
-                                        icon: Icon(state.showEmojiIcon.value ? Icons.emoji_emotions : Icons.keyboard,
-                                            color: ProjectColors.fontGray, size: ProjectSizes.chatPageIconFont,),
-                                        onPressed: () async {
-                                          myController.toggleEmojiKeyboard();
-                                        },
-                                      ),
-                                    )),
-                                suffixIcon: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    state.textMessageController.text == ""
-                                        ? IconButton(
-                                            onPressed: () {},
-                                            icon: const Icon(Icons.attach_file, color: ProjectColors.fontGray, size: ProjectSizes.chatPageIconFont),
-                                            padding: EdgeInsets.zero,
-                                          )
-                                        : IconButton(
-                                            color: ProjectColors.backGroundOrangeType3,
-                                            onPressed: () =>
-                                                myController.sendMessage(state.selectedChat!.type == ChatType.contact),
-                                            icon: const Icon(Icons.send, size: ProjectSizes.chatPageIconFont)),
-                                    state.textMessageController.text == ""
-                                        ? IconButton(
-                                            onPressed: () {
-                                              if (state.textMessageController.text == "") {
-                                                debugPrint("what is this");
-                                              }
-                                            },
-                                            icon: const Icon(
-                                              Icons.camera_alt,
-                                              color: ProjectColors.fontGray,
-                                                size: ProjectSizes.chatPageIconFont
-                                            ),
-                                            padding: EdgeInsets.zero)
-                                        : const SizedBox(
-                                            height: 0,
-                                            width: 0,
-                                          )
-                                  ],
-                                ),
-                                contentPadding: const EdgeInsets.all(10),
-                                hintText: "Message",
-                                hintStyle: const TextStyle(color: ProjectColors.fontGray2)
+
+                      Column(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height - 140,
+                              child: ScrollablePositionedList.builder(
+                                itemPositionsListener: state.itemPositionsListener,
+                                itemScrollController: state.itemScrollController,
+                                shrinkWrap: true,
+                                itemCount: myController.itemNumber,
+                                itemBuilder: (BuildContext context, int index) {
+                                  debugPrint("index value is $index");
+                                  if (index == 0) {
+                                    debugPrint("index 0 item : ${myController.datesShown}");
+                                    DateTime currentDate = state.selectedChat!.messages[0].date!;
+                                    lastDateShown = currentDate;
+                                    myController.datesShown = 1;
+                                    debugPrint("index 0 item : ${myController.datesShown}");
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: MessageDate(date: currentDate),
+                                    );
+                                  } else {
+                                    //todo is this method correct?
+                                    debugPrint("index is : $index");
+                                    debugPrint("values ${myController.datesShown} and $index");
+                                    if (!state.selectedChat!.messages[index - myController.datesShown].date!
+                                        .isSameDate(lastDateShown!)) {
+                                      DateTime currentDate =
+                                          state.selectedChat!.messages[index - myController.datesShown].date!;
+                                      lastDateShown = currentDate;
+                                      myController.datesShown++;
+                                      return MessageDate(date: currentDate);
+                                    } else {
+                                      return MessageWidget(
+                                        clientMessage: state.selectedChat!.messages[index - myController.datesShown].sender ==
+                                            signalRMessaging.myId,
+                                        chatType: state.selectedChat!.type,
+                                        message: state.selectedChat!.messages[index - myController.datesShown],
+                                      );
+                                    }
+                                  }
+                                },
                               ),
-                              controller: state.textMessageController,
-                              onChanged: (str) => myController.textControllerChanged(str),
                             ),
                           ),
-                          // ),
-                          // Padding(
-                          //   padding: const EdgeInsets.only(left: 2, right: 2, bottom: 8),
-                          //   child: CircleAvatar(
-                          //     backgroundColor: ProjectColors.backGroundOrangeType2,
-                          //     radius: 25,
-                          //     child: state.textMessageController.text == ""
-                          //         ? IconButton(
-                          //             onPressed: () {},
-                          //             icon: const Icon(Icons.mic),
-                          //             color: ProjectColors.backGroundOrangeType3,
-                          //           )
-                          //         : IconButton(
-                          //             color: ProjectColors.backGroundOrangeType3,
-                          //             onPressed: () =>
-                          //                 myController.sendMessage(state.selectedChat!.type == ChatType.contact),
-                          //             icon: const Icon(Icons.send)),
-                          //   ),
-                        )
-                      ],
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              // AnimatedIcon(icon: AnimatedIcons., progress: ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: Container(
+                                  // margin: const EdgeInsets.only(left: 2, right: 2),
+                                  // shape: RoundedRectangleBorder(
+                                  //   borderRadius: BorderRadius.circular(25),
+                                  // ),
+                                  // height: 125,
+                                  color: Colors.white,
+                                  child: TextField(
+                                    style: const TextStyle(fontSize: 18),
+                                    onTap: myController.tapOnTextField,
+                                    // on
+                                    focusNode: state.textInputFocus,
+                                    textAlignVertical: TextAlignVertical.center,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: 5,
+                                    minLines: 1,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      prefixIcon: Obx(() => AnimatedSwitcher(
+                                            duration: const Duration(milliseconds: 1000),
+                                            transitionBuilder: (Widget child, Animation<double> animation) {
+                                              return ScaleTransition(scale: animation, child: child);
+                                            },
+                                            child: IconButton(
+                                              focusColor: ProjectColors.backGroundOrangeType1,
+                                              icon: Icon(state.showEmojiIcon.value ? Icons.emoji_emotions : Icons.keyboard,
+                                                  color: ProjectColors.fontGray, size: ProjectSizes.chatPageIconFont,),
+                                              onPressed: () async {
+                                                myController.toggleEmojiKeyboard();
+                                              },
+                                            ),
+                                          )),
+                                      suffixIcon: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          state.textMessageController.text == ""
+                                              ? IconButton(
+                                                  onPressed: () {},
+                                                  icon: const Icon(Icons.attach_file, color: ProjectColors.fontGray, size: ProjectSizes.chatPageIconFont),
+                                                  padding: EdgeInsets.zero,
+                                                )
+                                              : IconButton(
+                                                  color: ProjectColors.backGroundOrangeType3,
+                                                  onPressed: () =>
+                                                      myController.sendMessage(state.selectedChat!.type == ChatType.contact),
+                                                  icon: const Icon(Icons.send, size: ProjectSizes.chatPageIconFont)),
+                                          state.textMessageController.text == ""
+                                              ? IconButton(
+                                                  onPressed: () {
+                                                    if (state.textMessageController.text == "") {
+                                                      debugPrint("what is this");
+                                                    }
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.camera_alt,
+                                                    color: ProjectColors.fontGray,
+                                                      size: ProjectSizes.chatPageIconFont
+                                                  ),
+                                                  padding: EdgeInsets.zero)
+                                              : const SizedBox(
+                                                  height: 0,
+                                                  width: 0,
+                                                )
+                                        ],
+                                      ),
+                                      contentPadding: const EdgeInsets.all(10),
+                                      hintText: "Message",
+                                      hintStyle: const TextStyle(color: ProjectColors.fontGray2)
+                                    ),
+                                    controller: state.textMessageController,
+                                    onChanged: (str) => myController.textControllerChanged(str),
+                                  ),
+                                ),
+                                // ),
+                                // Padding(
+                                //   padding: const EdgeInsets.only(left: 2, right: 2, bottom: 8),
+                                //   child: CircleAvatar(
+                                //     backgroundColor: ProjectColors.backGroundOrangeType2,
+                                //     radius: 25,
+                                //     child: state.textMessageController.text == ""
+                                //         ? IconButton(
+                                //             onPressed: () {},
+                                //             icon: const Icon(Icons.mic),
+                                //             color: ProjectColors.backGroundOrangeType3,
+                                //           )
+                                //         : IconButton(
+                                //             color: ProjectColors.backGroundOrangeType3,
+                                //             onPressed: () =>
+                                //                 myController.sendMessage(state.selectedChat!.type == ChatType.contact),
+                                //             icon: const Icon(Icons.send)),
+                                //   ),
+                              )
+                            ],
+                          ),
+
+                        ],
+                      ),
+              ],
+            ),
                     ),
                     Offstage(
                       offstage: state.emojiPickerVisible,
@@ -287,9 +298,7 @@ class ChatView extends StatelessWidget {
                           )),
                     ),
                   ],
-                ),
-              ],
-            )),
+                )),
       ),
     );
   }

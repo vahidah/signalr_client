@@ -35,7 +35,8 @@ class ChatState with ChangeNotifier {
 
   set setEmojiPickerVisible(bool newValue){
     _emojiPickerVisible  = newValue;
-    setState();
+    //we want to remove or show keyboard in same time
+    // setState();
   }
 
 

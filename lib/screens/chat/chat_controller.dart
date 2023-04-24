@@ -165,13 +165,10 @@ class ChatController extends MainController {
 
 
     if (!chatState.emojiPickerVisible) {
-      debugPrint("unfocus");
-      await SystemChannels.textInput.invokeMethod('TextInput.hide');
       chatState.textInputFocus.unfocus();
-
+      chatState.setState();
     }else{
-      debugPrint("request focus");
-
+      chatState.setState();
         chatState.textInputFocus.requestFocus();
 
     }
@@ -203,7 +200,7 @@ class ChatController extends MainController {
   Future<bool> onWillPop() async{
     if(!chatState.emojiPickerVisible){
       chatState.setEmojiPickerVisible= true;
-
+      firstTimeOpenKeyboard = true;
     }else{
       nav.goToName(RouteNames.home);
     }

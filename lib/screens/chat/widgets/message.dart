@@ -25,7 +25,7 @@ class MessageWidget extends StatelessWidget {
         child: Card(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
             margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            color: clientMessage ? ProjectColors.ownMessageText : ProjectColors.fontWhite,
+            color: clientMessage ? ProjectColors.backGroundOrangeType4 : ProjectColors.backGroundWhiteType1,
             child:
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -66,11 +66,11 @@ class MessageWidget extends StatelessWidget {
                         children: [
                           Text( intel.DateFormat('kk:mm').format(message.date!),
                             //its work as this app is memory less
-                            style: TextStyle(color: clientMessage ? ProjectColors.fontGreen : ProjectColors.fontGray, fontSize: 13),),
+                            style: TextStyle(color: clientMessage ? ProjectColors.fontOrange : ProjectColors.fontGray, fontSize: 13),),
                           const SizedBox(
                             width: 5,
                           ),
-                          clientMessage ? const Icon(Icons.done_all, size: 20, color: ProjectColors.fontGreen,) : Container()
+                          clientMessage ? const Icon(Icons.done_all, size: 20, color: ProjectColors.fontOrange,) : Container()
                         ],
                       ),
                     ),

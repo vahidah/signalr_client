@@ -25,7 +25,6 @@ class SignUpView extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     SignUpState state = context.watch<SignUpState>();
-    final NavigationService navigationService = getIt<NavigationService>();
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -48,12 +47,12 @@ class SignUpView extends StatelessWidget {
                 GestureDetector(
                   onTap: () => myController.sendContactName(),
                   child: Container(
-                    height: 60,
-                    width: 250,
+                    height: 50,
+                    width: 300,
                     margin: const EdgeInsets.only(bottom: 260),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
-                        stops: [0.9, 1],
+                        stops: [0.7, 1],
                         colors: [
                           ProjectColors.backGroundHalfTransparentType1,
                           ProjectColors.backGroundBlackType1,
@@ -68,9 +67,9 @@ class SignUpView extends StatelessWidget {
                       ),
                       // color: ProjectColors.backGroundHalfTransparentType1
                     ),
-                    child: Center(
+                    child: const Center(
                         child: Text("LOGIN",
-                            style: GoogleFonts.alegreya(textStyle: TextStyle(color: ProjectColors.fontBlackColorType1, fontSize: 20)),
+                            style: TextStyle(color: ProjectColors.fontBlackColorType1, fontSize: 20),
                             //style: TextStyle(color: ProjectColors.fontBlackColorType1, fontSize: 20)
                         )),
                   ),
@@ -78,7 +77,7 @@ class SignUpView extends StatelessWidget {
                 Container(
                   height: 250,
                   width: 360,
-                  margin: const EdgeInsets.only(bottom: 321),
+                  margin: const EdgeInsets.only(bottom: 311),
                   decoration: BoxDecoration(
                     border: Border.all(color: ProjectColors.backGroundHalfTransparentType1, width: 0),
                     borderRadius: const BorderRadius.all(Radius.circular(30)),

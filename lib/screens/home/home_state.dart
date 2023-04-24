@@ -4,15 +4,31 @@ import '../../core/classes/chat.dart';
 
 
 class HomeState with ChangeNotifier {
+
+
+  TextEditingController searchChat = TextEditingController();
+
   setState() => notifyListeners();
 
 
   final TextEditingController searchController = TextEditingController();
 
   FocusNode searchFocus = FocusNode();
-  // RxList<Chat> chats = <Chat>[].obs;
+
+  bool isSearchEmpty = true;
 
 
+  int _stackIndex = 0;
+
+  set setStackIndex(int newValue) {
+    _stackIndex = newValue;
+
+    notifyListeners();
+  }
+
+
+
+  int? get stackIndex => _stackIndex;
 
 
 

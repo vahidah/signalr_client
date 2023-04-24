@@ -179,17 +179,22 @@ Future<void> init() async {
   //end screens section
 
   debugPrint("here1");
-
-  final FirebaseMessaging _firebasemessaging = FirebaseMessaging.instance;
-
-
+  try{
+    final FirebaseMessaging _firebasemessaging = FirebaseMessaging.instance;
 
 
 
-  await _firebasemessaging.getToken().then((deviceToken) {
-    debugPrint("Device Token: $deviceToken");
-    ConstValues.fireBaseToken = deviceToken ?? "";
-  });
+
+
+    await _firebasemessaging.getToken().then((deviceToken) {
+      debugPrint("Device Token: $deviceToken");
+      ConstValues.fireBaseToken = deviceToken ?? "";
+    });
+
+  }catch(e){
+    debugPrint("can we receive this it by try block?");
+    ConstValues.fireBaseToken = 'null';
+  }
 
 
 
