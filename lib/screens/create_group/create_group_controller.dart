@@ -58,11 +58,11 @@ class CreateGroupController extends MainController {
       createGroupState.showError.value = true;
       return;
     }
-    createGroupState.setCrateGroupCompleted = false;
+    createGroupState.setCreateGroupCompleted = false;
     debugPrint("create group1");
     await signalRMessaging.createGroup(newGroupName: createGroupState.groupNameController.text);
     debugPrint("create group2");
-    createGroupState.setCrateGroupCompleted = true;
+    createGroupState.setCreateGroupCompleted = true;
     // navigationService.snackBar(content)
   }
 

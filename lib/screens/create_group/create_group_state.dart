@@ -17,7 +17,7 @@ class CreateGroupState with ChangeNotifier {
 
   bool get createGroupCompleted => _createGroupCompleted;
 
-  set setCrateGroupCompleted(bool newValue){
+  set setCreateGroupCompleted(bool newValue){
     _createGroupCompleted = newValue;
     notifyListeners();
   }

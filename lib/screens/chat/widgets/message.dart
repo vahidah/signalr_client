@@ -28,14 +28,14 @@ class MessageWidget extends StatelessWidget {
             color: clientMessage ? ProjectColors.backGroundOrangeType4 : ProjectColors.backGroundWhiteType1,
             child:
             Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 chatType == ChatType.group && !clientMessage
                     ? Padding(
                   padding: const EdgeInsets.only(left: 10.0, top: 7),
                   child: Text(
                     message.senderUserName,
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                     //,
                   ),
                 )
@@ -51,7 +51,7 @@ class MessageWidget extends StatelessWidget {
                   children: [
                     Flexible(
                       child: Padding(
-                          padding: const EdgeInsets.only(top: 10, bottom: 8, right: 0, left: 10),
+                          padding: const EdgeInsets.only(top: 5, bottom: 8, right: 0, left: 10),
                           child: Text(
                             message.text,
                             style: const TextStyle(fontSize: 18),
@@ -59,7 +59,7 @@ class MessageWidget extends StatelessWidget {
                           )),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(right: 10, left: 10, ),
+                      padding: const EdgeInsets.only(right: 10, left: 2, ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         mainAxisSize: MainAxisSize.min,

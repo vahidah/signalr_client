@@ -1,14 +1,11 @@
 import 'dart:convert';
 
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
 import 'package:provider/provider.dart';
 import 'package:signalr_client/core/util/Extensions.dart';
@@ -61,7 +58,7 @@ class ChatView extends StatelessWidget {
                                 child: FittedBox(
                                     fit: BoxFit.fitWidth,
                                     child: Text(
-                                      state.selectedChat!.userName?.showInAvatar() ??
+                                      state.selectedChat!.name?.showInAvatar() ??
                                           state.selectedChat!.chatId.showInAvatar(),
                                       style: const TextStyle(
                                           color: ProjectColors.projectBlue, fontWeight: FontWeight.bold, fontSize: 50),
@@ -76,7 +73,7 @@ class ChatView extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        state.selectedChat!.userName?.capitalizeFirstLetter() ??
+                        state.selectedChat!.name?.capitalizeFirstLetter() ??
                             state.selectedChat!.chatId.capitalizeFirstLetter(),
                         style:
                             const TextStyle(fontSize: 20, color: ProjectColors.fontWhite, fontWeight: FontWeight.bold),
@@ -140,6 +137,7 @@ class ChatView extends StatelessWidget {
                                       myController.datesShown++;
                                       return MessageDate(date: currentDate);
                                     } else {
+
                                       return MessageWidget(
                                         clientMessage: state.selectedChat!.messages[index - myController.datesShown].sender ==
                                             signalRMessaging.myId,
@@ -149,8 +147,7 @@ class ChatView extends StatelessWidget {
                                     }
                                   }
                                 },
-                              ),
-                            ),
+                              )),
                           ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.end,

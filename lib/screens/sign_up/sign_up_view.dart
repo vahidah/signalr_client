@@ -3,15 +3,11 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:signalr_client/screens/sign_up/sign_up_controller.dart';
 import 'package:signalr_client/screens/sign_up/sign_up_state.dart';
-import 'package:signalr_client/screens/sign_up/widgets/pick_image_button.dart';
-import 'package:signalr_client/widgets/ProjectTextField.dart';
-import '../../core/navigation/navigation_service.dart';
 import '/core/dependency_injection.dart';
 import '/core/constants/ui.dart';
 

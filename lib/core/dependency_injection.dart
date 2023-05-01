@@ -225,7 +225,7 @@ Future<void> init() async {
       onCreateGroup: (String message){
 
         navigationService.goToName(RouteNames.home);
-        createGroupState.setCrateGroupCompleted = true;
+        createGroupState.setCreateGroupCompleted = true;
         PackageErrorSnackBar.showSnackBar(message, false);
       }
   );

@@ -30,11 +30,10 @@ class ChatsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    DateFormat dateFormat = DateFormat("HH:mm");
     return ListView(
       children: [
         ...signalRMessaging.chats.map((e) {
-          return (e.userName?.toLowerCase() ?? e.chatId.toLowerCase())
+          return (e.name.toLowerCase() )
               .contains(state.searchController.text.toLowerCase()) || !searchedList
               ? Column(
                 children: [
@@ -58,7 +57,7 @@ class ChatsList extends StatelessWidget {
                                 child: FittedBox(
                             fit: BoxFit.fitWidth,
                             child: Text(
-                                e.userName?.showInAvatar() ?? e.chatId.showInAvatar(),
+                              e.name.showInAvatar(),
                                 style: const TextStyle(color: ProjectColors.fontWhite),
                             ),
                           ),
@@ -79,7 +78,7 @@ class ChatsList extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(bottom: 12.0),
                               child: Text(
-                                e.userName?.capitalizeFirstLetter() ?? e.chatId.capitalizeFirstLetter(),
+                                e.name.capitalizeFirstLetter() ?? e.chatId.capitalizeFirstLetter(),
                                 style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -95,7 +94,7 @@ class ChatsList extends StatelessWidget {
                                     : e.messages.isNotEmpty
                                     ? "${e.type == ChatType.contact ? "" : "${e.messages.last.senderUserName} : "}${myController.firstPartOfChat(e.messages.last.text)}"
                                     : e.type == ChatType.contact
-                                    ? "say hi to ${e.userName}!"
+                                    ? "say hi to ${e.name}!"
                                     : "say hi to all!",
                                 style: const TextStyle(
                                     fontSize: 17,
