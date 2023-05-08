@@ -26,6 +26,11 @@ class HomeController extends MainController {
     nav.goToName(RouteNames.newChat);
   }
 
+  void goToSettingsScreen(){
+
+    nav.goToName(RouteNames.settings);
+  }
+
   String firstPartOfChat(String str){
     return str.length > 15 ? "${str.substring(0,14)}..." : str;
   }

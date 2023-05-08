@@ -33,8 +33,18 @@ class SignUpController extends MainController {
     signUpState.nameController.addListener(() {
       debugPrint("listener called");
       if(signUpState.nameController.text.isNotEmpty) {
-        signUpState.validate.value = true;
+        signUpState.nameValidate.value = true;
       }
+    });
+
+    signUpState.phoneNumberController.addListener(() {
+      String regexPattern = r'^(?:[+0][1-9])?[0-9]{10,12}$';
+      var regExp = new RegExp(regexPattern);
+
+     if (regExp.hasMatch(signUpState.nameController.text) && signUpState.nameController.text.isNotEmpty) {
+       signUpState.phoneValidate.value = true;
+     }
+
     });
 
     super.onInit();
@@ -73,7 +83,7 @@ class SignUpController extends MainController {
 
 
     if(signUpState.nameController.text.isEmpty){
-      signUpState.validate.toggle();
+      signUpState.nameValidate.toggle();
       return;
 
     }

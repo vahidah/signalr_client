@@ -49,6 +49,37 @@ class HomeView extends StatelessWidget {
               //     ))
             ],
           ),
+          drawer: Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                const DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                  child: Text('Drawer Header'),
+                ),
+                ListTile(
+                  title: TextButton(
+                    onPressed: () => myController.goToSettingsScreen(),
+                    child: Row(
+                      children: [
+                        Icon(Icons.settings, size: 30,),
+                        SizedBox(width: 30,),
+                        Text("Settings", style: TextStyle(fontSize: 20),)
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ),
+          ),
           body: signalRMessaging.chats.isEmpty
               ? const Center(child: Text("No Chat Yet!", style: TextStyle(fontSize: 30)))
               : ChatsList(searchedList: false),

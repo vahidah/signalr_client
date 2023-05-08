@@ -3,6 +3,7 @@ import 'package:intl/intl.dart' as intel;
 
 import 'package:flutter/material.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
+import 'package:messaging_signalr/data_base/model_message.dart';
 import 'package:signalr_client/core/constants/ui.dart';
 import '../../../core/classes/chat.dart';
 import '../../../core/classes/message.dart';
@@ -32,7 +33,7 @@ class MessageWidget extends StatelessWidget {
               children: [
                 chatType == ChatType.group && !clientMessage
                     ? Padding(
-                  padding: const EdgeInsets.only(left: 10.0, top: 7),
+                  padding: const EdgeInsets.only(left: 10.0, top: 7, right: 10.0),
                   child: Text(
                     message.senderUserName,
                     style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
@@ -53,7 +54,7 @@ class MessageWidget extends StatelessWidget {
                       child: Padding(
                           padding: const EdgeInsets.only(top: 5, bottom: 8, right: 0, left: 10),
                           child: Text(
-                            message.text,
+                            message.message,
                             style: const TextStyle(fontSize: 18),
                             softWrap: true,
                           )),

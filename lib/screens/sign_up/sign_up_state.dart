@@ -28,11 +28,13 @@ class SignUpState with ChangeNotifier {
   bool get loading => _loading;
 
 
-  RxBool validate = true.obs;
+  RxBool nameValidate = true.obs;
+  RxBool phoneValidate = true.obs;
 
   RxBool checkBoxValue = true.obs;
 
   TextEditingController nameController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
 
 
 

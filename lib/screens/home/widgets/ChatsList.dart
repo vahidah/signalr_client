@@ -64,7 +64,7 @@ class ChatsList extends StatelessWidget {
                               )
                               :
                               CircleAvatar(
-                                backgroundImage: MemoryImage(base64.decode(e.image!)),
+                                backgroundImage: FileImage(e.image!),
                                 radius: 30,
                               ),
                             // FittedBox(
@@ -92,7 +92,7 @@ class ChatsList extends StatelessWidget {
                                     chatController.draftMessage[e.chatId] != "")
                                     ? "draft: ${chatController.draftMessage[e.chatId]}"
                                     : e.messages.isNotEmpty
-                                    ? "${e.type == ChatType.contact ? "" : "${e.messages.last.senderUserName} : "}${myController.firstPartOfChat(e.messages.last.text)}"
+                                    ? "${e.type == ChatType.contact ? "" : "${e.messages.last.senderUserName} : "}${myController.firstPartOfChat(e.messages.last.message)}"
                                     : e.type == ChatType.contact
                                     ? "say hi to ${e.name}!"
                                     : "say hi to all!",

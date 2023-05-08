@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:signalr_client/screens/sign_up/sign_up_controller.dart';
 import 'package:signalr_client/screens/sign_up/sign_up_state.dart';
+import 'package:signalr_client/screens/sign_up/widgets/text_field_signup.dart';
 import '/core/dependency_injection.dart';
 import '/core/constants/ui.dart';
 
@@ -82,46 +83,13 @@ class SignUpView extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      TextFieldSignUp(icon: Icons.person, title: "Name",
+                          controller: state.nameController, validate: state.nameValidate, errorMessage: "Please enter valid phone number",),
+                      const SizedBox(height: 10,),
+                      TextFieldSignUp(icon: Icons.phone, title: "Phone Number", controller: state.phoneNumberController,
+                          validate: state.phoneValidate, errorMessage: "Username cant be empty",),
                       Padding(
-                        padding: const EdgeInsets.only(left: 25),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 50,
-                              width: 50,
-                              color: ProjectColors.backGroundOrangeType3,
-                              child: const Center(
-                                child: Icon(
-                                  Icons.person,
-                                  size: 29,
-                                  color: ProjectColors.fontWhite,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 260,
-                              height: 50,
-                              color: ProjectColors.backGroundWhiteType1,
-                              //const Color.fromRGBO(255, 165, 0, 1),
-                              child: Obx ( () => TextField(
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.only(left: 10, top: 5),
-                                  border: InputBorder.none,
-                                  hintText: "Name",
-                                  hintStyle: const TextStyle(color: ProjectColors.fontBlackColorType1),
-                                  //const TextStyle(color: ProjectColors.fontBlackColorType1),
-                                  errorText: state.validate.value ? null : "Username cant be empty",
-
-                                ),
-                                controller: state.nameController,
-                              )),
-                            )
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 45, top: 32, left: 32),
+                        padding: const EdgeInsets.only(bottom: 30, top: 25, left: 32),
                         child: Row(
                           children: [
                             Obx(() => GestureDetector(

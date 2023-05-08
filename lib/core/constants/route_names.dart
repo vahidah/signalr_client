@@ -10,6 +10,7 @@ class RouteNames {
   static const createGroup = "/createGroup";
   static const newContact = "/newContact";
   static const signUp = "/";
+  static const settings = "/settings";
   // static const addFlight = "/addFlight";
   // static const profile = "/Profile";
   // static const signPdf = "/signPdf";

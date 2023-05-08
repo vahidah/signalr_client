@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../screens/settings/settings_view.dart';
 import '../constants/constant_values.dart';
 import '/screens/home/home_view.dart';
 import '/screens/chat/chat_view.dart';
@@ -65,6 +66,12 @@ class MyRouter {
         path: '/',
         title: '',
         builder: (BuildContext context, GoRouterState state) => SignUpView(),
+      ),
+      MyRoute(
+        name: RouteNames.settings,
+        path: RouteNames.settings,
+        title: 'Settings',
+        builder: (BuildContext context, GoRouterState state) => SettingsView(),
       ),
       // MyRoute(
       //   name: RouteNames.addFlight,

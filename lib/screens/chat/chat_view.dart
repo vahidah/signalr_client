@@ -66,7 +66,8 @@ class ChatView extends StatelessWidget {
                                   ),
                               )
                               : CircleAvatar(
-                            backgroundImage: MemoryImage(base64.decode(state.selectedChat!.image!)),
+                            backgroundImage: FileImage(state.selectedChat!.image!),
+                            // MemoryImage(base64.decode(state.selectedChat!.image!)),
                             radius: 30,
                           )),
                       const SizedBox(
@@ -139,8 +140,8 @@ class ChatView extends StatelessWidget {
                                     } else {
 
                                       return MessageWidget(
-                                        clientMessage: state.selectedChat!.messages[index - myController.datesShown].sender ==
-                                            signalRMessaging.myId,
+                                        clientMessage: state.selectedChat!.messages[index - myController.datesShown].senderID ==
+                                            signalRMessaging.myId.toString(),
                                         chatType: state.selectedChat!.type,
                                         message: state.selectedChat!.messages[index - myController.datesShown],
                                       );

@@ -34,6 +34,8 @@ import '../screens/new_chat/new_chat_state.dart';
 import '../screens/new_chat/new_chat_controller.dart';
 import '../screens/add_contact/new_contact_state.dart';
 import '../screens/add_contact/new_contact_controller.dart';
+import '../screens/settings/settings_controller.dart';
+import '../screens/settings/settings_state.dart';
 import '../screens/sign_up/sign_up_state.dart';
 import '../screens/sign_up/sign_up_controller.dart';
 import '../screens/sign_up/data_sources/signup_remote_ds.dart';
@@ -54,7 +56,6 @@ Future<void> init() async {
 
 
   SharedPreferences sp = await SharedPreferences.getInstance();
-
   SharedPrefService sharedPrefService = SharedPrefService(sp);
 
   NavigationService navigationService = NavigationService();
@@ -174,6 +175,11 @@ Future<void> init() async {
       signUpLocalDataSource: signUpLocalDataSource);
   getIt.registerLazySingleton(() => signupRepository);
 
+  // Settings ------------------------------------------------------------------------------------------------------------------
+
+  SettingsState settingsState = SettingsState();
+  getIt.registerLazySingleton(() => settingsState);
+
 
 
   //end screens section
@@ -201,14 +207,18 @@ Future<void> init() async {
   debugPrint("the value of signalrId is : ${sharedPrefService.getInt(SpKeys.signalrId)}");
   ConstValues.isUserLoggedIn = sharedPrefService.getInt(SpKeys.signalrId)== null ? false : true;
 
-  SignalRMessaging.init(
+  debugPrint("id of user is : ${sharedPrefService.getInt(SpKeys.signalrId)}");
+  debugPrint("user name is : ${sharedPrefService.getString(SpKeys.username)}");
+
+  SignalRMessaging().init(
       signalrId: sharedPrefService.getInt(SpKeys.signalrId),
       userName: sharedPrefService.getString(SpKeys.username),
       serverAddress: 'http://10.0.2.2:5124/ChatHub',
       firebaseToken: ConstValues.fireBaseToken,
       onSendMessage: (){
         chatState.setChat = SignalRMessaging().chats.firstWhere((element) => element.chatId == chatState.chatKey.value);
-        homeState.setState();},
+        homeState.setState();
+        },
       onGetContactInfo: (){
         navigationService.goToName(RouteNames.home);
         newContactState.getContactInfoCompleted.toggle();
@@ -264,6 +274,12 @@ Future<void> init() async {
   SignUpController signUpController = SignUpController();
   getIt.registerLazySingleton(() => signUpController);
   navigationService.registerController(RouteNames.signUp, signUpController);
+
+
+  SettingsController settingsController = SettingsController();
+  getIt.registerLazySingleton(() => settingsController);
+  navigationService.registerController(RouteNames.signUp, settingsController);
+
 
   debugPrint("in dependency injection 7");
 

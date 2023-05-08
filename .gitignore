@@ -45,4 +45,4 @@ app.*.map.json
 
 
 #object box files
-/lib/core/database/objectbox.g.dart
+/lib/objectbox.g.dart

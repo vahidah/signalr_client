@@ -2,6 +2,7 @@ import 'dart:async';
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,14 +21,16 @@ import 'screens/sign_up/sign_up_state.dart';
 
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await init();
 
   runZonedGuarded(
-      () => runApp(
+      () async{
+        WidgetsFlutterBinding.ensureInitialized();
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+        await init();
+
+        return runApp(
             MultiProvider(
               providers: [
                 ChangeNotifierProvider(create: (_) => getIt<HomeState>()),
@@ -36,10 +39,12 @@ Future<void> main() async {
                 ChangeNotifierProvider(create: (_) => getIt<NewChatState>()),
                 ChangeNotifierProvider(create: (_) => getIt<NewContactState>()),
                 ChangeNotifierProvider(create: (_) => getIt<SignUpState>()),
+                ChangeNotifierProvider(create: (_) => getIt<SignUpState>()),
               ],
               child: const MyApp(),
             ),
-          ), (error, stack) {
-    debugPrint("we have error");
+          );
+      }, (error, stack) {
+    debugPrint("we have error ${error.toString()}");
   });
 }
