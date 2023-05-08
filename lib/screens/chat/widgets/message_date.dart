@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:signalr_client/core/constants/ui.dart';
 
-class MessageDate extends StatelessWidget {
-  const MessageDate({Key? key, required this.date}) : super(key: key);
+class ChatDate extends StatelessWidget {
+  const ChatDate({Key? key, required this.date}) : super(key: key);
 
   final DateTime date;
 

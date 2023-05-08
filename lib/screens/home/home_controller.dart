@@ -37,8 +37,6 @@ class HomeController extends MainController {
 
   onSearch(String searched){
 
-
-
   }
 
 

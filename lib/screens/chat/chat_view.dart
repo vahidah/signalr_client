@@ -124,7 +124,7 @@ class ChatView extends StatelessWidget {
                                     debugPrint("index 0 item : ${myController.datesShown}");
                                     return Padding(
                                       padding: const EdgeInsets.only(top: 10),
-                                      child: MessageDate(date: currentDate),
+                                      child: ChatDate(date: currentDate),
                                     );
                                   } else {
                                     //todo is this method correct?
@@ -136,7 +136,7 @@ class ChatView extends StatelessWidget {
                                           state.selectedChat!.messages[index - myController.datesShown].date!;
                                       lastDateShown = currentDate;
                                       myController.datesShown++;
-                                      return MessageDate(date: currentDate);
+                                      return ChatDate(date: currentDate);
                                     } else {
 
                                       return MessageWidget(

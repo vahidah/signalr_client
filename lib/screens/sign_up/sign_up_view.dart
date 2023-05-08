@@ -86,8 +86,8 @@ class SignUpView extends StatelessWidget {
                       TextFieldSignUp(icon: Icons.person, title: "Name",
                           controller: state.nameController, validate: state.nameValidate, errorMessage: "Please enter valid phone number",),
                       const SizedBox(height: 10,),
-                      TextFieldSignUp(icon: Icons.phone, title: "Phone Number", controller: state.phoneNumberController,
-                          validate: state.phoneValidate, errorMessage: "Username cant be empty",),
+                      // TextFieldSignUp(icon: Icons.phone, title: "Phone Number", controller: state.phoneNumberController,
+                      //     validate: state.phoneValidate, errorMessage: "Username cant be empty",),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 30, top: 25, left: 32),
                         child: Row(

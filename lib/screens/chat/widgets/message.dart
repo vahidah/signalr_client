@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
 import 'package:messaging_signalr/data_base/model_message.dart';
 import 'package:signalr_client/core/constants/ui.dart';
-import '../../../core/classes/chat.dart';
-import '../../../core/classes/message.dart';
+import 'package:signalr_client/screens/chat/widgets/message_date.dart';
 
-class MessageWidget extends StatelessWidget {
+
+class MessageWidget extends StatefulWidget {
   const MessageWidget({Key? key, required this.clientMessage, required this.chatType, required this.message})
       : super(key: key);
   final bool clientMessage;
@@ -16,26 +16,64 @@ class MessageWidget extends StatelessWidget {
   final Message message;
 
   @override
+  State<MessageWidget> createState() => _MessageWidgetState();
+}
+
+class _MessageWidgetState extends State<MessageWidget> {
+
+
+  final globalKey2 = GlobalKey();
+  final globalKey3 = GlobalKey();
+
+  bool multilineText = false;
+
+  double? availableWidthForText;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      availableWidthForText = globalKey3.currentContext!.size!.width - globalKey2.currentContext!.size!.width;
+      String textTest = widget.message.message;
+      final span=TextSpan(text:textTest );
+      final tp =TextPainter(text:span,maxLines: 1,textDirection: TextDirection.ltr);
+      tp.layout(maxWidth: availableWidthForText?? 0); // equals the parent screen width
+
+      setState(() {
+        if(tp.didExceedMaxLines) {
+          multilineText = true;
+        }
+      });
+
+
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+    debugPrint("width 1 is : ${MediaQuery.of(context).size.width - 100}");
+
     return Align(
-      alignment: clientMessage ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: widget.clientMessage ? Alignment.centerRight : Alignment.centerLeft,
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width - 100,
         ),
         child: Card(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            color: clientMessage ? ProjectColors.backGroundOrangeType4 : ProjectColors.backGroundWhiteType1,
-            child:
-            Column(
+            margin: EdgeInsets.only(top: 5, bottom: 5 ,
+                left: widget.clientMessage ? 0 : 10, right: widget.clientMessage ? 10 : 0),
+            color: widget.clientMessage ? ProjectColors.backGroundOrangeType4 : ProjectColors.backGroundWhiteType1,
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                chatType == ChatType.group && !clientMessage
+                widget.chatType == ChatType.group && !widget.clientMessage
                     ? Padding(
                   padding: const EdgeInsets.only(left: 10.0, top: 7, right: 10.0),
                   child: Text(
-                    message.senderUserName,
+                    widget.message.senderUserName,
                     style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                     //,
                   ),
@@ -44,39 +82,29 @@ class MessageWidget extends StatelessWidget {
                   width: 0,
                   height: 0,
                 ),
-
+              multilineText == false ?
                 Row(
-
+                  key: globalKey3,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Flexible(
                       child: Padding(
-                          padding: const EdgeInsets.only(top: 5, bottom: 8, right: 0, left: 10),
-                          child: Text(
-                            message.message,
-                            style: const TextStyle(fontSize: 18),
-                            softWrap: true,
-                          )),
+                          padding: const EdgeInsets.only(top: 5, bottom: 4, right: 5, left: 10),
+                          child:TextWidget(text: widget.message.message)),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10, left: 2, ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text( intel.DateFormat('kk:mm').format(message.date!),
-                            //its work as this app is memory less
-                            style: TextStyle(color: clientMessage ? ProjectColors.fontOrange : ProjectColors.fontGray, fontSize: 13),),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          clientMessage ? const Icon(Icons.done_all, size: 20, color: ProjectColors.fontOrange,) : Container()
-                        ],
-                      ),
-                    ),
+                    MessageDate(key: globalKey2, date: widget.message.date!, clientMessage: widget.clientMessage, ),
                   ],
-                ),
+                )
+                  : Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                      padding: const EdgeInsets.only(top: 5, left: 10),
+                      child:TextWidget(text: widget.message.message)),
+                  MessageDate(date: widget.message.date!, clientMessage: widget.clientMessage, ),
+                ],
+              ),
 
               ],
             )
@@ -85,3 +113,52 @@ class MessageWidget extends StatelessWidget {
     );
   }
 }
+
+class TextWidget extends StatelessWidget {
+  TextWidget({Key? key, required this.text,}) : super(key: key);
+
+  String text;
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    debugPrint("width 2 is : ${MediaQuery.of(context).size.width - 100}");
+
+    return Text(
+      text,
+      style: const TextStyle(fontSize: 18),
+      softWrap: true,
+    );
+  }
+}
+
+class MessageDate extends StatelessWidget {
+  MessageDate({Key? key, required this.date, required this.clientMessage}) : super(key: key);
+
+  bool clientMessage;
+  DateTime date;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      key: key,
+      padding: const EdgeInsets.only(right: 10, left: 2, ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text( intel.DateFormat('kk:mm').format(date),
+            //its work as this app is memory less
+            style: TextStyle(color: clientMessage ? ProjectColors.fontOrange : ProjectColors.fontGray, fontSize: 13),),
+          const SizedBox(
+            width: 5,
+          ),
+          clientMessage ? const Icon(Icons.done_all, size: 20, color: ProjectColors.fontOrange,) : Container()
+        ],
+      ),
+    );
+  }
+}
+
+
