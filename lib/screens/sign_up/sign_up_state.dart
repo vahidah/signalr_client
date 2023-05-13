@@ -27,14 +27,27 @@ class SignUpState with ChangeNotifier {
 
   bool get loading => _loading;
 
+  int _indexOfStack = 0;
+
+  set setIndexStack(int newValue) {
+
+    _indexOfStack = newValue;
+
+    notifyListeners();
+  }
+
+  int get getIndexStack => _indexOfStack;
+
 
   RxBool nameValidate = true.obs;
   RxBool phoneValidate = true.obs;
+  RxBool passwordValidate = true.obs;
 
   RxBool checkBoxValue = true.obs;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
 
 

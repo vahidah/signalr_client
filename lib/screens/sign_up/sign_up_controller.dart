@@ -30,19 +30,13 @@ class SignUpController extends MainController {
   void onInit() {
     // TODO: implement onInit
 
-    signUpState.nameController.addListener(() {
-      debugPrint("listener called");
-      if(signUpState.nameController.text.isNotEmpty) {
-        signUpState.nameValidate.value = true;
-      }
-    });
-
     signUpState.phoneNumberController.addListener(() {
       String regexPattern = r'^(?:[+0][1-9])?[0-9]{10,12}$';
-      var regExp = new RegExp(regexPattern);
-
-     if (regExp.hasMatch(signUpState.nameController.text) && signUpState.nameController.text.isNotEmpty) {
+      var regExp = RegExp(regexPattern);
+     if (regExp.hasMatch(signUpState.phoneNumberController.text) || signUpState.phoneNumberController.text.isEmpty ) {
        signUpState.phoneValidate.value = true;
+     }else{
+       signUpState.phoneValidate.value = false;
      }
 
     });
@@ -56,9 +50,12 @@ class SignUpController extends MainController {
 
 
   Future<void> sendContactNameSignalrPackage() async{
-    //
+
     try{
-      await signalRMessaging.sendUserName(image: signUpState.image, userName: signUpState.nameController.text);
+      await signalRMessaging.loginToServer(image: signUpState.image,
+          userName: signUpState.nameController.text, phoneNumber: int.parse(signUpState.phoneNumberController.text,),
+        password: signUpState.passwordController.text
+      );
     }catch(e, t){
       navigationService.snackBar(GestureDetector(
           onTap: (){
@@ -81,11 +78,27 @@ class SignUpController extends MainController {
 
   void sendContactName() async {
 
+    if(signUpState.nameController.text.isNotEmpty){
+      signUpState.nameValidate.value = true;
+    }
+    if(signUpState.phoneNumberController.text.isNotEmpty){
+      signUpState.phoneValidate.value = true;
+    }
+    if(signUpState.passwordController.text.length >= 8){
+      signUpState.passwordValidate.value = true;
+    }
 
     if(signUpState.nameController.text.isEmpty){
-      signUpState.nameValidate.toggle();
+      signUpState.nameValidate.value = false;
       return;
-
+    }
+    if(signUpState.phoneNumberController.text.isEmpty){
+      signUpState.phoneValidate.value = false;
+      return;
+    }
+    if(signUpState.passwordController.text.length < 8){
+      signUpState.passwordValidate.value = false;
+      return;
     }
 
     signUpState.setLoading = true;

@@ -10,14 +10,17 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import '../../../core/constants/ui.dart';
 
 class TextFieldSignUp extends StatelessWidget {
-  const TextFieldSignUp({Key? key, required this.icon, required this.title,
-    required this.controller, required this.validate, required this.errorMessage}) : super(key: key);
+  TextFieldSignUp({Key? key, required this.icon, required this.title,
+    required this.controller, required this.validate, required this.errorMessage, this.password = false}) : super(key: key);
 
   final IconData icon;
   final String title;
   final String errorMessage;
   final TextEditingController controller;
   final RxBool validate;
+  final bool password;
+
+  final RxBool obscureText = true.obs;
 
 
 
@@ -32,9 +35,9 @@ class TextFieldSignUp extends StatelessWidget {
             height: 50,
             width: 50,
             color: ProjectColors.backGroundOrangeType3,
-            child: const Center(
+            child: Center(
               child: Icon(
-                Icons.person,
+                icon,
                 size: 29,
                 color: ProjectColors.fontWhite,
               ),
@@ -46,8 +49,12 @@ class TextFieldSignUp extends StatelessWidget {
             color: ProjectColors.backGroundWhiteType1,
             //const Color.fromRGBO(255, 165, 0, 1),
             child: Obx ( () => TextField(
+
+              obscureText: password? obscureText.value : false,
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(left: 10, top: 5),
+                suffixIconConstraints: const BoxConstraints(maxHeight: 20),
+                suffixIcon: password? HideButton(hide: obscureText) : null,
+                contentPadding: EdgeInsets.only(left: 10),
                 border: InputBorder.none,
                 hintText: title,
                 hintStyle: const TextStyle(color: ProjectColors.fontBlackColorType1),
@@ -63,3 +70,20 @@ class TextFieldSignUp extends StatelessWidget {
     );
   }
 }
+
+
+class HideButton extends StatelessWidget {
+  const HideButton({Key? key, required this.hide}) : super(key: key);
+
+  final RxBool hide;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx( () => IconButton(
+        onPressed: () => hide.toggle(),
+        padding: EdgeInsetsDirectional.only(end: 12 ),
+        icon: Icon(hide.value? Icons.visibility : Icons.visibility_off, color: Colors.black, )
+    ));
+  }
+}
+

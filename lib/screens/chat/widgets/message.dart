@@ -21,9 +21,8 @@ class MessageWidget extends StatefulWidget {
 
 class _MessageWidgetState extends State<MessageWidget> {
 
-
-  final globalKey2 = GlobalKey();
-  final globalKey3 = GlobalKey();
+  final dateKey = GlobalKey();
+  final rowKey = GlobalKey();
 
   bool multilineText = false;
 
@@ -33,17 +32,25 @@ class _MessageWidgetState extends State<MessageWidget> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
 
-      availableWidthForText = globalKey3.currentContext!.size!.width - globalKey2.currentContext!.size!.width;
-      String textTest = widget.message.message;
-      final span=TextSpan(text:textTest );
-      final tp =TextPainter(text:span,maxLines: 1,textDirection: TextDirection.ltr);
-      tp.layout(maxWidth: availableWidthForText?? 0); // equals the parent screen width
+      if(rowKey.currentContext != null) {
+        availableWidthForText = rowKey.currentContext!.size!.width - dateKey.currentContext!.size!.width - 15;
 
-      setState(() {
-        if(tp.didExceedMaxLines) {
-          multilineText = true;
-        }
-      });
+
+        String textTest = widget.message.message;
+        final span=TextSpan(text:textTest );
+        final tp =TextPainter(text:span,maxLines: 1,textDirection: TextDirection.ltr);
+        tp.layout(maxWidth: availableWidthForText?? 0); // equals the parent screen width
+
+
+        setState(() {
+          if(tp.didExceedMaxLines) {
+            multilineText = true;
+          }
+        });
+      }else{
+        multilineText = true;
+      }
+
 
 
     });
@@ -53,7 +60,6 @@ class _MessageWidgetState extends State<MessageWidget> {
   @override
   Widget build(BuildContext context) {
 
-    debugPrint("width 1 is : ${MediaQuery.of(context).size.width - 100}");
 
     return Align(
       alignment: widget.clientMessage ? Alignment.centerRight : Alignment.centerLeft,
@@ -74,7 +80,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                   padding: const EdgeInsets.only(left: 10.0, top: 7, right: 10.0),
                   child: Text(
                     widget.message.senderUserName,
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     //,
                   ),
                 )
@@ -84,7 +90,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                 ),
               multilineText == false ?
                 Row(
-                  key: globalKey3,
+                  key: rowKey,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -93,14 +99,30 @@ class _MessageWidgetState extends State<MessageWidget> {
                           padding: const EdgeInsets.only(top: 5, bottom: 4, right: 5, left: 10),
                           child:TextWidget(text: widget.message.message)),
                     ),
-                    MessageDate(key: globalKey2, date: widget.message.date!, clientMessage: widget.clientMessage, ),
+                    Padding(
+                      key: dateKey,
+                      padding: const EdgeInsets.only(right: 10, left: 2, ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text( intel.DateFormat('kk:mm').format(widget.message.date!),
+                            //its work as this app is memory less
+                            style: TextStyle(color: widget.clientMessage ? ProjectColors.fontOrange : ProjectColors.fontGray, fontSize: 13),),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          widget.clientMessage ? const Icon(Icons.done_all, size: 20, color: ProjectColors.fontOrange,) : Container()
+                        ],
+                      ),
+                    ),
                   ],
                 )
                   : Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Padding(
-                      padding: const EdgeInsets.only(top: 5, left: 10),
+                      padding: const EdgeInsets.only(top: 5, left: 10, right:10),
                       child:TextWidget(text: widget.message.message)),
                   MessageDate(date: widget.message.date!, clientMessage: widget.clientMessage, ),
                 ],
@@ -123,8 +145,6 @@ class TextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    debugPrint("width 2 is : ${MediaQuery.of(context).size.width - 100}");
-
     return Text(
       text,
       style: const TextStyle(fontSize: 18),
@@ -134,7 +154,7 @@ class TextWidget extends StatelessWidget {
 }
 
 class MessageDate extends StatelessWidget {
-  MessageDate({Key? key, required this.date, required this.clientMessage}) : super(key: key);
+  MessageDate({Key? inputKey, required this.date, required this.clientMessage}) : super(key: inputKey);
 
   bool clientMessage;
   DateTime date;

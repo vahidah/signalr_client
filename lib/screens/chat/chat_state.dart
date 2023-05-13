@@ -29,12 +29,12 @@ class ChatState with ChangeNotifier {
     setState();
   }
 
-  bool _emojiPickerVisible = true;
+  bool _emojiPickerInvisible = true;
 
-  bool get emojiPickerVisible => _emojiPickerVisible;
+  bool get emojiPickerInvisible => _emojiPickerInvisible;
 
   set setEmojiPickerVisible(bool newValue){
-    _emojiPickerVisible  = newValue;
+    _emojiPickerInvisible  = newValue;
     //we want to remove or show keyboard in same time
     // setState();
   }

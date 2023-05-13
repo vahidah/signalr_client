@@ -205,7 +205,8 @@ Future<void> init() async {
 
 
   debugPrint("the value of signalrId is : ${sharedPrefService.getInt(SpKeys.signalrId)}");
-  ConstValues.isUserLoggedIn = sharedPrefService.getInt(SpKeys.signalrId)== null ? false : true;
+  int? signalrId = sharedPrefService.getInt(SpKeys.signalrId);
+  ConstValues.isUserLoggedIn = (signalrId == null || signalrId == -1) ? false : true;
 
   debugPrint("id of user is : ${sharedPrefService.getInt(SpKeys.signalrId)}");
   debugPrint("user name is : ${sharedPrefService.getString(SpKeys.username)}");
@@ -213,11 +214,12 @@ Future<void> init() async {
   SignalRMessaging().init(
       signalrId: sharedPrefService.getInt(SpKeys.signalrId),
       userName: sharedPrefService.getString(SpKeys.username),
-      serverAddress: 'http://10.0.2.2:5124/ChatHub',
+      serverAddress: 'http://10.0.2.2:5124',
       firebaseToken: ConstValues.fireBaseToken,
       onSendMessage: (){
         chatState.setChat = SignalRMessaging().chats.firstWhere((element) => element.chatId == chatState.chatKey.value);
         homeState.setState();
+
         },
       onGetContactInfo: (){
         navigationService.goToName(RouteNames.home);
@@ -239,9 +241,10 @@ Future<void> init() async {
         PackageErrorSnackBar.showSnackBar(message, false);
       }
   );
-    //serverAddress: 'http://10.0.2.2:5000/Myhub',
+    //serverAddress: 'http://10.0.2.2:5124',
   // 10.0.2.2:5124/ChatHub
   //167.235.239.170:5025/Myhub
+  //'https://fdcschatapiv.fdcs.ir/ChatHub'
 
   debugPrint("in dependency injection 5");
 

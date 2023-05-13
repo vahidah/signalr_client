@@ -120,6 +120,7 @@ class ChatsList extends StatelessWidget {
                               ),
                             ),
                           ],
+
                         ),
                       )
                     ],
