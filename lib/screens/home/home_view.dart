@@ -30,8 +30,6 @@ class HomeView extends StatelessWidget {
         Scaffold(
           appBar: AppBar(
             backgroundColor: ProjectColors.backGroundOrangeType3,
-            title: Text("MY ID IS ${signalRMessaging.myId}",
-                style: const TextStyle(fontSize: 20, color: ProjectColors.fontWhite)),
             actions: [
               IconButton(
                   onPressed: () {
@@ -57,7 +55,7 @@ class HomeView extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.blue,
                   ),
-                  child: Text('Drawer Header'),
+                  child: Text('Its Empty Already'),
                 ),
                 ListTile(
                   title: TextButton(

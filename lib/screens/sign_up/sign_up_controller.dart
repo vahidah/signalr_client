@@ -3,13 +3,16 @@ import 'dart:core';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:signalr_client/core/constants/SpKeys.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
 
 
+import '../../core/constants/constant_values.dart';
 import '../../core/navigation/navigation_service.dart';
+import '../../core/util/package_snackbars.dart';
 import '/core/constants/route_names.dart';
 import '/core/dependency_injection.dart';
 import '/core/interfaces/controller.dart';
@@ -20,7 +23,6 @@ import 'sign_up_repository.dart';
 class SignUpController extends MainController {
   final SignUpState signUpState = getIt<SignUpState>();
   final HomeState homeState = getIt<HomeState>();
-  final SignupRepository signupRepository = getIt<SignupRepository>();
   static final NavigationService navigationService = getIt<NavigationService>();
   final SignalRMessaging signalRMessaging = getIt<SignalRMessaging>();
 
@@ -31,9 +33,8 @@ class SignUpController extends MainController {
     // TODO: implement onInit
 
     signUpState.phoneNumberController.addListener(() {
-      String regexPattern = r'^(?:[+0][1-9])?[0-9]{10,12}$';
-      var regExp = RegExp(regexPattern);
-     if (regExp.hasMatch(signUpState.phoneNumberController.text) || signUpState.phoneNumberController.text.isEmpty ) {
+
+     if (RegExpressions.phoneNumber.hasMatch(signUpState.phoneNumberController.text) || signUpState.phoneNumberController.text.isEmpty ) {
        signUpState.phoneValidate.value = true;
      }else{
        signUpState.phoneValidate.value = false;
@@ -49,11 +50,11 @@ class SignUpController extends MainController {
   }
 
 
-  Future<void> sendContactNameSignalrPackage() async{
+  Future<void> signUpSignalrPackage() async{
 
     try{
-      await signalRMessaging.loginToServer(image: signUpState.image,
-          userName: signUpState.nameController.text, phoneNumber: int.parse(signUpState.phoneNumberController.text,),
+      await signalRMessaging.signUp(image: signUpState.image,
+          userName: signUpState.nameController.text, phoneNumber: signUpState.phoneNumberController.text,
         password: signUpState.passwordController.text
       );
     }catch(e, t){
@@ -70,13 +71,15 @@ class SignUpController extends MainController {
             label: "Retry",
             onPressed: () {
               log("Retry");
-              sendContactName();
+              //signUp();
             },
           ));
     }
   }
 
-  void sendContactName() async {
+  void signUp() async {
+
+    debugPrint("in signUp");
 
     if(signUpState.nameController.text.isNotEmpty){
       signUpState.nameValidate.value = true;
@@ -90,24 +93,61 @@ class SignUpController extends MainController {
 
     if(signUpState.nameController.text.isEmpty){
       signUpState.nameValidate.value = false;
+      showInputValidationError();
       return;
     }
-    if(signUpState.phoneNumberController.text.isEmpty){
+    if(!RegExpressions.phoneNumber.hasMatch(signUpState.phoneNumberController.text)){
       signUpState.phoneValidate.value = false;
+      showInputValidationError();
       return;
     }
     if(signUpState.passwordController.text.length < 8){
+      showInputValidationError();
       signUpState.passwordValidate.value = false;
+
       return;
     }
 
     signUpState.setLoading = true;
-    await sendContactNameSignalrPackage();
-    prefs.setInt(SpKeys.signalrId, signalRMessaging.myId);
-    prefs.setString(SpKeys.username, signalRMessaging.userName!);
+    await signUpSignalrPackage();
 
-    nav.goToName(RouteNames.home);
-    signUpState.setLoading = false;
+
+
+  }
+
+  void login() async {
+
+
+    debugPrint("login function called");
+
+    if(signUpState.phoneNumberController.text.isNotEmpty){
+      signUpState.phoneValidate.value = true;
+    }
+    if(signUpState.passwordController.text.length >= 8){
+      signUpState.passwordValidate.value = true;
+    }
+
+    if(!RegExpressions.phoneNumber.hasMatch(signUpState.phoneNumberController.text)){
+      signUpState.phoneValidate.value = false;
+      showInputValidationError();
+      return;
+    }
+    if(signUpState.passwordController.text.length < 8){
+      showInputValidationError();
+      signUpState.passwordValidate.value = false;
+      return;
+    }
+
+
+    debugPrint("set loading value");
+
+    signUpState.setLoading = true;
+
+    debugPrint("call package login");
+
+    signalRMessaging.login(phoneNumber: signUpState.phoneNumberController.text,
+        password: signUpState.passwordController.text, fireBaseToken: ConstValues.fireBaseToken);
+
 
 
   }
@@ -118,6 +158,11 @@ class SignUpController extends MainController {
     if (image != null) {
       signUpState.setImage = File(image.path);
     }
+  }
+
+  void showInputValidationError(){
+    PackageHintSnackBar.showSnackBar("Please enter the requested items correctly", true);
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
 
 

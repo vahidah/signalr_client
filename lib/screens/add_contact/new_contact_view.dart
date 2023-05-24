@@ -42,11 +42,14 @@ class NewContactView extends StatelessWidget {
                               decoration: TextDecoration.none,
                               color: ProjectColors.fontBlackColorType1,
                               fontWeight: FontWeight.bold),
-                          controller: state.contactIdController,
+                          controller: state.contactPhoneController,
                           decoration: InputDecoration(
-                              hintText: "Enter contact Id",
+                              hintText: "Enter contact phone number",
+                              errorMaxLines: 3,
+                              errorStyle: TextStyle(fontSize: 15),
                               errorText:
-                                  state.correctContactId.value ? null : "enter contactId(id include just number)"))),
+                                  state.correctPhoneNumber.value ? null : "Please enter correct phone number"
+                                      "(it sould be numeric and it's length should be longer than 9 and less than 13)"))),
                 ],
               )
             : const Center(
@@ -54,7 +57,7 @@ class NewContactView extends StatelessWidget {
               )),
         floatingActionButton: FloatingActionButton(
           backgroundColor: ProjectColors.backGroundOrangeType1,
-          onPressed: () => myController.sendFirstMessage(),
+          onPressed: () => myController.addNewContact(),
           child: const Icon(Icons.done),
         ),
       ),

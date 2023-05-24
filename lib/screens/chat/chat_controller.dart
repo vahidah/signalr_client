@@ -26,7 +26,7 @@ class ChatController extends MainController {
   Map<String, String> draftMessage = <String, String>{};
 
   bool newMessageAdded = false;
-  bool fistTimePageOpened = true;
+  bool fistTimePageOpened = false;
 
   bool firstTimeOpenKeyboard = false;
 
@@ -47,8 +47,7 @@ class ChatController extends MainController {
 
     if (chatState.selectedChat != null && chatState.selectedChat!.messages.isNotEmpty) {
       debugPrint("here in computeItemNumber1");
-      int i = 0;
-      int j = 0;
+      int i = 0, j = 0;
       for (var element in chatState.selectedChat!.messages) {
         debugPrint("here in computeItemNumber5");
         bool haveThisDay = false;
@@ -85,6 +84,8 @@ class ChatController extends MainController {
     chatState.setChat = signalRMessaging.chats.firstWhere((element) {
       return element.chatId == chatState.chatKey.value;
     });
+
+    debugPrint("number of messages is : ${chatState.selectedChat!.messages.length}");
 
     if (chatState.selectedChat!.messages.isEmpty) {
       itemNumber = 0;
@@ -124,6 +125,9 @@ class ChatController extends MainController {
       final itemPositionsList = scrollListener.itemPositions.value.toList();
 
       if ((newMessageAdded && itemPositionsList.last.itemTrailingEdge > 1) || fistTimePageOpened) {
+
+        debugPrint("it do the scorll and doesn't depend on fistTimePageOpened");
+
         fistTimePageOpened = false;
         newMessageAdded = false;
         chatState.itemScrollController.scrollTo(
@@ -209,7 +213,6 @@ class ChatController extends MainController {
   Future<bool> onWillPop() async {
     if (!chatState.emojiPickerInvisible) {
       chatState.setEmojiPickerVisible = true;
-      firstTimeOpenKeyboard = true;
     } else {
       nav.goToName(RouteNames.home);
       fistTimePageOpened = true;

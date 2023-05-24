@@ -8,8 +8,9 @@ import 'package:signalr_client/screens/add_contact/new_contact_repositroy.dart';
 import 'package:signalr_client/screens/add_contact/usecases/get_image_usecase.dart';
 import 'package:signalr_core/signalr_core.dart';
 
+import '../../core/constants/constant_values.dart';
 import '../../core/navigation/navigation_service.dart';
-import '../../core/util/package_error_snackbar.dart';
+import '../../core/util/package_snackbars.dart';
 import '/core/constants/route_names.dart';
 import '/core/dependency_injection.dart';
 import '/core/interfaces/controller.dart';
@@ -29,19 +30,16 @@ class NewContactController extends MainController {
   @override
   void onInit() {
 
-    newContactState.contactIdController.clear();
+    newContactState.contactPhoneController.clear();
 
 
-    newContactState.contactIdController.addListener(() {
+    newContactState.contactPhoneController.addListener(() {
 
-
+      int contactLength = newContactState.contactPhoneController.text.length;
       debugPrint("in listener");
-      if(newContactState.contactIdController.text.isNum ||newContactState.contactIdController.text.isEmpty){
-        newContactState.correctContactId.value = true;
-      }else{
-        newContactState.correctContactId.value = false;
+      if(newContactState.contactPhoneController.text.isNum && (contactLength>=10 && contactLength<=12)){
+        newContactState.correctPhoneNumber.value = true;
       }
-
     });
 
     super.onInit();
@@ -52,57 +50,21 @@ class NewContactController extends MainController {
     nav.goToName(RouteNames.newChat);
   }
 
-  // Future<String> getImage()async{
-  //   GetImageRequest imageRequest = GetImageRequest(contactId: int.parse(newContactState.contactId.text));
-  //   final result = await getImageUseCase(request: imageRequest);
-  //   if(result.isRight()){
-  //     return (result as Right).value;
-  //   }else{
-  //     FailureHandler.handle((result as Left).value, retry: () => getImage());
-  //     return "";
-  //   }
-  //   //result.fold((failure) => FailureHandler.handle(failure, retry: () => getImage()), (r) => {base64Image = r});
-  // }
 
-  void sendFirstMessage() async {
-    //  debugPrint("here send first message");
+  void addNewContact() async {
 
-    //
-    //  debugPrint("contact id is : ${int.parse(contactId.text)}");
-    //  http.Response response = await http.post(
-    //      Uri.parse("${Apis.getImage}/${int.parse(contactId.text)}",),
-    //
-    //  );
-    // // final response = await dio.post("${apis}${int.parse(contactId.text)}");
-    // // response.data.
-    //  base64Image = base64.encode(response.bodyBytes);
-    // debugPrint("newContactController 1");
-    // String? base64Image = await getImage();
-    // debugPrint("newContactController 2");
-    // if(base64Image != "") {
-    //   homeState.chats.insert(
-    //       0,
-    //       Chat(
-    //           type: ChatType.contact,
-    //           chatName: newContactState.contactId.text,
-    //           messages: [
-    //             Message(
-    //                 sender: ConstValues.myId,
-    //                 text: newContactState.firstMessage.text,
-    //                 senderUserName: ConstValues.userName)
-    //           ],
-    //           image: base64Image));
-    //   connection.invoke('sendMessage',
-    //       args: [int.parse(newContactState.contactId.text), newContactState.firstMessage.text, true]);
-    if(!newContactState.correctContactId.value){
-      PackageErrorSnackBar.showSnackBar("enter contactId(id include just number)",true);
+    if(!RegExpressions.phoneNumber.hasMatch(newContactState.contactPhoneController.text) ){
+      newContactState.correctPhoneNumber.value = false;
       return;
     }
+
+
     debugPrint("sending First Message to contact");
     newContactState.getContactInfoCompleted.toggle();
-    await signalRMessaging.addNewContact(contactId: int.parse(newContactState.contactIdController.text));
 
-    newContactState.contactIdController.clear();
+    await signalRMessaging.addNewContact(contactPhoneNumber: newContactState.contactPhoneController.text);
+
+    newContactState.contactPhoneController.clear();
 
     }
 

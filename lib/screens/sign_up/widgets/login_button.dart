@@ -1,34 +1,48 @@
-
-
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../sign_up_state.dart';
-import '/core/constants/ui.dart';
-
+import '../../../core/constants/ui.dart';
 
 class LoginButton extends StatelessWidget {
-  const LoginButton({Key? key, required this.title}) : super(key: key);
+  const LoginButton({Key? key, required this.title, required this.bottomPadding, required this.onTap})
+      : super(key: key);
 
   final String title;
+  final double bottomPadding;
+  final Function onTap;
 
   @override
   Widget build(BuildContext context) {
-    SignUpState state = context.watch<SignUpState>();
-    return Container(
-      decoration: BoxDecoration(
-        color: ProjectColors.backGroundWhiteType1 ,
-        border: Border.all(width: 1, color: ProjectColors.fontWhite),
-        borderRadius: BorderRadius.circular(30)),
-      width: MediaQuery.of(context).size.width * 0.85,
-      height: MediaQuery.of(context).size.height * 0.1,
-      child: TextButton(
-        onPressed: (){
-          state.setIndexStack = 1;
-        },
-        child: Center(child: Text(title, style: TextStyle( fontSize: 20, color: ProjectColors.fontOrange),)),
+    return GestureDetector(
+      onTap: () => onTap(),
+      child: Container(
+        height: 50,
+        width: 300,
+        margin: EdgeInsets.only(
+          bottom: bottomPadding,
+        ),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            stops: [0.7, 1],
+            colors: [
+              ProjectColors.backGroundHalfTransparentType1,
+              ProjectColors.backGroundBlackType1,
+            ],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          ),
+          border: Border.all(color: ProjectColors.backGroundHalfTransparentType1, width: 0),
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(40),
+            bottomRight: Radius.circular(40),
+          ),
+          // color: ProjectColors.backGroundHalfTransparentType1
+        ),
+        child: Center(
+            child: Text(
+          title,
+          style: const TextStyle(color: ProjectColors.fontBlackColorType1, fontSize: 20),
+          //style: TextStyle(color: ProjectColors.fontBlackColorType1, fontSize: 20)
+        )),
       ),
     );
   }

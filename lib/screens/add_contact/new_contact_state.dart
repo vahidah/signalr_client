@@ -9,11 +9,7 @@ class NewContactState with ChangeNotifier {
 
   RxBool getContactInfoCompleted = true.obs;
 
-  RxBool correctContactId = true.obs;
+  RxBool correctPhoneNumber = true.obs;
 
-
-
-
-
-  TextEditingController contactIdController = TextEditingController();
+  TextEditingController contactPhoneController = TextEditingController();
 }

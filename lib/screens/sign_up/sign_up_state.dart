@@ -9,7 +9,7 @@ class SignUpState with ChangeNotifier {
 
   File? _image;
 
-  set setImage(File image) {
+  set setImage(File? image) {
 
     _image = image;
     notifyListeners();

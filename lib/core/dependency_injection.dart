@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
 import 'package:signalr_client/core/constants/SpKeys.dart';
-import 'package:signalr_client/core/util/package_error_snackbar.dart';
+import 'package:signalr_client/core/util/package_snackbars.dart';
 import 'package:signalr_client/screens/chat/chat_repository.dart';
 import 'package:signalr_client/screens/chat/data_sources/chat_local_ds.dart';
 import 'package:signalr_client/screens/chat/data_sources/chat_remote_ds.dart';
@@ -23,6 +23,9 @@ import 'package:signalr_client/screens/add_contact/data_sources/add_contact_loca
 import 'package:signalr_client/screens/sign_up/data_sources/signup_local_ds.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
+import 'package:flutter/services.dart';
+
+
 
 import '../screens/home/home_state.dart';
 import '../screens/home/home_controller.dart';
@@ -52,9 +55,6 @@ import 'package:signalr_client/screens/add_contact/new_contact_repositroy.dart';
 final getIt = GetIt.instance;
 
 Future<void> init() async {
-
-
-
   SharedPreferences sp = await SharedPreferences.getInstance();
   SharedPrefService sharedPrefService = SharedPrefService(sp);
 
@@ -72,7 +72,6 @@ Future<void> init() async {
   HomeState homeState = HomeState();
   getIt.registerLazySingleton(() => homeState);
 
-
   ///Data Sources
   HomeLocalDataSource homeLocalDataSource = HomeLocalDataSource(sharedPreferences: sp);
   HomeRemoteDataSource homeRemoteDataSource = HomeRemoteDataSource(homeLocalDataSource: homeLocalDataSource);
@@ -81,8 +80,6 @@ Future<void> init() async {
   HomeRepository homeRepository = HomeRepository(
       networkInfo: networkInfo, homeLocalDataSource: homeLocalDataSource, homeRemoteDataSource: homeRemoteDataSource);
   getIt.registerLazySingleton(() => homeRepository);
-
-
 
   // chat ------------------------------------------------------------------------------------------------------------------
   ///State
@@ -97,8 +94,6 @@ Future<void> init() async {
   ChatRepository chatRepository = ChatRepository(
       networkInfo: networkInfo, chatRemoteDataSource: chatRemoteDataSource, chatLocalDataSource: chatLocalDataSource);
   getIt.registerLazySingleton(() => chatRepository);
-
-
 
   // create Group ------------------------------------------------------------------------------------------------------------------
   ///state
@@ -116,7 +111,6 @@ Future<void> init() async {
       createGroupLocalDataSource: createGroupLocalDataSource,
       createGroupRemoteDataSource: createGroupRemoteDataSource);
   getIt.registerLazySingleton(() => createGroupRepository);
-
 
   // new Chat ------------------------------------------------------------------------------------------------------------------
 
@@ -136,8 +130,6 @@ Future<void> init() async {
 
   getIt.registerLazySingleton(() => newChatRepository);
 
-
-
   // new contact ------------------------------------------------------------------------------------------------------------------
   NewContactState newContactState = NewContactState();
   getIt.registerLazySingleton(() => newContactState);
@@ -153,9 +145,6 @@ Future<void> init() async {
       newContactLocalDataSource: newContactLocalDataSource,
       networkInfo: networkInfo);
   getIt.registerLazySingleton(() => newContactRepository);
-
-
-
 
   // sign Up ------------------------------------------------------------------------------------------------------------------
 
@@ -180,76 +169,84 @@ Future<void> init() async {
   SettingsState settingsState = SettingsState();
   getIt.registerLazySingleton(() => settingsState);
 
-
-
   //end screens section
 
-  debugPrint("here1");
-  try{
+
+  try {
     final FirebaseMessaging _firebasemessaging = FirebaseMessaging.instance;
-
-
-
-
 
     await _firebasemessaging.getToken().then((deviceToken) {
       debugPrint("Device Token: $deviceToken");
       ConstValues.fireBaseToken = deviceToken ?? "";
     });
-
-  }catch(e){
+  } catch (e) {
     debugPrint("can we receive this it by try block?");
     ConstValues.fireBaseToken = 'null';
   }
 
+  await SignalRMessaging().init(
 
-
-  debugPrint("the value of signalrId is : ${sharedPrefService.getInt(SpKeys.signalrId)}");
-  int? signalrId = sharedPrefService.getInt(SpKeys.signalrId);
-  ConstValues.isUserLoggedIn = (signalrId == null || signalrId == -1) ? false : true;
-
-  debugPrint("id of user is : ${sharedPrefService.getInt(SpKeys.signalrId)}");
-  debugPrint("user name is : ${sharedPrefService.getString(SpKeys.username)}");
-
-  SignalRMessaging().init(
-      signalrId: sharedPrefService.getInt(SpKeys.signalrId),
-      userName: sharedPrefService.getString(SpKeys.username),
-      serverAddress: 'http://10.0.2.2:5124',
+      serverAddress: 'https://fdcschatapiv.fdcs.ir',
       firebaseToken: ConstValues.fireBaseToken,
-      onSendMessage: (){
+      onSendMessage: () {
         chatState.setChat = SignalRMessaging().chats.firstWhere((element) => element.chatId == chatState.chatKey.value);
         homeState.setState();
-
-        },
-      onGetContactInfo: (){
+      },
+      onGetContactInfo: () {
         navigationService.goToName(RouteNames.home);
         newContactState.getContactInfoCompleted.toggle();
       },
-      onReceiveNewMessage: (){
-
+      onReceiveNewMessage: () {
         homeState.setState();
         chatState.setState();
       },
-      onGetContactInfoCanceled: (String message){
-          PackageErrorSnackBar.showSnackBar(message, true);
-          newContactState.getContactInfoCompleted.toggle();
+      onGetContactInfoCanceled: (String message) {
+        PackageHintSnackBar.showSnackBar(message, true);
+        newContactState.getContactInfoCompleted.toggle();
       },
-      onCreateGroup: (String message){
-
+      onCreateGroup: (String message) {
         navigationService.goToName(RouteNames.home);
         createGroupState.setCreateGroupCompleted = true;
-        PackageErrorSnackBar.showSnackBar(message, false);
-      }
-  );
-    //serverAddress: 'http://10.0.2.2:5124',
+        PackageHintSnackBar.showSnackBar(message, false);
+      },
+      onFailure: (String errorMessage) {
+        signUpState.setLoading = false;
+        PackageHintSnackBar.showSnackBar(errorMessage, true);
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+      },
+      onSignUp: () {
+          navigationService.goToName(RouteNames.home);
+          signUpState.setLoading = false;
+          PackageHintSnackBar.showSnackBar("Signup successfully", false);
+          signUpState.passwordController.clear();
+          signUpState.nameController.clear();
+          signUpState.phoneNumberController.clear();
+          signUpState.setImage = null;
+      },
+    onLogout: (){
+        signUpState.setIndexStack = 0;
+        navigationService.goToName(RouteNames.signUp);
+    },
+    onLogin: (){
+      signUpState.setIndexStack = 0;
+      navigationService.goToName(RouteNames.home);
+      signUpState.setLoading = false;
+      signUpState.passwordController.clear();
+      signUpState.nameController.clear();
+      signUpState.phoneNumberController.clear();
+
+    }
+      );
+  //serverAddress: 'http://10.0.2.2:5124',
   // 10.0.2.2:5124/ChatHub
   //167.235.239.170:5025/Myhub
   //'https://fdcschatapiv.fdcs.ir/ChatHub'
 
+  ConstValues.isUserLoggedIn = (SignalRMessaging().myPhoneNumber == null || SignalRMessaging().myPhoneNumber == 'null') ? false : true;
+
   debugPrint("in dependency injection 5");
 
   getIt.registerLazySingleton(() => SignalRMessaging());
-
 
   debugPrint("in dependency injection 6");
   //controllers
@@ -278,11 +275,9 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => signUpController);
   navigationService.registerController(RouteNames.signUp, signUpController);
 
-
   SettingsController settingsController = SettingsController();
   getIt.registerLazySingleton(() => settingsController);
   navigationService.registerController(RouteNames.signUp, settingsController);
-
 
   debugPrint("in dependency injection 7");
 

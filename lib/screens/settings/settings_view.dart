@@ -1,23 +1,14 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:signalr_client/screens/settings/settings_controller.dart';
 
 import '../../core/constants/ui.dart';
+import '../../core/dependency_injection.dart';
 
 class SettingsView extends StatelessWidget {
-  const SettingsView({Key? key}) : super(key: key);
+  SettingsView({Key? key}) : super(key: key);
+
+  final SettingsController myController = getIt<SettingsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +16,20 @@ class SettingsView extends StatelessWidget {
         child: Scaffold(
       appBar: AppBar(
         backgroundColor: ProjectColors.backGroundOrangeType3,
-        title: Text("Settings", style: TextStyle(fontSize: 20),),
+        leading: IconButton(
+          onPressed: () {
+            myController.backToHome();
+          },
+          icon: const Icon(Icons.arrow_back, color: ProjectColors.fontWhite),
+        ),
+        title: const Text("Settings", style: TextStyle(fontSize: 20),),
           actions: [
             PopupMenuButton<int>(
               itemBuilder: (context) => [
                 // PopupMenuItem 1
                 PopupMenuItem(
+                  onTap: () => myController.logout(),
+
                   value: 1,
                   // row with 2 children
                   child: Row(

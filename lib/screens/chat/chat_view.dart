@@ -33,17 +33,16 @@ class _ChatViewState extends State<ChatView> {
 
   final SignalRMessaging signalRMessaging = getIt<SignalRMessaging>();
 
-  double? screenHeight;
-
   double? keyBoardHeight;
 
+  //final listKey = GlobalKey();
+
+  final UniqueKey _center = UniqueKey();
 
   @override
   void initState() {
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // debugPrint("available height is in chat page : ${ourKey.currentContext!.size!.height};");
-    });
+
     super.initState();
   }
 
@@ -55,7 +54,6 @@ class _ChatViewState extends State<ChatView> {
     debugPrint("the value of keyBoardHeight is ${MediaQuery.of(context).viewInsets.bottom}");
 
     ChatState state = context.watch<ChatState>();
-    DateTime? lastDateShown;
     myController.computeItemNumber();
     myController.datesShown = 0;
 
@@ -147,58 +145,45 @@ class _ChatViewState extends State<ChatView> {
                                 Expanded(
                                   child: SizedBox(
                                       height: MediaQuery.of(context).size.height - 140,
-                                      child: ScrollablePositionedList.builder(
-                                        itemPositionsListener: state.itemPositionsListener,
-                                        itemScrollController: state.itemScrollController,
-                                        shrinkWrap: true,
-                                        itemCount: myController.itemNumber,
-                                        itemBuilder: (BuildContext context, int index) {
-                                          if(myController.listViewElements[index] == 'date'){
-                                            debugPrint("return date");
-                                            String itemInfo = myController.listViewElements[index + 1]!;
-                                            int indexOfItem = int.parse(itemInfo.split('|')[1]);
-                                            return ChatDate(date: state.selectedChat!.messages[indexOfItem].date!);
-                                          }else{
-                                            debugPrint("return message");
-                                            String itemInfo = myController.listViewElements[index]!;
-                                            int indexOfItem = int.parse(itemInfo.split('|')[1]);
-                                            var targetChat = state.selectedChat!.messages[indexOfItem];
-                                            return MessageWidget(clientMessage: targetChat.senderID ==
-                                                signalRMessaging.myId.toString(),
-                                                chatType: state.selectedChat!.type, message: targetChat);
-                                          }
-                                          if (index == 0) {
-                                            debugPrint("index 0 item : ${myController.datesShown}");
-                                            DateTime currentDate = state.selectedChat!.messages[0].date!;
-                                            lastDateShown = currentDate;
-                                            myController.datesShown = 1;
-                                            debugPrint("index 0 item : ${myController.datesShown}");
-                                            return Padding(
-                                              padding: const EdgeInsets.only(top: 10),
-                                              child: ChatDate(date: currentDate),
-                                            );
-                                          } else {
-                                            //todo is this method correct?
-                                            debugPrint("index is : $index");
-                                            debugPrint("values ${myController.datesShown} and $index");
-                                            if (!state.selectedChat!.messages[index - myController.datesShown].date!
-                                                .isSameDate(lastDateShown!)) {
-                                              DateTime currentDate =
-                                                 state.selectedChat!.messages[index - myController.datesShown].date!;
-                                              lastDateShown = currentDate;
-                                              myController.datesShown++;
-                                              return ChatDate(date: currentDate);
-                                            } else {
-                                              return MessageWidget(
-                                                clientMessage:
-                                                    state.selectedChat!.messages[index - myController.datesShown].senderID ==
-                                                        signalRMessaging.myId.toString(),
-                                                chatType: state.selectedChat!.type,
-                                                message: state.selectedChat!.messages[index - myController.datesShown],
-                                              );
-                                            }
-                                          }
-                                        },
+                                      child: CustomScrollView(
+                                        anchor: 1,
+                                        center: _center,
+                                        //physics: NeverScrollableScrollPhysics(),
+                                        slivers: [
+                                          SliverToBoxAdapter(
+                                            child: ScrollablePositionedList.builder(
+                                            //initialAlignment: 70,
+                                            itemPositionsListener: state.itemPositionsListener,
+
+                                            //reverse: true,
+                                            itemScrollController: state.itemScrollController,
+                                            shrinkWrap: true,
+                                            itemCount: myController.itemNumber,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              if(myController.listViewElements[index] == 'date'){
+                                                debugPrint("return date");
+                                                String itemInfo = myController.listViewElements[index + 1]!;
+                                                int indexOfItem = int.parse(itemInfo.split('|')[1]);
+                                                return ChatDate(date: state.selectedChat!.messages[indexOfItem].date!);
+                                              }else{
+                                                debugPrint("return message");
+                                                String itemInfo = myController.listViewElements[index]!;
+                                                int indexOfItem = int.parse(itemInfo.split('|')[1]);
+                                                var targetChat = state.selectedChat!.messages[indexOfItem];
+                                                return MessageWidget(clientMessage: targetChat.senderPhoneNumber ==
+                                                    signalRMessaging.myPhoneNumber,
+                                                    chatType: state.selectedChat!.type, message: targetChat);
+                                              }
+                                            },
+                                        ),
+                                          ),
+                                          SliverToBoxAdapter(
+                                            key: _center,
+                                              child: Container(
+                                                height: 0,
+                                              )
+                                          )
+                                        ]
                                       )),
                                 ),
                                 Row(
