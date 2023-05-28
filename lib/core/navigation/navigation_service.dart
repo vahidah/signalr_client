@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:go_router/go_router.dart';
 
 import 'package:flutter/material.dart';
+import '../constants/route_names.dart';
 import '../interfaces/controller.dart';
 import 'router.dart';
 
@@ -49,8 +51,10 @@ class NavigationService {
       _registeredControllers[routeName]!.onInit();
     }
     if (mode == NavigationMode.goRouter) {
-      MyRouter.router.goNamed(routeName, params: arguments ?? {}, extra: extra);
+      //MyRouter.router.goNamed(routeName, params: arguments ?? {}, extra: extra);
+      MyRouter.context?.go(routeName);
     } else {
+
       navigatorKey.currentState!.pushNamedAndRemoveUntil(routeName, (_) => false, arguments: arguments);
     }
   }
@@ -60,16 +64,13 @@ class NavigationService {
   Future<dynamic> dialog(Widget content) => showDialog(context: context!, builder: (c) => content);
 
   snackBar(Widget content, {Color? backgroundColor, SnackBarAction? action, Duration? duration, IconData? icon}) {
-    debugPrint("handle failure called 1");
     ScaffoldMessenger.of(context!).clearSnackBars();
-    debugPrint("handle failure called 2");
     ScaffoldMessenger.of(context!).showSnackBar(SnackBar(
       content: icon == null ? content : Row(children: [Icon(icon), const SizedBox(width: 8), Expanded(child: content)]),
       backgroundColor: backgroundColor,
       action: action,
       duration: duration ?? const Duration(seconds: 3),
     ));
-    debugPrint("handle failure called 3");
   }
 
   registerController(String name, MainController controller) =>

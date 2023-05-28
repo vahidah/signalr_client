@@ -1,15 +1,11 @@
 import 'dart:async';
-import 'dart:core';
-import 'dart:io';
-import 'dart:convert';
 
-import 'package:messaging_signalr/messaging_signalr.dart';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:signalr_core/signalr_core.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:get/get.dart';
 import 'firebase_options.dart';
 
 import 'my_app.dart';
@@ -18,21 +14,23 @@ import 'screens/home/home_state.dart';
 import 'screens/chat/chat_state.dart';
 import 'screens/create_group/create_group_state.dart';
 import 'screens/new_chat/new_chat_state.dart';
-import 'screens/new_contact/new_contact_state.dart';
+import 'screens/add_contact/new_contact_state.dart';
 import 'screens/sign_up/sign_up_state.dart';
 
 
 
 
-
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await init();
+
   runZonedGuarded(
-      () => runApp(
+      () async{
+        WidgetsFlutterBinding.ensureInitialized();
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
+        await init();
+
+        return runApp(
             MultiProvider(
               providers: [
                 ChangeNotifierProvider(create: (_) => getIt<HomeState>()),
@@ -41,10 +39,12 @@ Future<void> main() async {
                 ChangeNotifierProvider(create: (_) => getIt<NewChatState>()),
                 ChangeNotifierProvider(create: (_) => getIt<NewContactState>()),
                 ChangeNotifierProvider(create: (_) => getIt<SignUpState>()),
+                ChangeNotifierProvider(create: (_) => getIt<SignUpState>()),
               ],
               child: const MyApp(),
             ),
-          ), (error, stack) {
-    debugPrint("we have error");
+          );
+      }, (error, stack) {
+    debugPrint("we have error ${error.toString()}");
   });
 }

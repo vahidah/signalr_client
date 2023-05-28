@@ -19,6 +19,7 @@ class NewChatView extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: ProjectColors.backGroundOrangeType3,
             leading: IconButton(
               onPressed: () {
                 myController.backToHomeScreen();
@@ -35,18 +36,18 @@ class NewChatView extends StatelessWidget {
               children: const [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Icon(Icons.group, color: ProjectColors.iconBlackColor, size: ProjectSizes.newChatIcon,),
+                  child: Icon(Icons.group, color: ProjectColors.backGroundOrangeType1, size: ProjectSizes.newChatIcon,),
                 ),
-                Text("New group or join Group",  style: TextStyle(color: ProjectColors.fontBlackHome, fontSize: ProjectSizes.newChatText),),
+                Text("New group or join Group",  style: TextStyle(color: ProjectColors.fontBlackColorType1, fontSize: ProjectSizes.newChatText),),
               ],
             )),
             TextButton(onPressed: () => myController.goToNewContactScreen(), child: Row(
               children: const [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Icon(Icons.add_reaction, color: ProjectColors.lightBlackHome, size: ProjectSizes.newChatIcon,),
+                  child: Icon(Icons.add_reaction, color: ProjectColors.backGroundOrangeType1, size: ProjectSizes.newChatIcon,),
                 ),
-                Text("New contact", style: TextStyle(color: ProjectColors.fontBlackHome, fontSize: ProjectSizes.newChatText),)
+                Text("New contact", style: TextStyle(color: ProjectColors.fontBlackColorType1, fontSize: ProjectSizes.newChatText),)
               ],
             ))
           ],

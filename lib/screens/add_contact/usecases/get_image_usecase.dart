@@ -1,5 +1,5 @@
 
-import 'package:signalr_client/screens/new_contact/new_contact_repositroy.dart';
+import 'package:signalr_client/screens/add_contact/new_contact_repositroy.dart';
 import 'package:dartz/dartz.dart';
 
 import '/core/error/failures.dart';

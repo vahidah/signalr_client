@@ -11,32 +11,33 @@ import 'home_state.dart';
 
 
 
-
-
-
-
-
 class HomeController extends MainController {
   final HomeState homeState = getIt<HomeState>();
   final ChatState chatState = getIt<ChatState>();
-  final HubConnection connection = getIt<HubConnection>();
-
-
-
 
 
 
   void goToChatScreen(String chatKey){
 
-    chatState.chatKey = (chatKey).obs;
-    myNavigator.goToName(RouteNames.chat);
+    chatState.chatKey.value = chatKey;
+    nav.goToName(RouteNames.chat);
   }
   void goToNewChatScreen(){
-    myNavigator.goToName(RouteNames.newChat);
+    nav.goToName(RouteNames.newChat);
   }
 
+  void goToSettingsScreen(){
 
+    nav.goToName(RouteNames.settings);
+  }
 
+  String firstPartOfChat(String str){
+    return str.length > 15 ? "${str.substring(0,14)}..." : str;
+  }
+
+  onSearch(String searched){
+
+  }
 
 
 }

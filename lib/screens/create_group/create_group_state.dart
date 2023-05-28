@@ -8,7 +8,21 @@ class CreateGroupState with ChangeNotifier {
 
 
 
-  TextEditingController groupName = TextEditingController();
+  TextEditingController groupNameController = TextEditingController();
+
+
+  RxBool showError = false.obs;
+
+  bool _createGroupCompleted = true;
+
+  bool get createGroupCompleted => _createGroupCompleted;
+
+  set setCreateGroupCompleted(bool newValue){
+    _createGroupCompleted = newValue;
+    notifyListeners();
+  }
+
+
 
 
 }

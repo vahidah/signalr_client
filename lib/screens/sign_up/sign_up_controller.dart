@@ -1,59 +1,155 @@
 import 'dart:async';
 import 'dart:core';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:signalr_client/core/constants/SpKeys.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:signalr_core/signalr_core.dart';
+import 'package:messaging_signalr/messaging_signalr.dart';
+
 
 import '../../core/constants/constant_values.dart';
-import '../../core/util/failure_handler.dart';
+import '../../core/navigation/navigation_service.dart';
+import '../../core/util/package_snackbars.dart';
 import '/core/constants/route_names.dart';
 import '/core/dependency_injection.dart';
 import '/core/interfaces/controller.dart';
 import '../home/home_state.dart';
 import 'sign_up_state.dart';
 import 'sign_up_repository.dart';
-import 'usecases/image_usecase.dart';
 
 class SignUpController extends MainController {
   final SignUpState signUpState = getIt<SignUpState>();
   final HomeState homeState = getIt<HomeState>();
-  final SignupRepository signupRepository = getIt<SignupRepository>();
-  final connection = getIt<HubConnection>();
-  late ImageUseCase imageUseCaseUse = ImageUseCase(repository: signupRepository);
+  static final NavigationService navigationService = getIt<NavigationService>();
+  final SignalRMessaging signalRMessaging = getIt<SignalRMessaging>();
 
 
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
 
+    signUpState.phoneNumberController.addListener(() {
 
-  // @override
-  // void onInit({dynamic args}) {
-  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
-  // }
+     if (RegExpressions.phoneNumber.hasMatch(signUpState.phoneNumberController.text) || signUpState.phoneNumberController.text.isEmpty ) {
+       signUpState.phoneValidate.value = true;
+     }else{
+       signUpState.phoneValidate.value = false;
+     }
+
+    });
+
+    super.onInit();
+  }
 
   void backToNewChatScreen() {
-    myNavigator.goToName(RouteNames.newChat);
+    nav.goToName(RouteNames.newChat);
   }
 
-  Future<void> uploadImage() async{
-    ImageRequest imageRequest = ImageRequest(id: ConstValues.myId, image: signUpState.image!);
-    final result = await imageUseCaseUse(request: imageRequest);
-    result.fold(
-            (failure) {
-              debugPrint("fold failure state");
-            FailureHandler.handle(failure, retry: () => uploadImage());},
-            (r) {debugPrint("image uploaded successfully");});
+
+  Future<void> signUpSignalrPackage() async{
+
+    try{
+      await signalRMessaging.signUp(image: signUpState.image,
+          userName: signUpState.nameController.text, phoneNumber: signUpState.phoneNumberController.text,
+        password: signUpState.passwordController.text
+      );
+    }catch(e, t){
+      navigationService.snackBar(GestureDetector(
+          onTap: (){
+            // AppB
+          },
+          child: const Text("upload image failed")),
+          icon: Icons.error,
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 20),
+          action: SnackBarAction(
+            textColor: Colors.white,
+            label: "Retry",
+            onPressed: () {
+              log("Retry");
+              //signUp();
+            },
+          ));
+    }
+  }
+
+  void signUp() async {
+
+    debugPrint("in signUp");
+
+    if(signUpState.nameController.text.isNotEmpty){
+      signUpState.nameValidate.value = true;
+    }
+    if(signUpState.phoneNumberController.text.isNotEmpty){
+      signUpState.phoneValidate.value = true;
+    }
+    if(signUpState.passwordController.text.length >= 8){
+      signUpState.passwordValidate.value = true;
+    }
+
+    if(signUpState.nameController.text.isEmpty){
+      signUpState.nameValidate.value = false;
+      showInputValidationError();
+      return;
+    }
+    if(!RegExpressions.phoneNumber.hasMatch(signUpState.phoneNumberController.text)){
+      signUpState.phoneValidate.value = false;
+      showInputValidationError();
+      return;
+    }
+    if(signUpState.passwordController.text.length < 8){
+      showInputValidationError();
+      signUpState.passwordValidate.value = false;
+
+      return;
+    }
+
+    signUpState.setLoading = true;
+    await signUpSignalrPackage();
+
+
 
   }
 
-  void sendContactName() async {
-    debugPrint("before upload image");
-    await uploadImage();
-    debugPrint("after upload image");
-    ConstValues.userName = signUpState.nameController.text;
-    debugPrint("sending user name ${signUpState.nameController.text}");
-    connection.invoke('ReceiveUserName', args: [signUpState.nameController.text, ConstValues.myId]);
-    myNavigator.goToName(RouteNames.home);
+  void login() async {
+
+
+    debugPrint("login function called");
+
+    if(signUpState.phoneNumberController.text.isNotEmpty){
+      signUpState.phoneValidate.value = true;
+    }
+    if(signUpState.passwordController.text.length >= 8){
+      signUpState.passwordValidate.value = true;
+    }
+
+    if(!RegExpressions.phoneNumber.hasMatch(signUpState.phoneNumberController.text)){
+      signUpState.phoneValidate.value = false;
+      showInputValidationError();
+      return;
+    }
+    if(signUpState.passwordController.text.length < 8){
+      showInputValidationError();
+      signUpState.passwordValidate.value = false;
+      return;
+    }
+
+
+    debugPrint("set loading value");
+
+    signUpState.setLoading = true;
+
+    debugPrint("call package login");
+
+    signalRMessaging.login(phoneNumber: signUpState.phoneNumberController.text,
+        password: signUpState.passwordController.text, fireBaseToken: ConstValues.fireBaseToken);
+
+
+
   }
 
   Future pickImage(ImageSource source) async {
@@ -63,4 +159,11 @@ class SignUpController extends MainController {
       signUpState.setImage = File(image.path);
     }
   }
+
+  void showInputValidationError(){
+    PackageHintSnackBar.showSnackBar("Please enter the requested items correctly", true);
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+  }
+
+
 }
