@@ -16,7 +16,7 @@ class PackageHintSnackBar{
       Text(message, style: const TextStyle(fontSize: 20),),
       icon: warning ? Icons.warning : Icons.info,
       backgroundColor: warning ? ProjectColors.snackBarError : ProjectColors.snackBarInfo,
-      duration: const Duration(seconds: 8),
+      duration: const Duration(seconds: 4),
     );
 
   }

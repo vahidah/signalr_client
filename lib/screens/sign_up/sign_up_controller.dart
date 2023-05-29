@@ -52,29 +52,12 @@ class SignUpController extends MainController {
 
   Future<void> signUpSignalrPackage() async{
 
-    try{
+
       await signalRMessaging.signUp(image: signUpState.image,
           userName: signUpState.nameController.text, phoneNumber: signUpState.phoneNumberController.text,
         password: signUpState.passwordController.text
       );
-    }catch(e, t){
-      navigationService.snackBar(GestureDetector(
-          onTap: (){
-            // AppB
-          },
-          child: const Text("upload image failed")),
-          icon: Icons.error,
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 20),
-          action: SnackBarAction(
-            textColor: Colors.white,
-            label: "Retry",
-            onPressed: () {
-              log("Retry");
-              //signUp();
-            },
-          ));
-    }
+
   }
 
   void signUp() async {

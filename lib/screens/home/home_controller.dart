@@ -35,9 +35,7 @@ class HomeController extends MainController {
     return str.length > 15 ? "${str.substring(0,14)}..." : str;
   }
 
-  onSearch(String searched){
 
-  }
 
 
 }
