@@ -47,6 +47,9 @@ class NavigationService {
   }
 
   void goToName(String routeName, {Map<String, String>? arguments, dynamic extra}) {
+
+    ScaffoldMessenger.of(context!).clearSnackBars();
+
     if (_registeredControllers.containsKey(routeName)) {
       _registeredControllers[routeName]!.onInit();
     }

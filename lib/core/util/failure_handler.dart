@@ -20,7 +20,7 @@ class FailureHandler {
         child: Text("$failure")),
         icon: Icons.error,
         backgroundColor: Colors.red,
-        duration: const Duration(seconds: 10),
+        duration: const Duration(seconds: 4),
         action: SnackBarAction(
           textColor: Colors.white,
           label: "Retry",
@@ -35,7 +35,7 @@ class FailureHandler {
     navigationService.snackBar(Text("Could not Find $name"),
       icon: Icons.error,
       backgroundColor: Colors.orange,
-      duration: const Duration(seconds: 5),
+      duration: const Duration(seconds: 4),
     );
   }
 }

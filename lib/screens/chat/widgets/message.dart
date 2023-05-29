@@ -67,69 +67,73 @@ class _MessageWidgetState extends State<MessageWidget> {
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width - 100,
         ),
-        child: Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-            margin: EdgeInsets.only(top: 5, bottom: 5 ,
-                left: widget.clientMessage ? 0 : 10, right: widget.clientMessage ? 10 : 0),
-            color: widget.clientMessage ? ProjectColors.backGroundOrangeType4 : ProjectColors.backGroundWhiteType1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                widget.chatType == ChatType.group && !widget.clientMessage
-                    ? Padding(
-                  padding: const EdgeInsets.only(left: 10.0, top: 7, right: 10.0),
-                  child: Text(
-                    widget.message.senderUserName,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    //,
-                  ),
-                )
-                    : const SizedBox(
-                  width: 0,
-                  height: 0,
-                ),
-              multilineText == false ?
-                Row(
-                  key: rowKey,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
+        child: Row(
+          children: [
+            Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                margin: EdgeInsets.only(top: 5, bottom: 5 ,
+                    left: widget.clientMessage ? 0 : 10, right: widget.clientMessage ? 10 : 0),
+                color: widget.clientMessage ? ProjectColors.backGroundOrangeType4 : ProjectColors.backGroundWhiteType1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Flexible(
-                      child: Padding(
-                          padding: const EdgeInsets.only(top: 5, bottom: 4, right: 5, left: 10),
-                          child:TextWidget(text: widget.message.message)),
-                    ),
-                    Padding(
-                      key: dateKey,
-                      padding: const EdgeInsets.only(right: 10, left: 2, ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text( intel.DateFormat('kk:mm').format(widget.message.date!),
-                            //its work as this app is memory less
-                            style: TextStyle(color: widget.clientMessage ? ProjectColors.fontOrange : ProjectColors.fontGray, fontSize: 13),),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          widget.clientMessage ? const Icon(Icons.done_all, size: 20, color: ProjectColors.fontOrange,) : Container()
-                        ],
+                    widget.chatType == ChatType.group && !widget.clientMessage
+                        ? Padding(
+                      padding: const EdgeInsets.only(left: 10.0, top: 7, right: 10.0),
+                      child: Text(
+                        widget.message.senderUserName,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        //,
                       ),
+                    )
+                        : const SizedBox(
+                      width: 0,
+                      height: 0,
                     ),
+                  multilineText == false ?
+                    Row(
+                      key: rowKey,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Padding(
+                              padding: const EdgeInsets.only(top: 5, bottom: 4, right: 5, left: 10),
+                              child:TextWidget(text: widget.message.message)),
+                        ),
+                        Padding(
+                          key: dateKey,
+                          padding: const EdgeInsets.only(right: 10, left: 2, ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text( intel.DateFormat('kk:mm').format(widget.message.date!),
+                                //its work as this app is memory less
+                                style: TextStyle(color: widget.clientMessage ? ProjectColors.fontOrange : ProjectColors.fontGray, fontSize: 13),),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              widget.clientMessage ? const Icon(Icons.done_all, size: 20, color: ProjectColors.fontOrange,) : Container()
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                      : Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.only(top: 5, left: 10, right:10),
+                          child:TextWidget(text: widget.message.message)),
+                      MessageDate(date: widget.message.date!, clientMessage: widget.clientMessage, ),
+                    ],
+                  ),
+
                   ],
                 )
-                  : Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                      padding: const EdgeInsets.only(top: 5, left: 10, right:10),
-                      child:TextWidget(text: widget.message.message)),
-                  MessageDate(date: widget.message.date!, clientMessage: widget.clientMessage, ),
-                ],
-              ),
-
-              ],
-            )
+            ),
+          ],
         ),
       ),
     );
