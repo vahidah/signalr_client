@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
@@ -14,10 +15,17 @@ import 'package:signalr_client/screens/sign_up/widgets/text_field_signup.dart';
 import '/core/dependency_injection.dart';
 import '/core/constants/ui.dart';
 
-class SignUpView extends StatelessWidget {
-  final SignUpController myController = getIt<SignUpController>();
+class SignUpView extends StatefulWidget {
 
   SignUpView({Key? key}) : super(key: key);
+
+  @override
+  State<SignUpView> createState() => _SignUpViewState();
+}
+
+class _SignUpViewState extends State<SignUpView> {
+  final SignUpController myController = getIt<SignUpController>();
+
 
   @override
   Widget build(BuildContext context) {

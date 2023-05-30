@@ -51,8 +51,10 @@ dependencies:
   scrollable_positioned_list: ^0.3.5
   flutter_keyboard_visibility: ^5.4.0
   emoji_picker_flutter: ^1.5.2
+  permission_handler: ^10.2.0
   messaging_signalr:
-    path: ../messaging_signalr
+    path: ../clone_package
+
 
 
   # The following adds the Cupertino Icons font to your application.

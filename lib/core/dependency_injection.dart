@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:messaging_signalr/messaging_signalr.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:signalr_client/core/constants/SpKeys.dart';
 import 'package:signalr_client/core/util/package_snackbars.dart';
 import 'package:signalr_client/screens/chat/chat_repository.dart';
@@ -171,18 +172,48 @@ Future<void> init() async {
 
   //end screens section
 
+  var status = await Permission.photos.request();
 
-  try {
-    final FirebaseMessaging _firebasemessaging = FirebaseMessaging.instance;
-
-    await _firebasemessaging.getToken().then((deviceToken) {
-      debugPrint("Device Token: $deviceToken");
-      ConstValues.fireBaseToken = deviceToken ?? "";
-    });
-  } catch (e) {
-    debugPrint("can we receive this it by try block?");
-    ConstValues.fireBaseToken = 'null';
+  if(status.isGranted){
+    debugPrint("storing permission granted");
+  }else{
+    debugPrint("storing permission denied");
   }
+
+  FirebaseMessaging _firebasemessaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await _firebasemessaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    try {
+
+      await _firebasemessaging.getToken().then((deviceToken) {
+        debugPrint("Device Token: $deviceToken");
+        ConstValues.fireBaseToken = deviceToken ?? "";
+      });
+    } catch (e) {
+      debugPrint("can we receive this it by try block?");
+      ConstValues.fireBaseToken = 'null';
+    }
+    print('User granted permission');
+  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    ConstValues.fireBaseToken = 'null';
+    print('User granted provisional permission');
+  } else {
+    ConstValues.fireBaseToken = 'null';
+    print('User declined or has not accepted permission');
+  }
+
+
+  ConstValues.fireBaseToken = 'null';
 
   await SignalRMessaging().init(
 
